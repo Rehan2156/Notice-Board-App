@@ -6,6 +6,7 @@ import HomeStack from './homeStack';
 import AddNotice from '../screens/addNotice';
 import CustomSidebarMenu from './customSidebarMenu';
 
+
 // drawer navigation options
 const RootDrawerNavigator = createDrawerNavigator({
 
@@ -14,6 +15,7 @@ const RootDrawerNavigator = createDrawerNavigator({
   },
   AddNotice:{
     screen: AddNotice,
+    
   },
 //   About: {
 //     screen: AboutStack,

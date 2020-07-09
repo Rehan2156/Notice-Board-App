@@ -4,7 +4,6 @@ import {createAppContainer} from 'react-navigation'
 import Home from '../screens/home'
 import Notice from '../screens/notice'
 import Header from '../shared/header'
-import AddNotice from '../screens/addNotice';
 
 const screens = {
     Home:{
@@ -14,13 +13,6 @@ const screens = {
             return{
             headerTitle:()=> <Header navigation={navigation} title='MESCOE Notice Board'/>
             }
-        }
-    },
-    AddNotice:{
-        screen:AddNotice,
-        navigationOptions:{
-            title:'Add Notice',
-            // headerStyle:{backgroundColor:'#eee'}
         }
     },
     Notice:{
@@ -35,7 +27,7 @@ const screens = {
 const HomeStack = createStackNavigator(screens,{
     defaultNavigationOptions:{
         headerTintColor:'#444', 
-        headerStyle:{backgroundColor:'#84D7F7',height:60}
+        headerStyle:{backgroundColor:'#eee',height:60}
     }
 });
 

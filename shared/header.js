@@ -28,10 +28,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   headerText: {
-    fontFamily: 'Acme',
-    fontSize: 30,
+    fontFamily: 'Acme-Regular',
+    fontSize: 25,
     color: '#333',
-    letterSpacing: 1,
+    // letterSpacing: 1,
   },
   drawer: {
     position: 'absolute',

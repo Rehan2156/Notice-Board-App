@@ -59,7 +59,7 @@ export default class CustomSidebarMenu extends Component {
                   alignItems: 'center',
                   paddingTop: 10,
                   paddingBottom: 10,
-                  backgroundColor: global.currentScreenIndex === key ? '#e0dbdb' : '#ffffff',
+                  backgroundColor: global.currentScreenIndex === key ? '#ffffff':'#e0dbdb',
                 }}
                 key={key}>
                 <View style={{ marginRight: 10, marginLeft: 20 }}>
@@ -68,7 +68,8 @@ export default class CustomSidebarMenu extends Component {
                 <Text
                   style={{
                     fontSize: 15,
-                    color: global.currentScreenIndex === key ? 'red' : 'black',
+                    color: global.currentScreenIndex === key ? 'black' : 'red',
+                    fontFamily:'Nunito-Bold'
                   }}
                   onPress={() => {
                     global.currentScreenIndex = key;
