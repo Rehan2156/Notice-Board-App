@@ -18,40 +18,41 @@ const Home = ({navigation}) => {
         
     ])
 
-    // useEffect(() => {
-    //     console.log('using useeffect')
-    //     var myArray = []
-    // try {
-    //   var ref = database().ref("/notice");
-    //   ref.once("value", (snapshot) => {
+    useEffect(() => {
+        console.log('using useeffect')
+        var myArray = []
+    try {
+      var ref = database().ref("/notice");
+      ref.once("value", (snapshot) => {
+        console.log(snapshot.toJSON())
+        snapshot.forEach( (childSnapshot) => {
+            console.log('finding childSnapshot')
+            console.log(childSnapshot.val())
+            var myJSON=childSnapshot.toJSON()
+          var key = myJSON.key
+          var head = myJSON.head
+          var notice = myJSON.text
+            console.log('head is '+head+' notice is '+notice);
+          myArray = [...myArray, {head: head, text:notice, key: key }]
         
-    //     snapshot.forEach( (childSnapshot) => {
-    //         console.log('finding childSnapshot')
-    //         console.log(childSnapshot.val())
-    //       var key = childSnapshot.key
-    //       var head = childSnapshot.child("/head").val().toString()
-    //       var notice = childSnapshot.child("/text").val().toString()
-    //         console.log('head is '+head+' notice is '+notice);
-    //       myArray = [...myArray, {head: head, text:notice, key: key }]
-        
-    //     })
+        })
     
-    //     //   this.setState({
-    //     //     shops: [...this.state.shops, ...myArray],
-    //     //   })
+        //   this.setState({
+        //     shops: [...this.state.shops, ...myArray],
+        //   })
 
-    //     //   this.setState({
-    //     //     tempArray: this.state.shops,
-    //     //     lisIsready: true,
-    //     //   })
-    //     setList(myArray);
-    //     console.log(list);
-    //   })
-    // } catch(e) {
-    //   console.log('Error: aya bro :', e)
-    // }
+        //   this.setState({
+        //     tempArray: this.state.shops,
+        //     lisIsready: true,
+        //   })
+        setList(myArray.reverse());
+        console.log(list);
+      })
+    } catch(e) {
+      console.log('Error: aya bro :', e)
+    }
         
-    // })
+    })
 
     return ( 
     
