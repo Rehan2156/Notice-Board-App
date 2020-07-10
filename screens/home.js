@@ -19,23 +19,19 @@ const Home = ({navigation}) => {
     ])
 
     useEffect(() => {
-        
-
-        console.log('using useeffect')
         var myArray = []
     try {
       var ref = database().ref("/notice");
       ref.once("value", (snapshot) => {
-        console.log(snapshot.toJSON())
         snapshot.forEach( (childSnapshot) => {
-            console.log('finding childSnapshot')
-            console.log(childSnapshot.val())
             var myJSON=childSnapshot.toJSON()
           var key = myJSON.key
           var head = myJSON.head
           var notice = myJSON.text
-            console.log('head is '+head+' notice is '+notice);
-          myArray = [...myArray, {head: head, text:notice, key: key }]
+          var downURL = myJSON.downloadURL
+          var date = myJSON.date
+          var time = myJSON.time
+          myArray = [...myArray, {head: head, text:notice, downloadURL:downURL,date:date,time:time,key: key }]
         
         })
     
@@ -48,7 +44,6 @@ const Home = ({navigation}) => {
         //     lisIsready: true,
         //   })
         setList(myArray.reverse());
-        console.log(list);
       })
     } catch(e) {
       console.log('Error: aya bro :', e)
@@ -64,7 +59,7 @@ const Home = ({navigation}) => {
           style={styles.scrollView}> */}
         <FlatList data={list} renderItem={({ item }) => (
         <TouchableOpacity onPress={()=>navigation.navigate('Notice',item)}>
-        <Tile title={item.head}/>
+        <Tile title={item.head} date={item.date} time={item.time}/>
         </TouchableOpacity>
       )}/>
       {/* </ScrollView> */}
