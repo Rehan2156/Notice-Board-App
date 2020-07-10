@@ -3,14 +3,14 @@ import {View, Text,StyleSheet,SafeAreaView,ScrollView} from 'react-native'
 
 const Notice = ({navigation}) => {
     return ( 
-        <SafeAreaView style={styles.card}>
+        <View style={styles.card}>
         <ScrollView
           contentInsetAdjustmentBehavior="automatic"
           style={styles.scrollView}>
             <Text style={styles.head}>{navigation.getParam('head')}</Text>
             <Text style={styles.text}>{navigation.getParam('text')}</Text>
             </ScrollView>
-        </SafeAreaView>
+        </View>
      );
 }
 
