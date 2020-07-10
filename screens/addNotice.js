@@ -2,18 +2,39 @@ import React,{useState} from 'react';
 import { Text, StyleSheet,SafeAreaView, View, Alert,Dimensions,TextInput,TouchableOpacity,ScrollView  } from 'react-native'
 import { CheckBox,Button } from 'react-native-elements'
 import {globalStyles} from '../styles/global'
+import database from '@react-native-firebase/database';
 
 const {width:WIDTH}=Dimensions.get('window')
 
-const AddNotice = () => {
+const AddNotice = ({navigation}) => {
     const [head,setHead]=useState("")
     const [notice,setNotice]=useState("")
     const [std,setStd]=useState(false)
     const [fec1,setfec1]=useState(false)
     const [fec2,setfec2]=useState(false)
 
+    async function uploadTheDetails () {
+        console.log('hello')
+        if(head !== "" && notice !== "") {
+
+            database()
+            .ref('/notice/'+Date.now())
+            .set({
+                head: head,
+                text: notice,
+            })
+            .then(() => {                
+                Alert.alert('Information','User Data is Uploaded')
+                navigation.navigate('Home')
+            });
+        } else {
+            Alert.alert("Fill Every Info please")
+        }        
+    }
+
+
     return ( 
-        <SafeAreaView style={globalStyles.body}>
+        <View style={globalStyles.body}>
         <ScrollView
           contentInsetAdjustmentBehavior="automatic"
           style={styles.scrollView}>
@@ -78,18 +99,19 @@ const AddNotice = () => {
 
                 {/* <TouchableOpacity 
                     style={styles.myBtnB}
-                    // onPress={this.uploadTheDeatils}
+                    onPress={uploadTheDetails}
                 >
-                    <Text style={{margin:5,fontFamily:'nunito-bold',}}> Next </Text>
+                    <Text style={{margin:5,fontFamily:'nunito-bold'}}> Next </Text>
                 </TouchableOpacity> */}
                 <Button
                     title="Send Notice"
                     type="solid"
                     raised
+                    onPress={()=>uploadTheDetails()}
                 />
             {/* </View> */}
             </ScrollView>
-            </SafeAreaView>
+            </View>
     );
 }
 
