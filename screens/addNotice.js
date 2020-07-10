@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet,SafeAreaView, View, Alert,Dimensions,TextInput,TouchableOpacity,ScrollView, Image, ProgressBarAndroid  } from 'react-native'
+import { Text, StyleSheet,SafeAreaView, View, Alert,Dimensions,TextInput,TouchableOpacity,ScrollView, Image, ProgressBarAndroid, Platform  } from 'react-native'
 import { CheckBox,Button } from 'react-native-elements'
 import {globalStyles} from '../styles/global'
 import database from '@react-native-firebase/database';
 import DocumentPicker from 'react-native-document-picker';
 import storage from '@react-native-firebase/storage'
+import RNFS from 'react-native-fs'
+
 
 const {width:WIDTH}=Dimensions.get('window')
 
@@ -16,45 +18,53 @@ export default class AddNotice extends Component {
         std: "",
         fec1: false,
         fec2: false,
-        files: []
+        files: null,
+        downloadLink: '',
     }
 
-    uploadImage = () => {
-        this.state.files.forEach(async(data) => {
-            const filename = data.name; // Generate unique name
-            this.setState({ uploading: true });
-            storage()
-            .ref(`images/${filename}`)
-            .putFile(data.uri)
-            .on(
-                storage.TaskEvent.STATE_CHANGED,
-                snapshot => {
-                    if (snapshot.state === storage.TaskState.SUCCESS) {
-                        const allImages = "";
-                        allImages.push(snapshot.downloadURL);
-                        AsyncStorage.setItem('images', JSON.stringify(allImages));
-                    }
-                    this.setState({
-                        downloadURL: allImages
-                    });
-                },
-                error => {
-                    unsubscribe();
-                    alert('Sorry, Try again.');
+    uploadImage = async () => {
+        const files = this.state.files
+        const fileName = files.name
+        console.log(fileName)
+
+        var storageRef = storage().ref(`images/${fileName}`);
+        console.log(files.uri)
+
+        const data = await RNFS.readFile(files.uri, 'base64')
+
+        await storageRef.putString(data, 'base64')
+        .on('state_changed', snapshot => {
+                console.log('sanpshot: ' + snapshot.state)
+                console.log('Progress: ' + (snapshot.bytesTransferred/snapshot.totalBytes) * 100)
+
+                if(snapshot.state === storage.TaskState.SUCCESS) {
+                    console.log('Sucessful');
                 }
-            );
-        })
-      };
+            },
+            error => {
+                unsubscribe();
+                console.log('Image upload error: ' + error.toString())
+            },
+            () => {
+                storageRef.getDownloadURL()
+                    .then(downloadURL => {
+                        console.log('file is here: ' + downloadURL);
+                        this.setState({ downloadLink: downloadURL })
+                        this.uploadTheDetails()
+                    })
+            }
+        )
+    }
 
     uploadTheDetails= async () => {
         console.log('hello')
         if(this.state.head !== "" && this.state.notice !== "") {
-            await this.uploadImage()
             database()
             .ref('/notice/'+Date.now())
             .set({
                 head: this.state.head,
                 text: this.state.notice,
+                downloadURL: this.state.downloadLink
             })
             .then(() => {                
                 Alert.alert('Information','User Data is Uploaded')
@@ -64,27 +74,20 @@ export default class AddNotice extends Component {
             Alert.alert("Fill Every Info please")
         }        
     }
-
-    selectMultipleFile = async () =>  {
-        //Opening Document Picker for selection of multiple file
+    selectOneFile = async () => {
         try {
-          const results = await DocumentPicker.pickMultiple({
+          const res = await DocumentPicker.pick({
             type: [DocumentPicker.types.allFiles],
           });
-          for (const res of results) {
-            console.log('res : ' + JSON.stringify(res));
-            console.log('URI : ' + res.uri);
-            console.log('Type : ' + res.type);
-            console.log('File Name : ' + res.name);
-            console.log('File Size : ' + res.size);
-          }
-          //Setting the state to show multiple file attributes
-          this.setState({
-              files: results
-          })
+          console.log('res : ' + JSON.stringify(res));
+          console.log('URI : ' + res.uri);
+          console.log('Type : ' + res.type);
+          console.log('File Name : ' + res.name);
+          console.log('File Size : ' + res.size);
+          this.setState({ files: res });
         } catch (err) {
           if (DocumentPicker.isCancel(err)) {
-            alert('Canceled from multiple doc picker');
+            alert('Canceled from single doc picker');
           } else {
             alert('Unknown Error: ' + JSON.stringify(err));
             throw err;
@@ -123,29 +126,14 @@ export default class AddNotice extends Component {
                         title="Select File to upload"
                         type="solid"
                         raised
-                        onPress={()=>this.selectMultipleFile()}
+                        onPress={()=>this.selectOneFile()}
                     />
-                    <ScrollView>
-                        {/*Showing the data of selected Multiple files*/}
-                        {this.state.files.map((item, key) => (
-                            <View key={key}>
-                            {/*<Text style={styles.textStyle}>
-                                File Name: {item.name ? item.name : ''}
-                                {'\n'}
-                                Type: {item.type ? item.type : ''}
-                                {'\n'}
-                                File Size: {item.size ? item.size : ''}
-                                {'\n'}
-                                URI: {item.uri ? item.uri : ''}
-                                {'\n'}
-                            </Text>*/}
+                    <View>
                             <Image
-                                source={item}
+                                source={this.state.files}
                                 style={styles.image}
                             />
-                            </View>
-                        ))}
-                    </ScrollView>
+                    </View>
     
                     <Text style={styles.label}>Select class to send the notice </Text>
                     {/* <Picker
@@ -198,7 +186,7 @@ export default class AddNotice extends Component {
                         raised
                         onPress={() => {
                             console.log('pressed')
-                            this.uploadTheDetails()
+                            this.uploadImage()
                         }}
                     />
                 {/* </View> */}

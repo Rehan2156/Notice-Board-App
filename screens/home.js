@@ -19,20 +19,15 @@ const Home = ({navigation}) => {
     ])
 
     useEffect(() => {
-        console.log('using useeffect')
         var myArray = []
     try {
       var ref = database().ref("/notice");
       ref.once("value", (snapshot) => {
-        console.log(snapshot.toJSON())
         snapshot.forEach( (childSnapshot) => {
-            console.log('finding childSnapshot')
-            console.log(childSnapshot.val())
             var myJSON=childSnapshot.toJSON()
           var key = myJSON.key
           var head = myJSON.head
           var notice = myJSON.text
-            console.log('head is '+head+' notice is '+notice);
           myArray = [...myArray, {head: head, text:notice, key: key }]
         
         })
@@ -46,7 +41,6 @@ const Home = ({navigation}) => {
         //     lisIsready: true,
         //   })
         setList(myArray.reverse());
-        console.log(list);
       })
     } catch(e) {
       console.log('Error: aya bro :', e)
