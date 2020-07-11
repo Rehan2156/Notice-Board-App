@@ -20,6 +20,30 @@ export default class AddNotice extends Component {
         fec2: false,
         files: null,
         downloadLink: '',
+        progress:'0'
+    }
+
+    findDate=()=>{
+        var date = new Date(); 
+        return date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear();
+    }
+
+    findTime=()=>{
+        var date = new Date(); 
+        var hours = date.getHours(); 
+        var minutes = date.getMinutes(); 
+                
+                // Check whether AM or PM 
+        var newformat = hours >= 12 ? 'PM' : 'AM';  
+                
+                // Find current hour in AM-PM Format 
+        hours = hours % 12;  
+                
+                // To display "0" as "12" 
+        hours = hours ? hours : 12;  
+        minutes = minutes < 10 ? '0' + minutes : minutes; 
+        return hours + ':' + minutes + ' ' + newformat
+                
     }
 
     uploadImage = async () => {
@@ -35,7 +59,9 @@ export default class AddNotice extends Component {
         await storageRef.putString(data, 'base64')
         .on('state_changed', snapshot => {
                 console.log('sanpshot: ' + snapshot.state)
-                console.log('Progress: ' + (snapshot.bytesTransferred/snapshot.totalBytes) * 100)
+                this.setState({
+                    progress: (snapshot.bytesTransferred/snapshot.totalBytes) * 100
+                })
 
                 if(snapshot.state === storage.TaskState.SUCCESS) {
                     console.log('Sucessful');
@@ -64,10 +90,12 @@ export default class AddNotice extends Component {
             .set({
                 head: this.state.head,
                 text: this.state.notice,
-                downloadURL: this.state.downloadLink
+                downloadURL: this.state.downloadLink,
+                date:this.findDate(),
+                time:this.findTime()
             })
             .then(() => {                
-                Alert.alert('Information','User Data is Uploaded')
+                Alert.alert('Success','Notice is sent sucessfully')
                 this.props.navigation.navigate('Home')
             });
         } else {
@@ -129,6 +157,7 @@ export default class AddNotice extends Component {
                         onPress={()=>this.selectOneFile()}
                     />
                     <View>
+                    <Text style={styles.label}>Uploading: {this.state.progress}%</Text>
                             <Image
                                 source={this.state.files}
                                 style={styles.image}
