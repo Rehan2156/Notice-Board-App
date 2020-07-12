@@ -1,7 +1,8 @@
 import React from 'react';
 import { Text, StyleSheet, View, Alert  } from 'react-native'
 
-const Tile = ({title,date,time}) => {
+
+const Tile = ({title,date,time,theme}) => {
     return ( 
         <View style={styles.list}>
             <Text style={styles.head}>{title}</Text>
@@ -17,10 +18,11 @@ const styles = StyleSheet.create({
     list:{
         textAlign:'left',
         padding:15,
-        borderBottomWidth:0.8,
+        borderBottomWidth:2,
         fontFamily:'Nunito-Bold',
         flex:1,
         flexDirection:'row',
+        borderBottomColor:'#C1CAD7',
     },
     date:{
         flex:1,
@@ -31,6 +33,7 @@ const styles = StyleSheet.create({
     },
     data:{
         fontFamily:'Nunito-Regular',
+        color:'#899CA4'
     },
     head:{
         fontFamily:'Nunito-Bold',

@@ -7,9 +7,10 @@ import {
    
   } from 'react-native/Libraries/NewAppScreen';
   import database from '@react-native-firebase/database';
+  
 
 
-const Home = ({navigation}) => {
+const Home = ({navigation,theme}) => {
 
     const [list,setList] = useState([
         // {head:"Defaulter list",text:"All defaulter students are supposed to report in room no 403nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn nnnnnnnnnnnnnnnnnnnnnnnnnnn yyyyyyyyyyyyyyyyyyyyyyyyyyyyyy yyyyyyyyyyyyyyyyyyyyyyyyyyyy",key:'1'},
@@ -17,6 +18,7 @@ const Home = ({navigation}) => {
         // {head:'Holiday tomorrow1',text:'yeyy',key:'3'},
         
     ])
+    classroom='bec1'
 
     useEffect(() => {
         var myArray = []
@@ -25,6 +27,8 @@ const Home = ({navigation}) => {
       ref.once("value", (snapshot) => {
         snapshot.forEach( (childSnapshot) => {
             var myJSON=childSnapshot.toJSON()
+            var div = myJSON[classroom]
+            if(div==true){
           var key = myJSON.key
           var head = myJSON.head
           var notice = myJSON.text
@@ -32,6 +36,7 @@ const Home = ({navigation}) => {
           var date = myJSON.date
           var time = myJSON.time
           myArray = [...myArray, {head: head, text:notice, downloadURL:downURL,date:date,time:time,key: key }]
+            }
         
         })
     
@@ -57,9 +62,10 @@ const Home = ({navigation}) => {
         {/* <ScrollView
           contentInsetAdjustmentBehavior="automatic"
           style={styles.scrollView}> */}
-        <FlatList data={list} renderItem={({ item }) => (
+          <Text>Class : {classroom}</Text>
+        <FlatList data={list} keyExtractor={(item, index) => index.toString()} renderItem={({ item }) => (
         <TouchableOpacity onPress={()=>navigation.navigate('Notice',item)}>
-        <Tile title={item.head} date={item.date} time={item.time}/>
+        <Tile title={item.head} date={item.date} time={item.time} theme={theme}/>
         </TouchableOpacity>
       )}/>
       {/* </ScrollView> */}
