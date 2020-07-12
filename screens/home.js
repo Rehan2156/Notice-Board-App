@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from 'react';
-import { Text, StyleSheet, View, Alert,FlatList,Button,TouchableOpacity,SafeAreaView,ScrollView  } from 'react-native'
+import { Text, StyleSheet,ActivityIndicator, View, Alert,FlatList,Button,TouchableOpacity,SafeAreaView,ScrollView  } from 'react-native'
 import Tile from '../components/tile';
 import {
     Header,
@@ -18,12 +18,14 @@ const Home = ({navigation,theme}) => {
         // {head:'Holiday tomorrow1',text:'yeyy',key:'3'},
         
     ])
-    classroom='bec1'
+    const [load,setLoad]=useState(0)
+    classroom='fec2'
 
     useEffect(() => {
         var myArray = []
-    try {
+    // try {
       var ref = database().ref("/notice");
+      // setLoad(1)
       ref.once("value", (snapshot) => {
         snapshot.forEach( (childSnapshot) => {
             var myJSON=childSnapshot.toJSON()
@@ -49,15 +51,26 @@ const Home = ({navigation,theme}) => {
         //     lisIsready: true,
         //   })
         setList(myArray.reverse());
-      })
-    } catch(e) {
-      console.log('Error: aya bro :', e)
-    }
-        
+      }).then(()=>{
+        // setLoad(0)
+      }
+    );
+    // } catch(e) {
+    //   console.log('Error: aya bro :', e)
+    // }
     })
-
-    return ( 
     
+  //   if(load==1) {
+  //     return(
+  //         <View style={styles.container}>
+  //             <Text> Loading </Text>
+  //             <Text> Please Wait</Text>
+  //             <ActivityIndicator size='large' />
+  //         </View>
+  //     )
+  // }
+  // else{
+    return ( 
     <View>
         {/* <ScrollView
           contentInsetAdjustmentBehavior="automatic"
@@ -70,7 +83,9 @@ const Home = ({navigation,theme}) => {
       )}/>
       {/* </ScrollView> */}
      </View> 
+    
     );
+        // }
 }
 
 const styles = StyleSheet.create({

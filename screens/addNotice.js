@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, SafeAreaView, FlatList, View, Alert, Dimensions, TextInput, TouchableOpacity, ScrollView, Image, ProgressBarAndroid, Platform } from 'react-native'
-import { CheckBox, Button } from 'react-native-elements'
-// import {globalStyles} from '../styles/global'
+import { Text, StyleSheet,SafeAreaView, View, Alert,Dimensions,TextInput,TouchableOpacity,ScrollView, Image, ProgressBarAndroid, Platform, ActivityIndicator, ProgressBarAndroidComponent  } from 'react-native'
+import { CheckBox,Button } from 'react-native-elements'
+import {globalStyles} from '../styles/global'
 import database from '@react-native-firebase/database';
 import DocumentPicker from 'react-native-document-picker';
 import storage from '@react-native-firebase/storage'
@@ -50,7 +50,8 @@ export default class AddNotice extends Component {
         bee2: false,
         files: null,
         downloadLink: '',
-        progress: '0'
+        progress:'0',
+        uplaoding: false,
     }
 
     findDate = () => {
@@ -86,11 +87,16 @@ export default class AddNotice extends Component {
 
         const data = await RNFS.readFile(files.uri, 'base64')
 
+        this.setState({
+            uplaoding: true,
+        })
         await storageRef.putString(data, 'base64')
             .on('state_changed', snapshot => {
                 console.log('sanpshot: ' + snapshot.state)
+                var progress = (snapshot.bytesTransferred/snapshot.totalBytes) * 100
+                console.log('progress: ' + progress)
                 this.setState({
-                    progress: (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                    progress: progress
                 })
 
                 if (snapshot.state === storage.TaskState.SUCCESS) {
@@ -155,6 +161,9 @@ export default class AddNotice extends Component {
 
                 })
                 .then(() => {
+                    this.setState({ 
+                        uplaoding: false
+                    })
                     Alert.alert('Success', 'Notice is sent sucessfully')
                     this.props.navigation.navigate('Home')
                 });
@@ -196,12 +205,22 @@ export default class AddNotice extends Component {
     //    ])
 
     render() {
-        return (
-            <View style={styles.body}>
-                <ScrollView
-                    contentInsetAdjustmentBehavior="automatic"
-                    style={styles.scrollView}>
-                    {/* <View style={styles.box}> */}
+        if(this.state.uplaoding) {
+            return(
+                <View style={styles.container}>
+                    <Text> Uploading </Text>
+                    <Text> Please Wait</Text>
+                    <ActivityIndicator size='large' />
+                </View>
+            )
+        }
+
+        return ( 
+            <View style={globalStyles.body}>
+            <ScrollView
+              contentInsetAdjustmentBehavior="automatic"
+              style={styles.scrollView}>
+                {/* <View style={styles.box}> */}
                     {/* <Text style={styles.Header}>Shopkeeper Details </Text> */}
                     <TextInput
                         style={styles.headInput}
@@ -228,14 +247,13 @@ export default class AddNotice extends Component {
                         raised
                         onPress={() => this.selectOneFile()}
                     />
-                    <View>
-                        <Text style={styles.label}>Uploading: {this.state.progress}%</Text>
-                        <Image
-                            source={this.state.files}
-                            style={styles.image}
-                        />
-                    </View>
-
+                    { this.state.files && <View>
+                            <Image
+                                source={this.state.files}
+                                style={styles.image}
+                            />
+                    </View> } 
+    
                     <Text style={styles.label}>Select class to send the notice </Text>
 
                     <View style={styles.checkboxContainer}>
@@ -589,11 +607,12 @@ const styles = StyleSheet.create({
         // flex:1
     },
     container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        padding: 10,
-        paddingTop: 80,
-        paddingLeft: 15,
+      flex: 1,
+      backgroundColor: '#fff',
+      padding: 10,
+      justifyContent: 'center',
+      alignContent: 'center',
+      alignItems: 'center'
     },
     checkbox: {
         alignSelf: "center",
