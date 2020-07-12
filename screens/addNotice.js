@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet,SafeAreaView, View, Alert,Dimensions,TextInput,TouchableOpacity,ScrollView, Image, ProgressBarAndroid, Platform  } from 'react-native'
+import { Text, StyleSheet,SafeAreaView, View, Alert,Dimensions,TextInput,TouchableOpacity,ScrollView, Image, ProgressBarAndroid, Platform, ActivityIndicator, ProgressBarAndroidComponent  } from 'react-native'
 import { CheckBox,Button } from 'react-native-elements'
 import {globalStyles} from '../styles/global'
 import database from '@react-native-firebase/database';
@@ -20,7 +20,8 @@ export default class AddNotice extends Component {
         fec2: false,
         files: null,
         downloadLink: '',
-        progress:'0'
+        progress:'0',
+        uplaoding: false,
     }
 
     findDate=()=>{
@@ -56,11 +57,16 @@ export default class AddNotice extends Component {
 
         const data = await RNFS.readFile(files.uri, 'base64')
 
+        this.setState({
+            uplaoding: true,
+        })
         await storageRef.putString(data, 'base64')
         .on('state_changed', snapshot => {
                 console.log('sanpshot: ' + snapshot.state)
+                var progress = (snapshot.bytesTransferred/snapshot.totalBytes) * 100
+                console.log('progress: ' + progress)
                 this.setState({
-                    progress: (snapshot.bytesTransferred/snapshot.totalBytes) * 100
+                    progress: progress
                 })
 
                 if(snapshot.state === storage.TaskState.SUCCESS) {
@@ -95,6 +101,9 @@ export default class AddNotice extends Component {
                 time:this.findTime()
             })
             .then(() => {                
+                this.setState({ 
+                    uplaoding: false
+                })
                 Alert.alert('Success','Notice is sent sucessfully')
                 this.props.navigation.navigate('Home')
             });
@@ -124,6 +133,16 @@ export default class AddNotice extends Component {
       }
 
     render() {
+        if(this.state.uplaoding) {
+            return(
+                <View style={styles.container}>
+                    <Text> Uplaoding </Text>
+                    <Text> </Text>
+                    <ActivityIndicator size='large' />
+                </View>
+            )
+        }
+
         return ( 
             <View style={globalStyles.body}>
             <ScrollView
@@ -156,13 +175,12 @@ export default class AddNotice extends Component {
                         raised
                         onPress={()=>this.selectOneFile()}
                     />
-                    <View>
-                    <Text style={styles.label}>Uploading: {this.state.progress}%</Text>
+                    { this.state.files && <View>
                             <Image
                                 source={this.state.files}
                                 style={styles.image}
                             />
-                    </View>
+                    </View> } 
     
                     <Text style={styles.label}>Select class to send the notice </Text>
                     {/* <Picker
@@ -184,22 +202,18 @@ export default class AddNotice extends Component {
                     onPress={()=>{this.setState({ std: !this.state.std }); if(this.state.std==true){this.setState({ fec1: false }); this.setState({ fec2: false })} else{this.setState({ fec1: true }); this.setState({ fec2: true })}}}
                     />
                     </View>
-    
                     <View style={styles.checkboxContainer}>
                     <CheckBox
-                    
                     title='FE comp 1'
                     checked={this.state.fec1}
                     onPress={()=>this.setState({ fec1: !this.state.fec1 })}
                     />
                     <CheckBox
-                    
+
                     title='FE comp 2'
                     checked={this.state.fec2}
                     onPress={()=>this.setState({ fec2: !this.state.fec2 })}
                     />
-                    
-                    
                     </View>
                     
     
@@ -230,8 +244,9 @@ const styles = StyleSheet.create({
       flex: 1,
       backgroundColor: '#fff',
       padding: 10,
-      paddingTop: 80,
-      paddingLeft: 15,
+      justifyContent: 'center',
+      alignContent: 'center',
+      alignItems: 'center'
     },
     checkbox: {
         alignSelf: "center",
