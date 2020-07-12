@@ -9,10 +9,10 @@ import AddNotice from '../screens/addNotice';
 const screens = {
     Home:{
         screen:Home,
-        navigationOptions:({navigation})=>{
+        navigationOptions:({navigation,theme})=>{
             // title:'MESCOE Notice Board',
             return{
-            headerTitle:()=> <Header navigation={navigation} title='MESCOE Notice Board'/>
+            headerTitle:()=> <Header navigation={navigation} title='MESCOE Notice Board' theme={theme}/>
             }
         }
     },

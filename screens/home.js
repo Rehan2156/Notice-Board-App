@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from 'react';
-import { Text, StyleSheet, View, Alert,FlatList,Button,TouchableOpacity,SafeAreaView,ScrollView  } from 'react-native'
+import { Text, StyleSheet,ActivityIndicator, View, Alert,FlatList,Button,TouchableOpacity,SafeAreaView,ScrollView  } from 'react-native'
 import Tile from '../components/tile';
 import {
     Header,
@@ -7,9 +7,10 @@ import {
    
   } from 'react-native/Libraries/NewAppScreen';
   import database from '@react-native-firebase/database';
+  
 
 
-const Home = ({navigation}) => {
+const Home = ({navigation,theme}) => {
 
     const [list,setList] = useState([
         // {head:"Defaulter list",text:"All defaulter students are supposed to report in room no 403nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn nnnnnnnnnnnnnnnnnnnnnnnnnnn yyyyyyyyyyyyyyyyyyyyyyyyyyyyyy yyyyyyyyyyyyyyyyyyyyyyyyyyyy",key:'1'},
@@ -17,14 +18,19 @@ const Home = ({navigation}) => {
         // {head:'Holiday tomorrow1',text:'yeyy',key:'3'},
         
     ])
+    const [load,setLoad]=useState(0)
+    classroom='fec2'
 
     useEffect(() => {
         var myArray = []
-    try {
+    // try {
       var ref = database().ref("/notice");
+      // setLoad(1)
       ref.once("value", (snapshot) => {
         snapshot.forEach( (childSnapshot) => {
             var myJSON=childSnapshot.toJSON()
+            var div = myJSON[classroom]
+            if(div==true){
           var key = myJSON.key
           var head = myJSON.head
           var notice = myJSON.text
@@ -32,6 +38,7 @@ const Home = ({navigation}) => {
           var date = myJSON.date
           var time = myJSON.time
           myArray = [...myArray, {head: head, text:notice, downloadURL:downURL,date:date,time:time,key: key }]
+            }
         
         })
     
@@ -44,27 +51,41 @@ const Home = ({navigation}) => {
         //     lisIsready: true,
         //   })
         setList(myArray.reverse());
-      })
-    } catch(e) {
-      console.log('Error: aya bro :', e)
-    }
-        
+      }).then(()=>{
+        // setLoad(0)
+      }
+    );
+    // } catch(e) {
+    //   console.log('Error: aya bro :', e)
+    // }
     })
-
-    return ( 
     
+  //   if(load==1) {
+  //     return(
+  //         <View style={styles.container}>
+  //             <Text> Loading </Text>
+  //             <Text> Please Wait</Text>
+  //             <ActivityIndicator size='large' />
+  //         </View>
+  //     )
+  // }
+  // else{
+    return ( 
     <View>
         {/* <ScrollView
           contentInsetAdjustmentBehavior="automatic"
           style={styles.scrollView}> */}
-        <FlatList data={list} renderItem={({ item }) => (
+          <Text>Class : {classroom}</Text>
+        <FlatList data={list} keyExtractor={(item, index) => index.toString()} renderItem={({ item }) => (
         <TouchableOpacity onPress={()=>navigation.navigate('Notice',item)}>
-        <Tile title={item.head} date={item.date} time={item.time}/>
+        <Tile title={item.head} date={item.date} time={item.time} theme={theme}/>
         </TouchableOpacity>
       )}/>
       {/* </ScrollView> */}
      </View> 
+    
     );
+        // }
 }
 
 const styles = StyleSheet.create({
