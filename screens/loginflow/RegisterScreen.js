@@ -3,13 +3,21 @@ import { Text, StyleSheet, View, Button } from 'react-native'
 import { TextInput } from 'react-native-gesture-handler'
 import auth from '@react-native-firebase/auth'
 import database from '@react-native-firebase/database';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 export default class RegisterScreen extends Component {
     state = { 
         email: '', 
         password: '', 
         prn: '',
-        errorMessage: null 
+        classAndYear: '',
+        errorMessage: null ,
+        class: '',
+        year: '',
+        div: '',
+        dataClass: [{label: 'Computer', value: 'C'}, {label: 'EnTc', value: 'E'}, {label: 'Mechanical', value: 'M'}],
+        dataYear: [{label: 'FE', value: 'FE'},{label: 'SE', value: 'SE'},{label: 'TE', value: 'TE'},{label: 'BE', value: 'BE'}],
+        dataDiv: [{label: '1', value: '1'},{label: '2', value: '2'},{label: 'SS', value: 'SS'}]
     }
 
     handleSignUp = () => {
@@ -19,10 +27,12 @@ export default class RegisterScreen extends Component {
         .then(() => {
             console.log('hogaya')
             database()
-            .ref('/User/'+this.state.prn)
+            .ref('User/Student/'+auth().currentUser.uid)
             .set({
+                prn: this.state.prn,
                 email: this.state.email,
-                user: 'Student'
+                user: 'Student',
+                year_div: this.state.year + '' + this.state.class + '' + this.state.div,
             })
         })
         .catch(error => this.setState({ errorMessage: error.message }))
@@ -36,18 +46,59 @@ export default class RegisterScreen extends Component {
                     {this.state.errorMessage}
                 </Text>}
                 <TextInput
-                    placeholder="Email"
-                    autoCapitalize="none"
-                    style={styles.textInput}
-                    onChangeText={email => this.setState({ email })}
-                    value={this.state.email}
-                />
-                <TextInput
                     placeholder="PRN Number"
                     autoCapitalize="none"
                     style={styles.textInput}
                     onChangeText={prn => this.setState({ prn })}
                     value={this.state.prn}
+                />
+                <View style={styles.dropdown}>
+                    <DropDownPicker 
+                        placeholder = "Class"
+                        items={this.state.dataClass}
+                        defaultIndex={0}
+                        containerStyle={{height: 40}}
+                        onChangeItem={item => {
+                            console.log(item.label, item.value)
+                            this.setState({
+                                class: item.value
+                            })
+                        }}      
+                        style={styles.picker}              
+                    />
+                    <DropDownPicker 
+                        placeholder = "Year"
+                        items={this.state.dataYear}
+                        defaultIndex={1}
+                        containerStyle={{height: 40}}
+                        onChangeItem={item => {
+                            console.log(item.label, item.value)
+                            this.setState({
+                                year: item.value
+                            })
+                        }}     
+                        style={styles.picker}              
+                    />
+                    <DropDownPicker 
+                        placeholder = "Division"
+                        items={this.state.dataDiv}
+                        defaultIndex={2}
+                        containerStyle={{height: 40}}
+                        onChangeItem={item => {
+                            console.log(item.label, item.value)
+                            this.setState({
+                                div: item.value
+                            })
+                        }}  
+                        style={styles.picker}              
+                    />
+                </View>
+                <TextInput
+                    placeholder="Email"
+                    autoCapitalize="none"
+                    style={styles.textInput}
+                    onChangeText={email => this.setState({ email })}
+                    value={this.state.email}
                 />
                 <TextInput
                     secureTextEntry
@@ -75,6 +126,15 @@ const styles = StyleSheet.create({
       borderColor: 'gray',
       borderWidth: 1,
       marginTop: 8
+    },
+    picker: {
+        alignSelf: 'stretch',
+        width: 120,
+    },
+    dropdown: {
+        flexDirection: 'row',
+        alignItems: 'stretch',
+        margin: 10,
     }
   })
 

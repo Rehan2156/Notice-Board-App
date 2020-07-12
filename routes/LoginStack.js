@@ -1,27 +1,25 @@
 import React from 'react';
 import {createStackNavigator} from 'react-navigation-stack'
 import Header from '../shared/header'
-import LoginScreen from '../screens/loginflow/LoginScreen';
-import RegisterScreen from '../screens/loginflow/RegisterScreen';
+import FirstPage from '../screens/FirstPage';
+import StudentLoginStack from './StudentLoginStack';
+import TeacherLoginStack from './TeacherLoginStack'
 
 const screens = {
-    Login:{
-        screen: LoginScreen,
+    FirstPage:{
+        screen: FirstPage,
         navigationOptions:({navigation})=>{
             // title:'MESCOE Notice Board',
             return{
-            headerTitle:()=> <Header title='Login'/>
+            headerTitle:()=> <Header title='MESCOE Notice Board'/>
             }
         }
     },
-    Register:{
-        screen: RegisterScreen,
-        navigationOptions:({navigation})=>{
-            // title:'MESCOE Notice Board',
-            return{
-            headerTitle:()=> <Header title='Register'/>
-            }
-        }
+    Student:{
+        screen: StudentLoginStack,
+    },
+    Teacher:{
+        screen: TeacherLoginStack,
     }
 }
 
