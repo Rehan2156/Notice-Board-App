@@ -1,9 +1,9 @@
 import React from 'react';
-import Navigator from './routes/drawer'
+import MainRoute from './routes/MainRoute';
 
 const App = () => {
   return ( 
-    <Navigator/>
+    <MainRoute />
    );
 }
  
