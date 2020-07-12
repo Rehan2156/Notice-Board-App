@@ -10,7 +10,7 @@ export default function Header({navigation,title }) {
 
   return (
     <View style={styles.header}>
-      <Icon name='bars' size={28} onPress={openMenu} style={styles.drawer} />
+      {navigation && <Icon name='bars' size={28} onPress={openMenu} style={styles.drawer} />}
       <View>
         <Text style={styles.headerText}>{title}</Text>
       </View>
