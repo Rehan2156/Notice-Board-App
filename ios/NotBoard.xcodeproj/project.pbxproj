@@ -39,6 +39,7 @@
 		A792832D6AE344C89435DE3C /* mes_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = A8B3B18F668B4058AA112750 /* mes_logo.png */; };
 		E99C80D6F29947EF851784FF /* Amiri-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 09D6E3E1DFEA4AF18D561E4C /* Amiri-Bold.ttf */; };
 		CC998E2F99DB4F419DCD50B0 /* Lato-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9017A98FE2DA4505811C1032 /* Lato-Bold.ttf */; };
+		E0D2F36FD4F449C092A7AE22 /* backLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 23E2BF08C2B14E589BE39A2D /* backLogo.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -97,6 +98,7 @@
 		A8B3B18F668B4058AA112750 /* mes_logo.png */ = {isa = PBXFileReference; name = "mes_logo.png"; path = "../assets/fonts/img/mes_logo.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		09D6E3E1DFEA4AF18D561E4C /* Amiri-Bold.ttf */ = {isa = PBXFileReference; name = "Amiri-Bold.ttf"; path = "../assets/fonts/Amiri-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		9017A98FE2DA4505811C1032 /* Lato-Bold.ttf */ = {isa = PBXFileReference; name = "Lato-Bold.ttf"; path = "../assets/fonts/Lato-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		23E2BF08C2B14E589BE39A2D /* backLogo.png */ = {isa = PBXFileReference; name = "backLogo.png"; path = "../assets/fonts/img/backLogo.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -230,6 +232,7 @@
 				A8B3B18F668B4058AA112750 /* mes_logo.png */,
 				09D6E3E1DFEA4AF18D561E4C /* Amiri-Bold.ttf */,
 				9017A98FE2DA4505811C1032 /* Lato-Bold.ttf */,
+				23E2BF08C2B14E589BE39A2D /* backLogo.png */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -396,6 +399,7 @@
 				A792832D6AE344C89435DE3C /* mes_logo.png in Resources */,
 				E99C80D6F29947EF851784FF /* Amiri-Bold.ttf in Resources */,
 				CC998E2F99DB4F419DCD50B0 /* Lato-Bold.ttf in Resources */,
+				E0D2F36FD4F449C092A7AE22 /* backLogo.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

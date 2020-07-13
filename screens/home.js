@@ -78,7 +78,7 @@ const Home = ({navigation,theme}) => {
         {/* <ScrollView
           contentInsetAdjustmentBehavior="automatic"
           style={styles.scrollView}> */}
-          <Text onPress={auth().signOut()}>Class : {classroom}</Text>
+          <Text>Class : {classroom}</Text>
         <FlatList data={list} keyExtractor={(item, index) => index.toString()} renderItem={({ item }) => (
         <TouchableOpacity onPress={()=>navigation.navigate('Notice',item)}>
         <Tile title={item.head} date={item.date} time={item.time} theme={theme}/>
