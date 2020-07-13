@@ -1,6 +1,7 @@
 import React,{useState,useEffect} from 'react';
 import { Text, StyleSheet,ActivityIndicator, View, Alert,FlatList,Button,TouchableOpacity,SafeAreaView,ScrollView  } from 'react-native'
 import Tile from '../components/tile';
+import auth from '@react-native-firebase/auth'
 import {
     Header,
     Colors,
@@ -19,7 +20,7 @@ const Home = ({navigation,theme}) => {
         
     ])
     const [load,setLoad]=useState(0)
-    classroom='fec2'
+    classroom='bec1'
 
     useEffect(() => {
         var myArray = []
@@ -70,12 +71,14 @@ const Home = ({navigation,theme}) => {
   //     )
   // }
   // else{
+    
+
     return ( 
     <View>
         {/* <ScrollView
           contentInsetAdjustmentBehavior="automatic"
           style={styles.scrollView}> */}
-          <Text>Class : {classroom}</Text>
+          {/* <Text>Class : {classroom}</Text> */}
         <FlatList data={list} keyExtractor={(item, index) => index.toString()} renderItem={({ item }) => (
         <TouchableOpacity onPress={()=>navigation.navigate('Notice',item)}>
         <Tile title={item.head} date={item.date} time={item.time} theme={theme}/>
