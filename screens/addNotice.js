@@ -82,7 +82,7 @@ export default class AddNotice extends Component {
         console.log('Pressed This')
         let headers = {
             "Content-Type": "application/json; charset=utf-8",
-            Authorization: "YjhmNTI0N2MtMzI1OS00MjNkLWJmODQtNmZkNmU3NTBjNjE3"
+            Authorization: "Basic YjhmNTI0N2MtMzI1OS00MjNkLWJmODQtNmZkNmU3NTBjNjE3"
           };
       
           let endpoint = "https://onesignal.com/api/v1/notifications";
@@ -93,7 +93,8 @@ export default class AddNotice extends Component {
             body: JSON.stringify({
               app_id: "82d014e8-838d-4e74-ac0a-ab31f4f8a2ae",
               included_segments: ["All"],
-              contents: { en: this.state.head }
+              contents: { en: this.state.head },
+              headings: {en: "MESCOE Notice board"},
             })
           };
           fetch(endpoint, params).then(res => console.log("After :", res));
@@ -600,9 +601,6 @@ export default class AddNotice extends Component {
 
 
                     {/* ----------------------------------------- */}
-
-
-
 
                     {/* <TouchableOpacity 
                         style={styles.myBtnB}
