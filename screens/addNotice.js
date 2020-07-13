@@ -6,6 +6,7 @@ import database from '@react-native-firebase/database';
 import DocumentPicker from 'react-native-document-picker';
 import storage from '@react-native-firebase/storage'
 import RNFS from 'react-native-fs'
+import OneSignal from 'react-native-onesignal';
 
 
 const { width: WIDTH } = Dimensions.get('window')
@@ -75,6 +76,27 @@ export default class AddNotice extends Component {
         minutes = minutes < 10 ? '0' + minutes : minutes;
         return hours + ':' + minutes + ' ' + newformat
 
+    }
+
+    pushNotification = () => {
+        console.log('Pressed This')
+        let headers = {
+            "Content-Type": "application/json; charset=utf-8",
+            Authorization: "YjhmNTI0N2MtMzI1OS00MjNkLWJmODQtNmZkNmU3NTBjNjE3"
+          };
+      
+          let endpoint = "https://onesignal.com/api/v1/notifications";
+      
+          let params = {
+            method: "POST",
+            headers: headers,
+            body: JSON.stringify({
+              app_id: "82d014e8-838d-4e74-ac0a-ab31f4f8a2ae",
+              included_segments: ["All"],
+              contents: { en: this.state.head }
+            })
+          };
+          fetch(endpoint, params).then(res => console.log("After :", res));
     }
 
     uploadImage = async () => {
@@ -161,6 +183,7 @@ export default class AddNotice extends Component {
 
                 })
                 .then(() => {
+                    this.pushNotification()
                     this.setState({ 
                         uplaoding: false
                     })
@@ -181,12 +204,19 @@ export default class AddNotice extends Component {
             console.log('Type : ' + res.type);
             console.log('File Name : ' + res.name);
             console.log('File Size : ' + res.size);
-            this.setState({ files: res });
+
+            if(((res.size / 1024) / 1024) >= 10) {
+                console.log('hello: ' + res.size)
+                throw " Size of this document is too large "
+            } else {
+                this.setState({ files: res });
+            }
+
         } catch (err) {
             if (DocumentPicker.isCancel(err)) {
                 alert('Canceled from single doc picker');
             } else {
-                alert('Unknown Error: ' + JSON.stringify(err));
+                alert('Error: ' + JSON.stringify(err));
                 throw err;
             }
         }

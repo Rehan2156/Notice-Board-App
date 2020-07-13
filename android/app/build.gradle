@@ -77,6 +77,18 @@ import com.android.build.OutputFile
  * ]
  */
 
+/* OneSignal build script */
+buildscript {
+    repositories {
+        maven { url 'https://plugins.gradle.org/m2/' } // Gradle Plugin Portal 
+    }
+    dependencies {
+        classpath 'gradle.plugin.com.onesignal:onesignal-gradle-plugin:[0.12.6, 0.99.99]'
+    }
+}
+
+apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
+
 project.ext.react = [
     enableHermes: false,  // clean and rebuild if changing
 ]
