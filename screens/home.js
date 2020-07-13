@@ -31,7 +31,7 @@ const Home = ({navigation,theme}) => {
         snapshot.forEach( (childSnapshot) => {
             var myJSON=childSnapshot.toJSON()
             var div = myJSON[classroom]
-            if(div==true){
+           // if(div==true){
           var key = myJSON.key
           var head = myJSON.head
           var notice = myJSON.text
@@ -39,7 +39,7 @@ const Home = ({navigation,theme}) => {
           var date = myJSON.date
           var time = myJSON.time
           myArray = [...myArray, {head: head, text:notice, downloadURL:downURL,date:date,time:time,key: key }]
-            }
+           // }
         
         })
     
