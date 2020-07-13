@@ -1,9 +1,9 @@
 //This is an example code for Navigation Drawer with Custom Side bar//
 import React,{Component} from 'react';
-import { View, StyleSheet, Image, Text } from 'react-native';
+import { View, StyleSheet, Image, Text, Button } from 'react-native';
 // import Icon from 'react-native-vector-icons';
 import Icon from 'react-native-vector-icons/FontAwesome'
-// import * as firebase from 'firebase'
+import auth from '@react-native-firebase/auth'
 
 
 export default class CustomSidebarMenu extends Component {
@@ -25,12 +25,7 @@ export default class CustomSidebarMenu extends Component {
         navOptionThumb: 'envelope',
         navOptionName: 'Add Notice',
         screenToNavigate: 'AddNotice',
-      },
-    //   {
-    //     navOptionThumb: 'error-outline',
-    //     navOptionName: 'About QueT',
-    //     screenToNavigate: 'About',
-    //   },
+      }
     ];
   }
   render() {
@@ -80,6 +75,24 @@ export default class CustomSidebarMenu extends Component {
               </View>
             ))}
           </View>
+          <Button
+            title='Log Out'
+            icon={
+              <Icon
+                name="sign-out"
+                size={15}
+                color="white"
+                style={{paddingRight:20}}
+              />
+            }
+            onPress={() => {
+                auth()
+                .signOut()
+                .then(() => {
+                  console.log('Logged Out')
+                })
+            }}
+          />
         </View>
       );
   }
