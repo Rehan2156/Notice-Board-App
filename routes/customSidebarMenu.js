@@ -5,6 +5,7 @@ import { View, StyleSheet, Image, Text, Button } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome'
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth'
+import { TouchableHighlight, TouchableOpacity } from 'react-native-gesture-handler';
 
 
 export default class CustomSidebarMenu extends Component {
@@ -95,24 +96,22 @@ export default class CustomSidebarMenu extends Component {
               </View>
             ))}
           </View>
-          <Button
-            title='Log Out'
-            icon={
-              <Icon
-                name="sign-out"
-                size={15}
-                color="white"
-                style={{paddingRight:20}}
-              />
-            }
-            onPress={() => {
+          <TouchableOpacity style={{flex:1,flexDirection:'row',paddingTop:20}} 
+          onPress={() => {
                 auth()
                 .signOut()
                 .then(() => {
                   console.log('Logged Out')
                 })
-            }}
-          />
+            }}>
+          <Icon
+                name="sign-out"
+                size={15}
+                color="#808080"
+                style={{paddingRight:20}}
+              />
+          <Text>LOG OUT</Text>    
+          </TouchableOpacity>
         </View>
       );
   }
