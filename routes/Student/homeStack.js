@@ -1,26 +1,18 @@
 import React from 'react';
 import {createStackNavigator} from 'react-navigation-stack'
 import {createAppContainer} from 'react-navigation'
-import Home from '../screens/home'
-import Notice from '../screens/notice'
-import Header from '../shared/header'
-import AddNotice from '../screens/addNotice';
+import Notice from '../../screens/notice'
+import Header from '../../shared/header'
+import StudentHome from '../../screens/Student/home';
 
 const screens = {
     Home:{
-        screen:Home,
+        screen:StudentHome,
         navigationOptions:({navigation,theme})=>{
             // title:'MESCOE Notice Board',
             return{
             headerTitle:()=> <Header navigation={navigation} title='MESCOE Notice Board' theme={theme}/>
             }
-        }
-    },
-    AddNotice:{
-        screen:AddNotice,
-        navigationOptions:{
-            title:'Add Notice',
-            // headerStyle:{backgroundColor:'#eee'}
         }
     },
     Notice:{

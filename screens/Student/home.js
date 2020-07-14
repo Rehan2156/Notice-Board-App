@@ -1,6 +1,6 @@
 import React,{useState,useEffect} from 'react';
 import { Text, StyleSheet,ActivityIndicator, View, Alert,FlatList,Button,TouchableOpacity,SafeAreaView,ScrollView  } from 'react-native'
-import Tile from '../components/tile';
+import Tile from '../../components/tile';
 import auth from '@react-native-firebase/auth'
 import {
     Header,
@@ -11,7 +11,7 @@ import {
   
 
 
-const Home = ({navigation,theme}) => {
+const StudentHome = ({navigation,theme}) => {
 
     const [list,setList] = useState([
         // {head:"Defaulter list",text:"All defaulter students are supposed to report in room no 403nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn nnnnnnnnnnnnnnnnnnnnnnnnnnn yyyyyyyyyyyyyyyyyyyyyyyyyyyyyy yyyyyyyyyyyyyyyyyyyyyyyyyyyy",key:'1'},
@@ -105,4 +105,4 @@ const styles = StyleSheet.create({
       },
     })
 
-export default Home;
+export default StudentHome;

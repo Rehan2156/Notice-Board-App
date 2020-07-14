@@ -1,13 +1,13 @@
 import React from 'react';
 import {createStackNavigator} from 'react-navigation-stack'
 import {createAppContainer} from 'react-navigation'
-import Home from '../screens/home'
-import Notice from '../screens/notice'
-import Header from '../shared/header'
+import Notice from '../../screens/notice'
+import Header from '../../shared/header'
+import TeacherHome from '../../screens/Teacher/home';
 
 const screens = {
     Home:{
-        screen:Home,
+        screen:TeacherHome,
         navigationOptions:({navigation})=>{
             // title:'MESCOE Notice Board',
             return{
