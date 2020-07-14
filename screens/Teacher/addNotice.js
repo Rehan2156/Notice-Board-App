@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Text, StyleSheet,SafeAreaView, View, Alert,Dimensions,TextInput,TouchableOpacity,ScrollView, Image, ProgressBarAndroid, Platform, ActivityIndicator, ProgressBarAndroidComponent  } from 'react-native'
 import { CheckBox,Button } from 'react-native-elements'
-import {globalStyles} from '../styles/global'
+import {globalStyles} from '../../styles/global'
 import database from '@react-native-firebase/database';
 import DocumentPicker from 'react-native-document-picker';
 import storage from '@react-native-firebase/storage'

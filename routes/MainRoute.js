@@ -1,14 +1,15 @@
 import { createSwitchNavigator, createAppContainer } from "react-navigation"
-import LoginStack from "./LoginStack"
-import LoadingScreen from "../screens/loginflow/LoadingScreen"
-import RootDrawerNavigator from './drawer'
+import FirstPage from "../screens/FirstPage"
+import StudentMainRoute from "./StudentMainRoute"
+import TeacherMainRoute from "./TeacherMainRoute"
+
 const MainRoute = createSwitchNavigator({
-    Loading: LoadingScreen,
-    LoginStack: LoginStack,
-    Navigator: RootDrawerNavigator,
+    FirstPage: FirstPage,
+    Student: StudentMainRoute,
+    Teacher: TeacherMainRoute,
 },
 {
-    initialRouteName: 'Loading'
+    initialRouteName: 'FirstPage'
 }
 )
 

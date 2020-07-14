@@ -3,26 +3,19 @@ import { createDrawerNavigator } from 'react-navigation-drawer';
 import { createAppContainer} from 'react-navigation'
 import {Dimensions, Button, View} from 'react-native'
 import HomeStack from './homeStack';
-import AddNotice from '../screens/addNotice';
-import CustomSidebarMenu from './customSidebarMenu';
-import Logout from '../methods/Logout';
+import StudentCustomSidebarMenu from './customSidebarMenu';
 
 
 // drawer navigation options
-const RootDrawerNavigator = createDrawerNavigator({
-
+const StudentRootDrawerNavigator = createDrawerNavigator({
   Home: {
     screen: HomeStack,
-  },
-  AddNotice:{
-    screen: AddNotice,
-    
   }
 },
 {
-  contentComponent: CustomSidebarMenu,
+  contentComponent: StudentCustomSidebarMenu,
   drawerWidth: Dimensions.get('window').width - 130,
 }
 );
 
-export default createAppContainer(RootDrawerNavigator)
+export default createAppContainer(StudentRootDrawerNavigator)

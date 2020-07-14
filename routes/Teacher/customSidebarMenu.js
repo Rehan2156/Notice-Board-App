@@ -11,16 +11,16 @@ export default class CustomSidebarMenu extends Component {
 
   state={
     user:'',
-    classroom:''
+    name:''
   }
 
   componentDidMount(){
-    database().ref("/Users/Student/"+auth().currentUser.uid)
+    database().ref("Users/Teachers/"+auth().currentUser.uid)
       .once("value",(snapshot)=>{
         var myJSON = snapshot.toJSON()
         this.setState({
           user:myJSON.user,
-          classroom:myJSON.year_div
+          name:myJSON.name
         })
       })
   }
@@ -55,7 +55,7 @@ export default class CustomSidebarMenu extends Component {
             style={styles.sideMenuProfileIcon}
           />
           <Text style={styles.head}>User : {this.state.user}</Text>
-          <Text style={styles.head}>Class : {this.state.classroom}</Text>
+          <Text style={styles.head}>Name : {this.state.name}</Text>
           {/*Divider between Top Image and Sidebar Option*/}
           <View
             style={{
