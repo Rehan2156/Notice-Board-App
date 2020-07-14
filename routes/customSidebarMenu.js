@@ -4,9 +4,28 @@ import { View, StyleSheet, Image, Text } from 'react-native';
 // import Icon from 'react-native-vector-icons';
 import Icon from 'react-native-vector-icons/FontAwesome'
 // import * as firebase from 'firebase'
+import database from '@react-native-firebase/database';
+import auth from '@react-native-firebase/auth'
 
 
 export default class CustomSidebarMenu extends Component {
+
+  state={
+    user:'',
+    classroom:''
+  }
+
+  componentDidMount(){
+    database().ref("/Users/Student/"+auth().currentUser.uid)
+      .once("value",(snapshot)=>{
+        var myJSON = snapshot.toJSON()
+        this.setState({
+          user:myJSON.user,
+          classroom:myJSON.year_div
+        })
+      })
+  }
+
   constructor() {
     super();
     //Setting up the Main Top Large Image of the Custom Sidebar
@@ -41,6 +60,8 @@ export default class CustomSidebarMenu extends Component {
             source={{ uri: this.proileImage }}
             style={styles.sideMenuProfileIcon}
           />
+          <Text style={styles.head}>User : {this.state.user}</Text>
+          <Text style={styles.head}>Class : {this.state.classroom}</Text>
           {/*Divider between Top Image and Sidebar Option*/}
           <View
             style={{
@@ -123,4 +144,8 @@ sideMenuContainer: {
     borderRadius: 150 / 2,
     
   },
+  head:{
+    fontFamily:'Nunito-Bold',
+    fontSize:20
+  }
 });

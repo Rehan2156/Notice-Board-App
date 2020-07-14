@@ -258,7 +258,7 @@ export default class AddNotice extends Component {
                         onChangeText={val => this.setState({ head: val })}
                         selectedValue={this.state.head}
                         placeholder={'Heading'}
-                        placeholderTextColor={'rgba(255,255,255,0.7)'}
+                        // placeholderTextColor={'rgba(255,255,255,0.7)'}
                         underlineColorAndroid='transparent'
                     />
 
@@ -267,8 +267,8 @@ export default class AddNotice extends Component {
                         onChangeText={val => this.setState({ notice: val })}
                         selectedValue={this.state.notice}
                         placeholder={'Type the notice'}
-                        placeholderTextColor={'rgba(255,255,255,0.7)'}
-                        underlineColorAndroid='transparent'
+                        // placeholderTextColor={'rgba(255,255,255,0.7)'}
+                        // underlineColorAndroid='transparent'
                         multiline={true}
                     />
 
@@ -668,11 +668,14 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         fontSize: 16,
         paddingLeft: 20,
-        backgroundColor: 'rgba(0,0,0,0.35)',
-        color: 'rgba(255,255,255,0.7)',
+        // backgroundColor: 'rgba(0,0,0,0.35)',
+        // color: 'rgba(255,255,255,0.7)',
         marginHorizontal: 25,
         fontFamily: 'Nunito-Bold',
         margin: 20,
+        borderRadius:5,
+        borderColor:'black',
+          borderWidth:1,
     },
     textInput: {
         alignSelf: 'center',
@@ -682,11 +685,27 @@ const styles = StyleSheet.create({
         fontSize: 16,
         paddingLeft: 20,
         paddingRight: 20,
-        backgroundColor: 'rgba(0,0,0,0.35)',
-        color: 'rgba(255,255,255,0.7)',
+        // backgroundColor: 'rgba(0,0,0,0.35)',
+        // color: 'rgba(255,255,255,0.7)',
         marginHorizontal: 25,
         fontFamily: 'Nunito-Bold',
         margin: 20,
+        //     justifyContent:'center',
+        //     width: '90%',
+        //   // height:55,
+          borderRadius:5,
+        //   fontSize:16,
+        //   // paddingLeft:45,
+        //   // backgroundColor:'rgba(0,0,0,0.35)',
+        //   // color:'rgba(255,255,255,0.7)',
+        //   // marginHorizontal:25,
+        //   fontFamily:'Nunito-Bold',
+          borderColor:'black',
+          borderWidth:1,
+        //   padding:10,
+        //   margin:20,
+        //   paddingLeft:45,
+        //   paddingRight:45
     },
 
     myBtnA: {
