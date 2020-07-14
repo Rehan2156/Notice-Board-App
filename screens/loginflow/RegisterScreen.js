@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, View, Button,TouchableHighlight } from 'react-native'
+import { Text, StyleSheet, View, Button,TouchableHighlight,ScrollView, KeyboardAvoidingView } from 'react-native'
 import { TextInput } from 'react-native-gesture-handler'
 import auth from '@react-native-firebase/auth'
 import database from '@react-native-firebase/database';
@@ -42,11 +42,14 @@ export default class RegisterScreen extends Component {
 
     render() {
         return (
+            <ScrollView>
             <View style={styles.container}>
                 {this.state.errorMessage &&
                 <Text style={{ color: 'red' }}>
                     {this.state.errorMessage}
                 </Text>}
+                <View style={styles.inputContainer}>
+            <Icon name={'document'} size={25} color="#808080" style={styles.inputIcon}/>
                 <TextInput
                     placeholder="PRN Number"
                     autoCapitalize="none"
@@ -54,6 +57,7 @@ export default class RegisterScreen extends Component {
                     onChangeText={prn => this.setState({ prn })}
                     value={this.state.prn}
                 />
+                </View>
                 <View style={styles.dropdown}>
                     <DropDownPicker 
                         placeholder = "Branch"
@@ -95,6 +99,9 @@ export default class RegisterScreen extends Component {
                         style={styles.picker}              
                     />
                 </View>
+
+                <View style={styles.inputContainer}>
+            <Icon name={'at'} size={25} color="#808080" style={styles.inputIcon}/>
                 <TextInput
                     placeholder="Email"
                     autoCapitalize="none"
@@ -102,6 +109,10 @@ export default class RegisterScreen extends Component {
                     onChangeText={email => this.setState({ email })}
                     value={this.state.email}
                 />
+                </View>
+
+                <View style={styles.inputContainer}>
+            <Icon name={'lock-closed'} size={25} color="#808080" style={styles.inputIcon}/>
                 <TextInput
                     secureTextEntry
                     placeholder="Password"
@@ -110,17 +121,19 @@ export default class RegisterScreen extends Component {
                     onChangeText={password => this.setState({ password })}
                     value={this.state.password}
                 />
+                </View>
                 <TouchableHighlight style={styles.myBtn} onPress={this.handleSignUp}>
-            <Text style={styles.btnText}>Login</Text>
+            <Text style={styles.btnText}>Sign Up</Text>
           </TouchableHighlight>
             </View>
+            </ScrollView>
         )
     }
 }
 
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
+    //   flex: 1,
       justifyContent:'center',
         borderRadius: 6,
         elevation: 3,
