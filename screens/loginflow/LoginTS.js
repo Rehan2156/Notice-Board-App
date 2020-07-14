@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, View, Button,Dimensions,TouchableHighlight,KeyboardAvoidingView,SafeAreaView } from 'react-native'
+import { Text, StyleSheet, View, Button,Dimensions,TouchableHighlight,ScrollView,SafeAreaView } from 'react-native'
 import { TextInput,TouchableOpacity } from 'react-native-gesture-handler'
 import auth from '@react-native-firebase/auth'
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -19,7 +19,8 @@ export default class LoginTS extends Component {
 
     render() {
         return (
-          <KeyboardAvoidingView style={styles.container} behavior='height'>
+          <ScrollView>
+          <View style={styles.container}>
           {this.state.errorMessage &&
             <Text style={{ color: 'red' }}>
               {this.state.errorMessage}
@@ -54,14 +55,15 @@ export default class LoginTS extends Component {
           <TouchableOpacity style={styles.navBtn} onPress={() => this.props.navigation.navigate('Register')}>
             <Text style={styles.navText}>Don't have an account? Sign Up</Text>
           </TouchableOpacity>
-        </KeyboardAvoidingView>
+        </View>
+        </ScrollView>
         )
     }
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
     justifyContent:'center',
       borderRadius: 6,
       elevation: 3,
