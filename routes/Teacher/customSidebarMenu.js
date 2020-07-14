@@ -5,23 +5,22 @@ import { View, StyleSheet, Image, Text, Button } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome'
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth'
-import { TouchableHighlight, TouchableOpacity } from 'react-native-gesture-handler';
 
 
 export default class CustomSidebarMenu extends Component {
 
   state={
     user:'',
-    classroom:''
+    name:''
   }
 
   componentDidMount(){
-    database().ref("/Users/Student/"+auth().currentUser.uid)
+    database().ref("Users/Teachers/"+auth().currentUser.uid)
       .once("value",(snapshot)=>{
         var myJSON = snapshot.toJSON()
         this.setState({
           user:myJSON.user,
-          classroom:myJSON.year_div
+          name:myJSON.name
         })
       })
   }
@@ -56,7 +55,7 @@ export default class CustomSidebarMenu extends Component {
             style={styles.sideMenuProfileIcon}
           />
           <Text style={styles.head}>User : {this.state.user}</Text>
-          <Text style={styles.head}>Class : {this.state.classroom}</Text>
+          <Text style={styles.head}>Name : {this.state.name}</Text>
           {/*Divider between Top Image and Sidebar Option*/}
           <View
             style={{
@@ -96,22 +95,24 @@ export default class CustomSidebarMenu extends Component {
               </View>
             ))}
           </View>
-          <TouchableOpacity style={{flex:1,flexDirection:'row',paddingTop:20}} 
-          onPress={() => {
+          <Button
+            title='Log Out'
+            icon={
+              <Icon
+                name="sign-out"
+                size={15}
+                color="white"
+                style={{paddingRight:20}}
+              />
+            }
+            onPress={() => {
                 auth()
                 .signOut()
                 .then(() => {
                   console.log('Logged Out')
                 })
-            }}>
-          <Icon
-                name="sign-out"
-                size={15}
-                color="#808080"
-                style={{paddingRight:20}}
-              />
-          <Text>LOG OUT</Text>    
-          </TouchableOpacity>
+            }}
+          />
         </View>
       );
   }

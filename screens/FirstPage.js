@@ -1,9 +1,32 @@
 import React, { Component } from 'react'
 import { Text, StyleSheet, View, Button,Image,Dimensions,TouchableOpacity,ImageBackground } from 'react-native'
+import auth from '@react-native-firebase/auth'
+import database from '@react-native-firebase/database'
 
 const {width:WIDTH}=Dimensions.get('window')
 
 export default class FirstPage extends Component {
+
+  componentDidMount() {
+    auth().onAuthStateChanged(user => {
+      if(user) {
+        console.log('is Logged in')
+        var uid = auth().currentUser.uid      
+        this.checkingWhereToGo(uid)
+      }
+    })
+  }
+
+  checkingWhereToGo = async (uid) => {
+    if (await (await database().ref('Users/Student/' + uid + '/').once('value')).exists()) {
+      console.log('Student')
+      this.props.navigation.navigate('Student')
+    } else {
+      console.log('Teacher')
+      this.props.navigation.navigate('Teacher')
+    }
+  }
+
     render() {
         return (
             <ImageBackground style={styles.body} source={{uri:'https://cdn02.plentymarkets.com/epz0zx1qug71/item/images/131242/full/rasch--Tapete--Aqua--Relief--Satintapete--210309--.jpg'}}>

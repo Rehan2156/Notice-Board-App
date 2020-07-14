@@ -1,6 +1,6 @@
 import React,{useState,useEffect} from 'react';
 import { Text, StyleSheet,ActivityIndicator, View, Alert,FlatList,Button,TouchableOpacity,SafeAreaView,ScrollView  } from 'react-native'
-import Tile from '../components/tile';
+import Tile from '../../components/tile';
 import auth from '@react-native-firebase/auth'
 import {
     Header,
@@ -11,7 +11,7 @@ import {
   
 
 
-const Home = ({navigation,theme}) => {
+const TeacherHome = ({navigation,theme}) => {
 
     const [list,setList] = useState([
         // {head:"Defaulter list",text:"All defaulter students are supposed to report in room no 403nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn nnnnnnnnnnnnnnnnnnnnnnnnnnn yyyyyyyyyyyyyyyyyyyyyyyyyyyyyy yyyyyyyyyyyyyyyyyyyyyyyyyyyy",key:'1'},
@@ -25,30 +25,19 @@ const Home = ({navigation,theme}) => {
 
     useEffect(() => {
         var myArray = []
-      database().ref("/Users/Student/"+auth().currentUser.uid)
-      .once("value",(snapshot)=>{
-        var myJSON = snapshot.toJSON()
-        setUser(myJSON.user)
-        setClassroom(myJSON.year_div)
-      })
-
     // try {
       var ref = database().ref("/notice");
       // setLoad(1)
       ref.once("value", (snapshot) => {
         snapshot.forEach( (childSnapshot) => {
             var myJSON=childSnapshot.toJSON()
-            var div = myJSON[classroom.toLowerCase()]
-           if(div==true){
           var key = myJSON.key
           var head = myJSON.head
           var notice = myJSON.text
           var downURL = myJSON.downloadURL
           var date = myJSON.date
           var time = myJSON.time
-          myArray = [...myArray, {head: head, text:notice, downloadURL:downURL,date:date,time:time,key: key }]
-           }
-        
+          myArray = [...myArray, {head: head, text:notice, downloadURL:downURL,date:date,time:time,key: key }]        
         })
     
         //   this.setState({
@@ -105,4 +94,4 @@ const styles = StyleSheet.create({
       },
     })
 
-export default Home;
+export default TeacherHome;
