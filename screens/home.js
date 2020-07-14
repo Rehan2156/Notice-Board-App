@@ -20,18 +20,26 @@ const Home = ({navigation,theme}) => {
         
     ])
     const [load,setLoad]=useState(0)
-    classroom='bec1'
+    const [classroom,setClassroom]=useState('')
+    const [user,setUser]=useState('')
 
     useEffect(() => {
         var myArray = []
+      database().ref("/Users/Student/"+auth().currentUser.uid)
+      .once("value",(snapshot)=>{
+        var myJSON = snapshot.toJSON()
+        // setUser(myJSON.user)
+        setClassroom(myJSON.year_div)
+      })
+
     // try {
       var ref = database().ref("/notice");
       // setLoad(1)
       ref.once("value", (snapshot) => {
         snapshot.forEach( (childSnapshot) => {
             var myJSON=childSnapshot.toJSON()
-            var div = myJSON[classroom]
-           // if(div==true){
+            var div = myJSON[classroom.toLowerCase()]
+           if(div==true){
           var key = myJSON.key
           var head = myJSON.head
           var notice = myJSON.text
@@ -39,7 +47,7 @@ const Home = ({navigation,theme}) => {
           var date = myJSON.date
           var time = myJSON.time
           myArray = [...myArray, {head: head, text:notice, downloadURL:downURL,date:date,time:time,key: key }]
-           // }
+           }
         
         })
     

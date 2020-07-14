@@ -29,7 +29,7 @@ export default class RegisterScreen extends Component {
         .then(() => {
             console.log('hogaya')
             database()
-            .ref('User/Student/'+auth().currentUser.uid)
+            .ref('Users/Student/'+auth().currentUser.uid)
             .set({
                 prn: this.state.prn,
                 email: this.state.email,
