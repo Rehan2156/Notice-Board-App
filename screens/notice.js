@@ -1,5 +1,8 @@
 import React,{useCallback} from 'react';
-import {View, Text,StyleSheet,SafeAreaView,ScrollView,TouchableOpacity,Linking,Button} from 'react-native'
+import {View, Text,StyleSheet,SafeAreaView,ScrollView,TouchableOpacity,Linking} from 'react-native'
+import Icon from 'react-native-vector-icons/FontAwesome'
+import {Button} from 'react-native-elements'
+
 
 const Notice = ({navigation}) => {
 
@@ -17,7 +20,14 @@ const Notice = ({navigation}) => {
           }
         }, [url]);
       
-        return <Button title={children} onPress={handlePress} />;
+        return <Button title={children} titleStyle={{fontFamily:'Nunito-Bold',letterSpacing:1}} onPress={handlePress} icon={
+          <Icon
+            name="paperclip"
+            size={25}
+            color="white"
+            style={{paddingRight:8}}
+          />
+        }/>;
       };
       
       
@@ -27,6 +37,12 @@ const Notice = ({navigation}) => {
         <ScrollView
           contentInsetAdjustmentBehavior="automatic"
           style={styles.scrollView}>
+          <View style={{flex:1,flexDirection:'row',alignSelf:'center',paddingBottom:20}}>
+          <Icon name={'calendar'} size={15} color="#808080" style={{paddingRight:2,paddingTop:3}}/>
+          <Text style={{paddingRight:30,fontFamily:'Nunito-Regular',color:'#899CA4'}}>{navigation.getParam('date')}</Text>
+          <Icon name={'clock-o'} size={15} color="#808080" style={{paddingRight:2,paddingTop:3}}/>
+          <Text style={{fontFamily:'Nunito-Regular',color:'#899CA4'}}>{navigation.getParam('time')}</Text>
+          </View>
             <Text style={styles.head}>{navigation.getParam('head')}</Text>
             <Text style={styles.text}>{navigation.getParam('text')}</Text>
         <View style={styles.viewButton}>

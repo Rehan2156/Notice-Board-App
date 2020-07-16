@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, View, Button,TouchableHighlight,ScrollView, KeyboardAvoidingView } from 'react-native'
+import { Text, StyleSheet, View, Button,TouchableHighlight,ScrollView, KeyboardAvoidingView,ActivityIndicator } from 'react-native'
 import { TextInput } from 'react-native-gesture-handler'
 import auth from '@react-native-firebase/auth'
 import database from '@react-native-firebase/database';
 import DropDownPicker from 'react-native-dropdown-picker';
-import Icon from 'react-native-vector-icons/Ionicons'
+import Icon from 'react-native-vector-icons/FontAwesome'
 
 
 export default class RegisterScreen extends Component {
@@ -14,6 +14,7 @@ export default class RegisterScreen extends Component {
         prn: '',
         classAndYear: '',
         errorMessage: null ,
+        loading:false,
         class: '',
         year: '',
         div: '',
@@ -23,6 +24,7 @@ export default class RegisterScreen extends Component {
     }
 
     handleSignUp = () => {
+        this.setState({loading:true})
         console.log('handleSignUp')
         auth()
         .createUserWithEmailAndPassword(this.state.email, this.state.password)
@@ -36,11 +38,13 @@ export default class RegisterScreen extends Component {
                 user: 'Student',
                 year_div: this.state.year + '' + this.state.class + '' + this.state.div,
             })
+            this.setState({loading:false})
         })
-        .catch(error => this.setState({ errorMessage: error.message }))
+        .catch(error => this.setState({ errorMessage: error.message,loading:false }))
     }
 
     render() {
+        if(!this.state.loading){
         return (
             <ScrollView>
             <View style={styles.container}>
@@ -49,7 +53,7 @@ export default class RegisterScreen extends Component {
                     {this.state.errorMessage}
                 </Text>}
                 <View style={styles.inputContainer}>
-            <Icon name={'document'} size={25} color="#808080" style={styles.inputIcon}/>
+            <Icon name={'id-card'} size={23} color="#808080" style={styles.inputIcon}/>
                 <TextInput
                     placeholder="PRN Number"
                     autoCapitalize="none"
@@ -101,7 +105,7 @@ export default class RegisterScreen extends Component {
                 </View>
 
                 <View style={styles.inputContainer}>
-            <Icon name={'at'} size={25} color="#808080" style={styles.inputIcon}/>
+            <Icon name={'envelope'} size={23} color="#808080" style={styles.inputIcon}/>
                 <TextInput
                     placeholder="Email"
                     autoCapitalize="none"
@@ -112,7 +116,7 @@ export default class RegisterScreen extends Component {
                 </View>
 
                 <View style={styles.inputContainer}>
-            <Icon name={'lock-closed'} size={25} color="#808080" style={styles.inputIcon}/>
+            <Icon name={'lock'} size={25} color="#808080" style={styles.inputIcon}/>
                 <TextInput
                     secureTextEntry
                     placeholder="Password"
@@ -128,6 +132,14 @@ export default class RegisterScreen extends Component {
             </View>
             </ScrollView>
         )
+                    }else{
+                        return(
+                          <View style={styles.loading}>
+                            <Text> Loading Please Wait ... </Text>
+                              <ActivityIndicator size = 'large'/>
+                          </View>
+                        )
+                      }
     }
 }
 
@@ -205,5 +217,11 @@ const styles = StyleSheet.create({
       top:30,
       left:250
     },
+    loading: {
+        flex: 1,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
   })
 

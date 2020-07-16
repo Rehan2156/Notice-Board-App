@@ -1,25 +1,28 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, View, Button,Dimensions,TouchableHighlight,ScrollView,SafeAreaView } from 'react-native'
+import { Text, StyleSheet, View, Button,Dimensions,TouchableHighlight,ScrollView,ActivityIndicator } from 'react-native'
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import auth from '@react-native-firebase/auth'
-import Icon from 'react-native-vector-icons/Ionicons'
+import Icon from 'react-native-vector-icons/FontAwesome'
 
 
 const {width:WIDTH}=Dimensions.get('window')
 export default class LoginScreen extends Component {
-    state = { email: '', password: '', errorMessage: null,showPass:true }
+    state = { email: '', password: '', errorMessage: null,hidePass:true,loading:false }
 
     handleLogin = () => {
+      this.setState({loading:true})
         console.log('handleLogin')
         auth()
           .signInWithEmailAndPassword(this.state.email, this.state.password)
           .then(() => {
             console.log('loged in')
+            this.setState({loading:false})
           })
           .catch(error => this.setState({ errorMessage: error.message }))
     }
     
     render() {
+      if(!this.state.loading){
         return (
           // <View style={{height:'100%'}}>
             <ScrollView>
@@ -29,7 +32,7 @@ export default class LoginScreen extends Component {
                 {this.state.errorMessage}
               </Text>}
             <View style={styles.inputContainer}>
-            <Icon name={'at'} size={25} color="#808080" style={styles.inputIcon}/>
+            <Icon name={'envelope'} size={22} color="#808080" style={styles.inputIcon}/>
             <TextInput
               style={styles.textInput}
               autoCapitalize="none"
@@ -39,16 +42,16 @@ export default class LoginScreen extends Component {
             />
             </View>  
             <View style={styles.inputContainer}>
-            <Icon name={'lock-closed'} size={25} color="#808080" style={styles.inputIcon}/>
+            <Icon name={'lock'} size={25} color="#808080" style={styles.inputIcon}/>
             <TextInput
-              secureTextEntry={this.state.showPass}
+              secureTextEntry={this.state.hidePass}
               style={styles.textInput}
               autoCapitalize="none"
               placeholder="Password"
               onChangeText={password => this.setState({ password })}
               value={this.state.password}
             />
-            <Icon name={this.state.showPass?'eye-off':'eye'} size={25} color="#808080" style={styles.eyeIcon} onPress={()=>this.setState({showPass:!this.state.showPass})}/>
+            <Icon name={this.state.hidePass?'eye-slash':'eye'} size={25} color="#808080" style={styles.eyeIcon} onPress={()=>this.setState({hidePass:!this.state.hidePass})}/>
             </View>
       
             <TouchableHighlight style={styles.myBtn} onPress={this.handleLogin}>
@@ -62,6 +65,15 @@ export default class LoginScreen extends Component {
           </ScrollView>
           // </View>
         )
+            }
+            else{
+              return(
+                <View style={styles.loading}>
+                  <Text> Loading Please Wait ... </Text>
+                    <ActivityIndicator size = 'large'/>
+                </View>
+              )
+            }
     }
 }
 
@@ -143,5 +155,11 @@ const styles = StyleSheet.create({
     //   flex:1,
     // flexDirection:'row'
     // }
+    loading: {
+      flex: 1,
+      backgroundColor: '#fff',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
   })
 

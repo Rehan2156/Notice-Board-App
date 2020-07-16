@@ -1,17 +1,17 @@
 import React from 'react';
 import { Text, StyleSheet, View, Alert  } from 'react-native'
-import Icon from 'react-native-vector-icons/Ionicons'
+import Icon from 'react-native-vector-icons/FontAwesome'
 
 
 const Tile = ({title,date,time,theme}) => {
     return ( 
         <View style={styles.list}>
-            <Icon name={'document-text'} size={25} color="#808080" style={{paddingRight:5}}/>
+            <Icon name={'thumb-tack'} size={25} color="#EE6135" style={{paddingRight:8}}/>
             <Text style={styles.head}>{title}</Text>
             <View style={styles.date}>
             <Text style={styles.data}>{date}</Text>
             <View style={{flex:1,flexDirection:'row'}}>
-            <Icon name={'time-outline'} size={15} color="#808080" style={{paddingRight:2,paddingTop:3}}/>
+            <Icon name={'clock-o'} size={15} color="#808080" style={{paddingRight:2,paddingTop:3}}/>
             <Text style={styles.data}>{time}</Text>
             </View>
             </View>
