@@ -8,9 +8,28 @@ import {
    
   } from 'react-native/Libraries/NewAppScreen';
   import database from '@react-native-firebase/database';
+  import OneSignal from 'react-native-onesignal';
   
-
-
+  /* It is used to add this user to perticular group */
+    var myTag
+    database().ref('Users/Student/' + auth().currentUser.uid).once('value' , data => {
+      myTag = data.toJSON().year_div
+    }).then(() => {
+      console.log('myTag:', myTag)
+  
+      var cls = myTag.toString().substr(0,2)
+      var dep = myTag.toString().substr(2,1)
+      const tags = {
+        user: 'Student',
+        department: dep,
+        class: cls,
+        tag: myTag,
+      }
+  
+      console.log('tags:', tags)
+      OneSignal.sendTags(tags)
+    })
+  
 const StudentHome = ({navigation,theme}) => {
 
     const [list,setList] = useState([
