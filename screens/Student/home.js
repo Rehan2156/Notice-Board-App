@@ -28,7 +28,7 @@ const StudentHome = ({navigation,theme}) => {
       database().ref("/Users/Student/"+auth().currentUser.uid)
       .once("value",(snapshot)=>{
         var myJSON = snapshot.toJSON()
-        // setUser(myJSON.user)
+        setUser(myJSON.user)
         setClassroom(myJSON.year_div)
       })
 

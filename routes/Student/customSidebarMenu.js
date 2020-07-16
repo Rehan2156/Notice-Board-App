@@ -1,12 +1,12 @@
-//This is an example code for Navigation Drawer with Custom Side bar//
 import React,{Component} from 'react';
-import { View, StyleSheet, Image, Text, Button } from 'react-native';
-// import Icon from 'react-native-vector-icons';
+import { View, StyleSheet, Image, Text, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome'
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth'
+import { TouchableHighlight, TouchableOpacity } from 'react-native-gesture-handler';
+import {Button} from 'react-native-elements'
 
-
+const {height:HEIGHT}=Dimensions.get('window')
 export default class StudentCustomSidebarMenu extends Component {
 
   state={
@@ -90,14 +90,17 @@ export default class StudentCustomSidebarMenu extends Component {
               </View>
             ))}
           </View>
+          <View>
           <Button
             title='Log Out'
+            titleStyle={{fontFamily:'Nunito-Bold'}}
+            buttonStyle={{marginTop:20,width:'100%'}}
             icon={
               <Icon
                 name="sign-out"
                 size={15}
                 color="white"
-                style={{paddingRight:20}}
+                style={{paddingRight:8}}
               />
             }
             onPress={() => {
@@ -108,6 +111,7 @@ export default class StudentCustomSidebarMenu extends Component {
                 })
             }}
           />
+          </View>
         </View>
       );
   }

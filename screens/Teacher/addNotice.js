@@ -17,6 +17,9 @@ export default class AddNotice extends Component {
         head: "",
         notice: "",
         all: false,
+        comp:false,
+        mech:false,
+        entc:false,
         fe: false,
         fec1: false,
         fec2: false,
@@ -295,6 +298,7 @@ export default class AddNotice extends Component {
                             onPress={() => {
                                 this.setState({ all: !this.state.all }); if (this.state.all == true) {
                                     this.setState({
+                                        comp:false,mech:false,entc:false,
                                         fe: false, fec1: false, fec2: false, fecss: false, fem1: false, fem2: false, fee1: false, fee2: false, se: false,
                                         sec1: false,
                                         sec2: false,
@@ -322,6 +326,7 @@ export default class AddNotice extends Component {
                                     })
                                 } else {
                                     this.setState({
+                                        comp:true, mech:true, entc:true,
                                         fe: true, fec1: true, fec2: true, fecss: true, fem1: true, fem2: true, fee1: true, fee2: true, se: true,
                                         sec1: true,
                                         sec2: true,
@@ -352,6 +357,33 @@ export default class AddNotice extends Component {
                         />
                     </View>
 
+                    <View style={styles.checkboxContainer}>
+                        <CheckBox
+                            center
+                            title='Computer Department'
+                            checked={this.state.comp}
+                            onPress={() => { this.setState({ comp: !this.state.comp }); if (this.state.comp == true) { this.setState({ fec1: false, fec2: false, fecss: false, sec1: false, sec2: false, secss: false,tec1: false, tec2: false, tecss: false,bec1: false, bec2: false, becss: false }) } else { this.setState({ fec1: true, fec2: true, fecss: true, sec1: true, sec2: true, secss: true,tec1: true, tec2: true, tecss: true,bec1: true, bec2: true, becss: true }) } }}
+                        />
+                    </View>
+
+                    <View style={styles.checkboxContainer}>
+                        <CheckBox
+                            center
+                            title='Mechanical Department'
+                            checked={this.state.mech}
+                            onPress={() => { this.setState({ mech: !this.state.mech }); if (this.state.mech == true) { this.setState({fem1: false, fem2: false, sem1: false, sem2: false,tem1: false, tem2: false,bem1: false, bem2: false }) } else { this.setState({fem1: true, fem2: true, sem1: true, sem2: true,tem1: true, tem2: true,bem1: true, bem2: true }) } }}
+                        />
+                    </View>
+
+                    <View style={styles.checkboxContainer}>
+                        <CheckBox
+                            center
+                            title='ENTC Department'
+                            checked={this.state.entc}
+                            onPress={() => { this.setState({ entc: !this.state.entc }); if (this.state.entc == true) { this.setState({fee1: false, fee2: false, see1: false, see2: false,tee1: false, tee2: false,bee1: false, bee2: false }) } else { this.setState({fee1: true, fee2: true, see1: true, see2: true,tee1: true, tee2: true,bee1: true, bee2: true }) } }}
+                        />
+                    </View>
+
                     <View style={styles.line}></View>
 
                     <View style={styles.checkboxContainer}>
@@ -365,12 +397,12 @@ export default class AddNotice extends Component {
 
                     <View style={styles.checkboxContainer}>
                         <CheckBox
-                            title='FE comp 1'
+                            title='FE COMP 1'
                             checked={this.state.fec1}
                             onPress={() => this.setState({ fec1: !this.state.fec1 })}
                         />
                         <CheckBox
-                            title='FE comp 2'
+                            title='FE COMP 2'
                             checked={this.state.fec2}
                             onPress={() => this.setState({ fec2: !this.state.fec2 })}
                         />
@@ -378,7 +410,7 @@ export default class AddNotice extends Component {
 
                     <View style={styles.checkboxContainer}>
                         <CheckBox
-                            title='FE comp second shift'
+                            title='FE COMP Second Shift'
                             checked={this.state.fecss}
                             onPress={() => this.setState({ fecss: !this.state.fecss })}
                         />
@@ -387,12 +419,12 @@ export default class AddNotice extends Component {
                     {/* ---------------------------------------- */}
                     <View style={styles.checkboxContainer}>
                         <CheckBox
-                            title='FE mech 1'
+                            title='FE MECH 1'
                             checked={this.state.fem1}
                             onPress={() => this.setState({ fem1: !this.state.fem1 })}
                         />
                         <CheckBox
-                            title='FE mech 2'
+                            title='FE MECH 2'
                             checked={this.state.fem2}
                             onPress={() => this.setState({ fem2: !this.state.fem2 })}
                         />
@@ -427,12 +459,12 @@ export default class AddNotice extends Component {
 
                     <View style={styles.checkboxContainer}>
                         <CheckBox
-                            title='SE comp 1'
+                            title='SE COMP 1'
                             checked={this.state.sec1}
                             onPress={() => this.setState({ sec1: !this.state.sec1 })}
                         />
                         <CheckBox
-                            title='SE comp 2'
+                            title='SE COMP 2'
                             checked={this.state.sec2}
                             onPress={() => this.setState({ sec2: !this.state.sec2 })}
                         />
@@ -440,7 +472,7 @@ export default class AddNotice extends Component {
 
                     <View style={styles.checkboxContainer}>
                         <CheckBox
-                            title='SE comp second shift'
+                            title='SE COMP Second Shift'
                             checked={this.state.secss}
                             onPress={() => this.setState({ secss: !this.state.secss })}
                         />
@@ -449,12 +481,12 @@ export default class AddNotice extends Component {
                     {/* ---------------------------------------- */}
                     <View style={styles.checkboxContainer}>
                         <CheckBox
-                            title='SE mech 1'
+                            title='SE MECH 1'
                             checked={this.state.sem1}
                             onPress={() => this.setState({ sem1: !this.state.sem1 })}
                         />
                         <CheckBox
-                            title='SE mech 2'
+                            title='SE MECH 2'
                             checked={this.state.sem2}
                             onPress={() => this.setState({ sem2: !this.state.sem2 })}
                         />
@@ -488,12 +520,12 @@ export default class AddNotice extends Component {
 
                     <View style={styles.checkboxContainer}>
                         <CheckBox
-                            title='TE comp 1'
+                            title='TE COMP 1'
                             checked={this.state.tec1}
                             onPress={() => this.setState({ tec1: !this.state.tec1 })}
                         />
                         <CheckBox
-                            title='TE comp 2'
+                            title='TE COMP 2'
                             checked={this.state.tec2}
                             onPress={() => this.setState({ tec2: !this.state.tec2 })}
                         />
@@ -501,7 +533,7 @@ export default class AddNotice extends Component {
 
                     <View style={styles.checkboxContainer}>
                         <CheckBox
-                            title='TE comp second shift'
+                            title='TE COMP Second Shift'
                             checked={this.state.tecss}
                             onPress={() => this.setState({ tecss: !this.state.tecss })}
                         />
@@ -510,12 +542,12 @@ export default class AddNotice extends Component {
                     {/* ---------------------------------------- */}
                     <View style={styles.checkboxContainer}>
                         <CheckBox
-                            title='TE mech 1'
+                            title='TE MECH 1'
                             checked={this.state.tem1}
                             onPress={() => this.setState({ tem1: !this.state.tem1 })}
                         />
                         <CheckBox
-                            title='TE mech 2'
+                            title='TE MECH 2'
                             checked={this.state.tem2}
                             onPress={() => this.setState({ tem2: !this.state.tem2 })}
                         />
@@ -549,12 +581,12 @@ export default class AddNotice extends Component {
 
                     <View style={styles.checkboxContainer}>
                         <CheckBox
-                            title='BE comp 1'
+                            title='BE COMP 1'
                             checked={this.state.bec1}
                             onPress={() => this.setState({ bec1: !this.state.bec1 })}
                         />
                         <CheckBox
-                            title='BE comp 2'
+                            title='BE COMP 2'
                             checked={this.state.bec2}
                             onPress={() => this.setState({ bec2: !this.state.bec2 })}
                         />
@@ -562,7 +594,7 @@ export default class AddNotice extends Component {
 
                     <View style={styles.checkboxContainer}>
                         <CheckBox
-                            title='BE comp second shift'
+                            title='BE COMP Second Shift'
                             checked={this.state.becss}
                             onPress={() => this.setState({ becss: !this.state.becss })}
                         />
@@ -571,12 +603,12 @@ export default class AddNotice extends Component {
                     {/* ---------------------------------------- */}
                     <View style={styles.checkboxContainer}>
                         <CheckBox
-                            title='BE mech 1'
+                            title='BE MECH 1'
                             checked={this.state.bem1}
                             onPress={() => this.setState({ bem1: !this.state.bem1 })}
                         />
                         <CheckBox
-                            title='BE mech 2'
+                            title='BE MECH 2'
                             checked={this.state.bem2}
                             onPress={() => this.setState({ bem2: !this.state.bem2 })}
                         />
