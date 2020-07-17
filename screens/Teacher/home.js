@@ -10,22 +10,22 @@ import {
   import database from '@react-native-firebase/database';
   import OneSignal from 'react-native-onesignal';
   
-/* It is used to add this user to perticular group */
-  var myTag
-  database().ref('Users/Teacher/' + auth().currentUser.uid).once('value' , data => {
-    myTag = data.toJSON()
-  }).then(() => {
-    console.log('myTag:', myTag)
-    const tags = {
-      user: 'Teacher',
-    }
-    console.log('tags:', tags)
-    OneSignal.sendTags(tags)
-  })  
-
-
-
 const TeacherHome = ({navigation,theme}) => {
+
+  useState(() => {
+    /* It is used to add this user to perticular group */
+    var myTag
+    database().ref('Users/Teacher/' + auth().currentUser.uid).once('value' , data => {
+      myTag = data.toJSON()
+    }).then(() => {
+      console.log('myTag:', myTag)
+      const tags = {
+        user: 'Teacher',
+      }
+      console.log('tags:', tags)
+      OneSignal.sendTags(tags)
+    })
+  })
 
     const [list,setList] = useState([
         // {head:"Defaulter list",text:"All defaulter students are supposed to report in room no 403nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn nnnnnnnnnnnnnnnnnnnnnnnnnnn yyyyyyyyyyyyyyyyyyyyyyyyyyyyyy yyyyyyyyyyyyyyyyyyyyyyyyyyyy",key:'1'},
