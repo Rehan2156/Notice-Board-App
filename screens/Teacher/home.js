@@ -10,7 +10,7 @@ import {
   import database from '@react-native-firebase/database';
   import OneSignal from 'react-native-onesignal';
   
-const TeacherHome = ({navigation,theme}) => {
+const TeacherHome = ({navigation}) => {
 
   useState(() => {
     /* It is used to add this user to perticular group */
@@ -92,7 +92,7 @@ const TeacherHome = ({navigation,theme}) => {
           {/* <Text>Class : {classroom}</Text> */}
         <FlatList data={list} keyExtractor={(item, index) => index.toString()} renderItem={({ item }) => (
         <TouchableOpacity onPress={()=>navigation.navigate('Notice',item)}>
-        <Tile title={item.head} date={item.date} time={item.time} theme={theme}/>
+        <Tile title={item.head} date={item.date} time={item.time}/>
         </TouchableOpacity>
       )}/>
       {/* </ScrollView> */}

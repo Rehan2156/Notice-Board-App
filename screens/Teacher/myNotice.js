@@ -8,32 +8,9 @@ import {
    
   } from 'react-native/Libraries/NewAppScreen';
   import database from '@react-native-firebase/database';
-  import OneSignal from 'react-native-onesignal';
   
-const StudentHome = ({navigation,theme}) => {
+const MyNotice = ({navigation}) => {
   
-  useState(() => {
-   /* It is used to add this user to perticular group */
-    var myTag
-    
-    database().ref('Users/Student/'+auth().currentUser.uid)
-    .once('value' , data => {
-      myTag = data.toJSON().year_div
-    }).then(() => {
-      console.log('myTag:', myTag)
-  
-      var cls = myTag.toString().substr(0,2)
-      var dep = myTag.toString().substr(2,1)
-      const tags = {
-        user: 'Student',
-        department: dep,
-        class: cls,
-        tag: myTag,
-      }
-
-      console.log('tags:', tags)
-      OneSignal.sendTags(tags)
-  })})
 
     const [list,setList] = useState([
         // {head:"Defaulter list",text:"All defaulter students are supposed to report in room no 403nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn nnnnnnnnnnnnnnnnnnnnnnnnnnn yyyyyyyyyyyyyyyyyyyyyyyyyyyyyy yyyyyyyyyyyyyyyyyyyyyyyyyyyy",key:'1'},
@@ -42,17 +19,12 @@ const StudentHome = ({navigation,theme}) => {
         
     ])
     const [load,setLoad]=useState(0)
-    const [classroom,setClassroom]=useState('')
+    const [upl,setUpl]=useState('')
     const [user,setUser]=useState('')
 
     useEffect(() => {
         var myArray = []
-      database().ref("/Users/Student/"+auth().currentUser.uid)
-      .once("value",(snapshot)=>{
-        var myJSON = snapshot.toJSON()
-        setUser(myJSON.user)
-        setClassroom(myJSON.year_div)
-      })
+      setUpl(auth().currentUser.uid)
 
     // try {
       var ref = database().ref("/notice");
@@ -60,8 +32,8 @@ const StudentHome = ({navigation,theme}) => {
       ref.once("value", (snapshot) => {
         snapshot.forEach( (childSnapshot) => {
             var myJSON=childSnapshot.toJSON()
-            var div = myJSON[classroom.toLowerCase()]
-           if(div==true){
+            var uploader = myJSON.uploaderID
+            if(uploader==upl){
           var key = myJSON.key
           var head = myJSON.head
           var notice = myJSON.text
@@ -69,18 +41,9 @@ const StudentHome = ({navigation,theme}) => {
           var date = myJSON.date
           var time = myJSON.time
           myArray = [...myArray, {head: head, text:notice, downloadURL:downURL,date:date,time:time,key: key }]
-           }
+            }
         
         })
-    
-        //   this.setState({
-        //     shops: [...this.state.shops, ...myArray],
-        //   })
-
-        //   this.setState({
-        //     tempArray: this.state.shops,
-        //     lisIsready: true,
-        //   })
         setList(myArray.reverse());
       }).then(()=>{
         // setLoad(0)
@@ -91,18 +54,13 @@ const StudentHome = ({navigation,theme}) => {
     // }
     })
     
-  //   if(load==1) {
-  //     return(
-  //         <View style={styles.container}>
-  //             <Text> Loading </Text>
-  //             <Text> Please Wait</Text>
-  //             <ActivityIndicator size='large' />
-  //         </View>
-  //     )
-  // }
-  // else{
-    
-
+    if(list.length==0)
+    {
+        return(
+            <View><Text style={styles.empty}>You have not sent any notices yet</Text></View>
+        )
+    }
+    else{
     return ( 
     <View>
         {/* <ScrollView
@@ -118,6 +76,7 @@ const StudentHome = ({navigation,theme}) => {
      </View> 
     
     );
+        }
         // }
 }
 
@@ -125,6 +84,11 @@ const styles = StyleSheet.create({
     scrollView: {
         backgroundColor: Colors.lighter,
       },
+      empty:{
+          textAlign:'center',
+          fontFamily:'Nunito-Bold',
+          fontSize:20,
+      }
     })
 
-export default StudentHome;
+export default MyNotice;

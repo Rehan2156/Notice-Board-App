@@ -6,6 +6,7 @@ import database from '@react-native-firebase/database';
 import DocumentPicker from 'react-native-document-picker';
 import storage from '@react-native-firebase/storage'
 import RNFS from 'react-native-fs'
+import auth from '@react-native-firebase/auth'
 
 const { width: WIDTH } = Dimensions.get('window')
 
@@ -184,6 +185,7 @@ export default class AddNotice extends Component {
                     bem2: this.state.bem2,
                     bee1: this.state.bee1,
                     bee2: this.state.bee2,
+                    uploaderID:auth().currentUser.uid
 
                 })
                 .then(() => {

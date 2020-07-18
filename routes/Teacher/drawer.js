@@ -5,6 +5,7 @@ import {Dimensions, Button, View} from 'react-native'
 import HomeStack from './homeStack';
 import CustomSidebarMenu from './customSidebarMenu';
 import AddNotice from '../../screens/Teacher/addNotice';
+import MyNotice from '../../screens/Teacher/myNotice';
 
 
 // drawer navigation options
@@ -16,6 +17,9 @@ const TeacherRootDrawerNavigator = createDrawerNavigator({
   AddNotice:{
     screen: AddNotice,
     
+  },
+  MyNotice:{
+    screen: MyNotice,
   }
 },
 {
