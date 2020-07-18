@@ -1,7 +1,7 @@
 import React,{useState,useEffect} from 'react';
 import { Text, StyleSheet,ActivityIndicator, View, Alert,FlatList,Button,TouchableOpacity,SafeAreaView,ScrollView  } from 'react-native'
 import Tile from '../../components/tile';
-import auth from '@react-native-firebase/auth'
+import auth from '@react-native-firebase/auth';
 import {
     Header,
     Colors,
@@ -12,7 +12,9 @@ import {
   
   /* It is used to add this user to perticular group */
     var myTag
-    database().ref('Users/Student/' + auth().currentUser.uid).once('value' , data => {
+    
+    database().ref('Users/Student/'+auth().currentUser.uid)
+    .once('value' , data => {
       myTag = data.toJSON().year_div
     }).then(() => {
       console.log('myTag:', myTag)
