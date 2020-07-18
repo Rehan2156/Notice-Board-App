@@ -5,14 +5,15 @@ import Notice from '../../screens/notice'
 import Header from '../../shared/header'
 import TeacherHome from '../../screens/Teacher/home';
 import AddNotice from '../../screens/Teacher/addNotice';
+import MyNotice from '../../screens/Teacher/myNotice';
 
 const screens = {
     Home:{
         screen:TeacherHome,
-        navigationOptions:({navigation,theme})=>{
+        navigationOptions:({navigation})=>{
             // title:'MESCOE Notice Board',
             return{
-            headerTitle:()=> <Header navigation={navigation} title='MESCOE Notice Board' theme={theme}/>
+            headerTitle:()=> <Header navigation={navigation} title='MESCOE Notice Board'/>
             }
         }
     },
@@ -20,6 +21,13 @@ const screens = {
         screen:AddNotice,
         navigationOptions:{
             title:'Add Notice',
+            // headerStyle:{backgroundColor:'#eee'}
+        }
+    },
+    MyNotice:{
+        screen:MyNotice,
+        navigationOptions:{
+            title:'My Notices',
             // headerStyle:{backgroundColor:'#eee'}
         }
     },

@@ -18,7 +18,7 @@ export default class LoginScreen extends Component {
             console.log('loged in')
             this.setState({loading:false})
           })
-          .catch(error => this.setState({ errorMessage: error.message }))
+          .catch(error => this.setState({ errorMessage: error.message, loading:false }))
     }
     
     render() {

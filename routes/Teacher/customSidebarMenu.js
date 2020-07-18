@@ -44,6 +44,11 @@ export default class CustomSidebarMenu extends Component {
         navOptionThumb: 'envelope',
         navOptionName: 'Add Notice',
         screenToNavigate: 'AddNotice',
+      },
+      {
+        navOptionThumb: 'user',
+        navOptionName: 'My Notices',
+        screenToNavigate: 'MyNotice',
       }
     ];
   }
@@ -75,7 +80,7 @@ export default class CustomSidebarMenu extends Component {
                   alignItems: 'center',
                   paddingTop: 10,
                   paddingBottom: 10,
-                  backgroundColor: global.currentScreenIndex === key ? '#ffffff':'#e0dbdb',
+                  // backgroundColor: global.currentScreenIndex === key ? '#ffffff':'#e0dbdb',
                 }}
                 key={key}>
                 <View style={{ marginRight: 10, marginLeft: 20 }}>
@@ -84,7 +89,7 @@ export default class CustomSidebarMenu extends Component {
                 <Text
                   style={{
                     fontSize: 15,
-                    color: global.currentScreenIndex === key ? 'black' : 'red',
+                    // color: global.currentScreenIndex === key ? 'black' : 'red',
                     fontFamily:'Nunito-Bold'
                   }}
                   onPress={() => {
