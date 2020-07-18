@@ -1,11 +1,23 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, View, Button,TouchableHighlight,ScrollView, KeyboardAvoidingView,ActivityIndicator } from 'react-native'
+import { Text, StyleSheet, View, Button,TouchableHighlight,ScrollView, KeyboardAvoidingView,ActivityIndicator, Dimensions, Alert } from 'react-native'
 import { TextInput } from 'react-native-gesture-handler'
 import auth from '@react-native-firebase/auth'
 import database from '@react-native-firebase/database';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Icon from 'react-native-vector-icons/FontAwesome'
+import {
+    GoogleSignin,
+    GoogleSigninButton,
+    statusCodes,
+} from '@react-native-community/google-signin'
 
+GoogleSignin.configure({
+    webClientId: '1095803181729-plorjsc7202l5koepequdtv0apag1snb.apps.googleusercontent.com',
+});
+
+
+const width = Dimensions.get("window").width - 100
+const height = Dimensions.get("window").height * 0.07
 
 export default class RegisterScreen extends Component {
     state = { 
@@ -20,7 +32,22 @@ export default class RegisterScreen extends Component {
         div: '',
         dataClass: [{label: 'Computer', value: 'C'}, {label: 'EnTC', value: 'E'}, {label: 'Mechanical', value: 'M'}],
         dataYear: [{label: 'FE', value: 'FE'},{label: 'SE', value: 'SE'},{label: 'TE', value: 'TE'},{label: 'BE', value: 'BE'}],
-        dataDiv: [{label: '1', value: '1'},{label: '2', value: '2'},{label: 'SS', value: 'SS'}]
+        dataDiv: [{label: '1', value: '1'},{label: '2', value: '2'},{label: 'SS', value: 'SS'}],
+        isSigninInProgress: false,
+        wantTouseEmail: false,
+    }
+
+    onGoogleButtonPress = async () => {
+        if(this.state.prn !== '' && this.state.class !== '' && this.state.year !== '' && this.state.div !== '' ) {
+            this.setState({ loading: true, isSigninInProgress: true })
+            const { idToken, user } = await GoogleSignin.signIn();
+            this.setState({ email: user.email })
+            const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+            return auth().signInWithCredential(googleCredential);
+        } else {
+            Alert.alert("Fill Every thing")
+            return 1
+        }
     }
 
     handleSignUp = () => {
@@ -104,31 +131,59 @@ export default class RegisterScreen extends Component {
                     />
                 </View>
 
-                <View style={styles.inputContainer}>
-            <Icon name={'envelope'} size={23} color="#808080" style={styles.inputIcon}/>
-                <TextInput
-                    placeholder="Email"
-                    autoCapitalize="none"
-                    style={styles.textInput}
-                    onChangeText={email => this.setState({ email })}
-                    value={this.state.email}
-                />
-                </View>
+                {!this.state.wantTouseEmail ? 
+                    <TouchableHighlight style={styles.myBtn} onPress={() => { this.setState({ wantTouseEmail: true }) }}>
+                    <   Text style={styles.btnText}>Use Email</Text>
+                    </TouchableHighlight> :
+                    <View>
+                        <View style={styles.inputContainer}>
+                            <Icon name={'envelope'} size={23} color="#808080" style={styles.inputIcon}/>
+                                <TextInput
+                                    placeholder="Email"
+                                    autoCapitalize="none"
+                                    style={styles.textInput}
+                                    onChangeText={email => this.setState({ email })}
+                                    value={this.state.email}
+                                />
+                                </View>
 
-                <View style={styles.inputContainer}>
-            <Icon name={'lock'} size={25} color="#808080" style={styles.inputIcon}/>
-                <TextInput
-                    secureTextEntry
-                    placeholder="Password"
-                    autoCapitalize="none"
-                    style={styles.textInput}
-                    onChangeText={password => this.setState({ password })}
-                    value={this.state.password}
-                />
-                </View>
-                <TouchableHighlight style={styles.myBtn} onPress={this.handleSignUp}>
-            <Text style={styles.btnText}>Sign Up</Text>
-          </TouchableHighlight>
+                                <View style={styles.inputContainer}>
+                            <Icon name={'lock'} size={25} color="#808080" style={styles.inputIcon}/>
+                                <TextInput
+                                    secureTextEntry
+                                    placeholder="Password"
+                                    autoCapitalize="none"
+                                    style={styles.textInput}
+                                    onChangeText={password => this.setState({ password })}
+                                    value={this.state.password}
+                                />
+                        </View>
+                        <TouchableHighlight style={styles.myBtn} onPress={this.handleSignUp}>
+                            <Text style={styles.btnText}>Sign Up</Text>
+                        </TouchableHighlight> 
+                    </View>
+                }
+            
+            <GoogleSigninButton
+                    style={{ width: width, height: height, marginTop: 20, }}
+                    size={GoogleSigninButton.Size.Wide}
+                    color={GoogleSigninButton.Color.Dark}
+                    onPress={() => {
+                    this.onGoogleButtonPress().then(() => {
+                        console.log('Signed in with Google!')
+                        database()
+                        .ref('Users/Student/'+auth().currentUser.uid)
+                        .set({
+                            prn: this.state.prn,
+                            email: this.state.email,
+                            user: 'Student',
+                            year_div: this.state.year + '' + this.state.class + '' + this.state.div,
+                        })
+                        this.setState({loading:false, isSigninInProgress: false})
+                    })}}
+                    disabled={this.state.isSigninInProgress} 
+            />
+
             </View>
             </ScrollView>
         )
