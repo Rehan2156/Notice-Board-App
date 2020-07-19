@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler';
 import MainRoute from './routes/MainRoute';
 import React, { Component } from 'react';
 import OneSignal from 'react-native-onesignal';

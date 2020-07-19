@@ -102,7 +102,11 @@ const StudentHome = ({navigation,theme}) => {
   // }
   // else{
     
-
+    if(list.length==0){
+      return(
+      <ActivityIndicator size="large" color="#84D7F7"/>
+      )
+    }
     return ( 
     <View>
         {/* <ScrollView

@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     head:{
         fontFamily:'Nunito-Bold',
         fontSize:20,
-        maxWidth:'80%'
+        maxWidth:'67%'
     }
 })
 export default Tile;
