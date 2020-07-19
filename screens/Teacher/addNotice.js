@@ -105,6 +105,12 @@ export default class AddNotice extends Component {
     }
 
     uploadImage = async () => {
+        if(this.state.head=="")
+        {
+            Alert.alert("Warning","Heading is compulsory")
+        }
+        else if(this.state.files!=null){
+
         const files = this.state.files
         const fileName = files.name
         console.log(fileName)
@@ -143,17 +149,21 @@ export default class AddNotice extends Component {
                         })
                 }
             )
+        }
+        else{
+            this.uploadTheDetails() 
+        }
     }
 
     uploadTheDetails = async () => {
         console.log('hello')
-        if (this.state.head !== "" && this.state.notice !== "") {
+        // if (this.state.head !== "" && this.state.notice !== "") {
             database()
                 .ref('/notice/' + Date.now())
                 .set({
                     head: this.state.head,
-                    text: this.state.notice,
-                    downloadURL: this.state.downloadLink,
+                    text: this.state.notice==""?"":this.state.notice,
+                    downloadURL: this.state.downloadLink==""?"":this.state.downloadLink,
                     date: this.findDate(),
                     time: this.findTime(),
                     all: this.state.all,
@@ -197,9 +207,9 @@ export default class AddNotice extends Component {
                     Alert.alert('Success', 'Notice is sent sucessfully')
                     this.props.navigation.navigate('Home')
                 });
-        } else {
-            Alert.alert("Fill Every Info please")
-        }
+        // } else {
+        //     Alert.alert("Fill Every Info please")
+        // }
     }
     selectOneFile = async () => {
         try {
@@ -499,8 +509,8 @@ export default class AddNotice extends Component {
         if(this.state.uplaoding) {
             return(
                 <View style={styles.container}>
-                    <Text> Uploading </Text>
-                    <Text> Please Wait</Text>
+                    <Text>Uploading</Text>
+                    <Text>Please Wait</Text>
                     <ActivityIndicator size='large' />
                 </View>
             )

@@ -45,9 +45,15 @@ const Notice = ({navigation}) => {
           </View>
             <Text style={styles.head}>{navigation.getParam('head')}</Text>
             <Text style={styles.text}>{navigation.getParam('text')}</Text>
+        {navigation.getParam('downloadURL')!=""?
         <View style={styles.viewButton}>
         <OpenURLButton url={navigation.getParam('downloadURL')}>View file</OpenURLButton>
+        
+        </View>:
+        <View style={styles.noFile}>
+        <Text style={{fontFamily:'Nunito-Regular'}}>No file attached</Text>
         </View>
+        }
             </ScrollView>
         </View>
      );
@@ -93,6 +99,10 @@ const styles = StyleSheet.create({
     viewButton:{
         padding:50,
         paddingBottom:20,
+    },
+    noFile:{
+      alignSelf:'flex-end',
+      
     }
 
 })
