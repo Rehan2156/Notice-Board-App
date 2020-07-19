@@ -32,7 +32,7 @@ export default class FirstPage extends Component {
             <ImageBackground style={styles.body} source={{uri:'https://cdn02.plentymarkets.com/epz0zx1qug71/item/images/131242/full/rasch--Tapete--Aqua--Relief--Satintapete--210309--.jpg'}}>
             <Image style ={styles.img} source={require('../assets/fonts/img/mes_logo.png')} />
             <Text style={styles.head}>Modern Education Society's College of Engineering</Text>
-            <Text style={styles.headApp}>Notice Board App</Text>
+            <Text style={styles.headApp}>NOTICE BOARD APP</Text>
             <ImageBackground style={styles.container} imageStyle={{ borderTopRightRadius:50,borderTopLeftRadius:50,}} source={{uri:'https://image.made-in-china.com/202f0j00tdlQmYLFCIuS/Plain-Designs-Wallpaper-for-Wall-Coating.jpg'}}>
                 {/* <Button 
                     title = 'Student'
@@ -75,15 +75,17 @@ const styles = StyleSheet.create({
         textAlign:'center',
         fontSize:25,
         fontFamily:'Lato-Bold',
-        paddingBottom:60,
+        paddingBottom:40,
         color:'#1C2837'
     },
     headApp:{
         textAlign:'center',
-        fontSize:40,
+        fontSize:35,
         fontFamily:'Amiri-Bold',
         paddingBottom:30,
-        color:'#465362'
+        color:'#465362',
+        paddingLeft:10,
+        paddingRight:10
     },
     container: {
         flex: 1,
