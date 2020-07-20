@@ -33,7 +33,7 @@ const TeacherHome = ({navigation}) => {
         // {head:'Holiday tomorrow1',text:'yeyy',key:'3'},
         
     ])
-    const [load,setLoad]=useState(0)
+    const [timehaspassed,setTimehaspassed]=useState(false)
     const [classroom,setClassroom]=useState('')
     const [user,setUser]=useState('')
 
@@ -83,7 +83,20 @@ const TeacherHome = ({navigation}) => {
   // }
   // else{
     
-
+    if(list.length==0){
+      setTimeout(() => {setTimehaspassed(true)}, 10000)
+      return(
+        <View style={styles.container}>
+        {!timehaspassed?
+      <ActivityIndicator size="large" color="#84D7F7"/>:
+      <View>
+      <ActivityIndicator size="large" color="#84D7F7"/>
+      <Text style={{fontFamily:'Nunito-Regular',fontSize:20}}>Check your Internet Connection</Text>
+      </View>
+      }
+      </View>
+      )
+    }
     return ( 
     <View>
         {/* <ScrollView
@@ -106,6 +119,14 @@ const styles = StyleSheet.create({
     scrollView: {
         backgroundColor: Colors.lighter,
       },
+      container: {
+        flex: 1,
+        backgroundColor: '#fff',
+        padding: 10,
+        justifyContent: 'center',
+        alignContent: 'center',
+        alignItems: 'center',
+      },  
     })
 
 export default TeacherHome;

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet,SafeAreaView, View, Alert,Dimensions,TextInput,TouchableOpacity,ScrollView, Image, ProgressBarAndroid, Platform, ActivityIndicator, ProgressBarAndroidComponent  } from 'react-native'
+import { Text, StyleSheet,SafeAreaView, View, Alert,Dimensions,TextInput,TouchableOpacity,ScrollView, Image, ProgressBarAndroid, Platform, ActivityIndicator, ProgressBarAndroidComponent,Modal  } from 'react-native'
 import { CheckBox,Button } from 'react-native-elements'
 import {globalStyles} from '../../styles/global'
 import database from '@react-native-firebase/database';
@@ -508,11 +508,21 @@ export default class AddNotice extends Component {
     render() {
         if(this.state.uplaoding) {
             return(
-                <View style={styles.container}>
-                    <Text>Uploading</Text>
-                    <Text>Please Wait</Text>
+                <Modal
+                animationType="slide"
+                transparent={false}
+                visible={true}
+                onRequestClose={() => {
+        //   Alert.alert("Modal has been closed.");
+        }}
+                >
+                    <View style={styles.container}>
+                    <Text style={{fontFamily:'Nunito-Regular',fontSize:15}}>Uploading</Text>
+                    <Text style={{fontFamily:'Nunito-Regular',fontSize:15}}>Please Wait</Text>
                     <ActivityIndicator size='large' />
-                </View>
+                    </View>
+
+                    </Modal>
             )
         }
 
@@ -523,15 +533,16 @@ export default class AddNotice extends Component {
               style={styles.scrollView}>
                 {/* <View style={styles.box}> */}
                     {/* <Text style={styles.Header}>Shopkeeper Details </Text> */}
+                    <Text style={styles.label}>Heading (Required)</Text>
                     <TextInput
                         style={styles.headInput}
                         onChangeText={val => this.setState({ head: val })}
                         selectedValue={this.state.head}
-                        placeholder={'Heading'}
+                        placeholder={'Type the heading'}
                         // placeholderTextColor={'rgba(255,255,255,0.7)'}
                         underlineColorAndroid='transparent'
                     />
-
+                    <Text style={styles.label}>Notice in words (Optional)</Text>
                     <TextInput
                         style={styles.textInput}
                         onChangeText={val => this.setState({ notice: val })}
@@ -543,7 +554,7 @@ export default class AddNotice extends Component {
                     />
 
                     <Button
-                        title="Select File to upload"
+                        title="Select file (Optional)"
                         type="solid"
                         raised
                         onPress={() => this.selectOneFile()}
@@ -1069,8 +1080,14 @@ const styles = StyleSheet.create({
       padding: 10,
       justifyContent: 'center',
       alignContent: 'center',
-      alignItems: 'center'
+      alignItems: 'center',
     },
+    centeredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 22
+      },
     checkbox: {
         alignSelf: "center",
     },
