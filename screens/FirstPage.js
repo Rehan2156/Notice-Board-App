@@ -1,29 +1,32 @@
 import React, { Component } from 'react'
 import { Text, StyleSheet, View, Button,Image,Dimensions,TouchableOpacity,ImageBackground } from 'react-native'
-import auth from '@react-native-firebase/auth'
-import database from '@react-native-firebase/database'
+import AsyncStorage from '@react-native-community/async-storage';
 
 const {width:WIDTH}=Dimensions.get('window')
 
 export default class FirstPage extends Component {
 
-  componentDidMount() {
-    auth().onAuthStateChanged(user => {
-      if(user) {
-        console.log('is Logged in')
-        var uid = auth().currentUser.uid      
-        this.checkingWhereToGo(uid)
-      }
-    })
+  state = {
+    user: ''
   }
 
-  checkingWhereToGo = async (uid) => {
-    if (await (await database().ref('Users/Student/' + uid + '/').once('value')).exists()) {
-      console.log('Student')
-      this.props.navigation.navigate('Student')
-    } else {
-      console.log('Teacher')
-      this.props.navigation.navigate('Teacher')
+  componentDidMount() {
+    console.log('is Logged in') 
+    this.checkingWhereToGo()
+  }
+
+  checkingWhereToGo = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('User_Cred')
+      jsonValue != null ? JSON.parse(jsonValue) : null;
+      console.log(jsonValue)
+      if(jsonValue != null) {
+          var user =  JSON.parse(jsonValue).user 
+          console.log('User', user)
+          this.props.navigation.navigate(user)
+      }
+    } catch(e) {
+        console.log('error: ', e)
     }
   }
 

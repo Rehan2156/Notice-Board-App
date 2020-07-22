@@ -3,8 +3,8 @@ import { View, StyleSheet, Image, Text, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome'
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth'
-import { TouchableHighlight, TouchableOpacity } from 'react-native-gesture-handler';
 import {Button} from 'react-native-elements'
+import AsyncStorage from '@react-native-community/async-storage';
 
 const {height:HEIGHT}=Dimensions.get('window')
 export default class StudentCustomSidebarMenu extends Component {
@@ -23,6 +23,27 @@ export default class StudentCustomSidebarMenu extends Component {
           classroom:myJSON.year_div
         })
       })
+  }
+
+  getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('User_Cred')
+      jsonValue != null ? JSON.parse(jsonValue) : null;
+      console.log(jsonValue)
+      if(jsonValue != null) {
+          var prn = JSON.parse(jsonValue).prn
+          var Class = JSON.parse(jsonValue).class 
+          var year = JSON.parse(jsonValue).year
+          var div = JSON.parse(jsonValue).div
+          var user = JSON.parse(jsonValue).user
+          this.setState({
+            user: user,
+            classroom: year + '' + Class + '' + div
+          })
+      }
+    } catch(e) {
+        console.log('error: ', e)
+    }
   }
 
   constructor() {

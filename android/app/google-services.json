@@ -8,41 +8,20 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1095803181729:android:2050019bed350182c5aee0",
-        "android_client_info": {
-          "package_name": "com.native_ninjas.noticeBorad"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "1095803181729-plorjsc7202l5koepequdtv0apag1snb.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDrPdAslwXGc2vK9I5iESTX5mud29c4NME"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "1095803181729-plorjsc7202l5koepequdtv0apag1snb.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:1095803181729:android:c8733ef0c812926fc5aee0",
         "android_client_info": {
           "package_name": "com.notboard"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "1095803181729-3762vu8ae3idhtf2kicaiemijsvo53h6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.notboard",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
         {
           "client_id": "1095803181729-plorjsc7202l5koepequdtv0apag1snb.apps.googleusercontent.com",
           "client_type": 3

@@ -44,6 +44,7 @@ const StudentHome = ({navigation,theme}) => {
     const [load,setLoad]=useState(0)
     const [classroom,setClassroom]=useState('')
     const [user,setUser]=useState('')
+    const [timehaspassed,setTimehaspassed]=useState(false)
 
     useEffect(() => {
         var myArray = []
@@ -103,8 +104,17 @@ const StudentHome = ({navigation,theme}) => {
   // else{
     
     if(list.length==0){
+      setTimeout(() => {setTimehaspassed(true)}, 10000)
       return(
+        <View style={styles.container}>
+        {!timehaspassed?
+      <ActivityIndicator size="large" color="#84D7F7"/>:
+      <View>
       <ActivityIndicator size="large" color="#84D7F7"/>
+      <Text style={{fontFamily:'Nunito-Regular',fontSize:20}}>Check your Internet Connection</Text>
+      </View>
+      }
+      </View>
       )
     }
     return ( 
@@ -129,6 +139,14 @@ const styles = StyleSheet.create({
     scrollView: {
         backgroundColor: Colors.lighter,
       },
+      container: {
+        flex: 1,
+        backgroundColor: '#fff',
+        padding: 10,
+        justifyContent: 'center',
+        alignContent: 'center',
+        alignItems: 'center',
+      },  
     })
 
 export default StudentHome;

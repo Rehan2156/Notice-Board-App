@@ -3,9 +3,9 @@ import React,{Component} from 'react';
 import { View, StyleSheet, Image, Text } from 'react-native';
 // import Icon from 'react-native-vector-icons';
 import Icon from 'react-native-vector-icons/FontAwesome'
-import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth'
 import {Button} from 'react-native-elements'
+import AsyncStorage from '@react-native-community/async-storage';
 
 
 export default class CustomSidebarMenu extends Component {
@@ -16,14 +16,28 @@ export default class CustomSidebarMenu extends Component {
   }
 
   componentDidMount(){
-    database().ref("Users/Teachers/"+auth().currentUser.uid)
-      .once("value",(snapshot)=>{
-        var myJSON = snapshot.toJSON()
-        this.setState({
-          user:myJSON.user,
-          name:myJSON.name
-        })
-      })
+    this.getData()
+  }
+
+  getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('User_Cred')
+      jsonValue != null ? JSON.parse(jsonValue) : null;
+      console.log(jsonValue)
+      if(jsonValue != null) {
+          var employeeId = JSON.parse(jsonValue).employeeId
+          var email = JSON.parse(jsonValue).email
+          var user = JSON.parse(jsonValue).user
+          var name = JSON.parse(jsonValue).name        
+
+          this.setState({
+            user: user,
+            name: name
+          })
+      }
+    } catch(e) {
+        console.log('error: ', e)
+    }
   }
 
   constructor() {
