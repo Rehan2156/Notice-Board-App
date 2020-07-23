@@ -8,12 +8,8 @@ const Notice = ({navigation}) => {
 
     const OpenURLButton = ({ url, children }) => {
         const handlePress = useCallback(async () => {
-          // Checking if the link is supported for links with custom URL scheme.
           const supported = await Linking.canOpenURL(url);
-      
           if (supported) {
-            // Opening the link with some app, if the URL scheme is "http" the web link should be opened
-            // by some browser in the mobile
             await Linking.openURL(url);
           } else {
             Alert.alert(`Don't know how to open this URL: ${url}`);
@@ -30,8 +26,6 @@ const Notice = ({navigation}) => {
         }/>;
       };
       
-      
-
     return ( 
         <View style={styles.card}>
         <ScrollView
@@ -77,14 +71,9 @@ const styles = StyleSheet.create({
       marginBottom:20
     },
     head:{
-        textAlign:'left',
-        // padding:20,
-        // fontSize:25,
-        // marginTop:10,
-        // marginBottom:10,
-        fontFamily:'Nunito-Bold',
-        marginHorizontal: 18,
-    // marginVertical: 20,
+    textAlign:'left',
+    fontFamily:'Nunito-Bold',
+    marginHorizontal: 18,
     fontSize:25,
     borderBottomWidth:0.5,
     paddingBottom:30

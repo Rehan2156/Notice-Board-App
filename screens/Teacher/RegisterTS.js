@@ -1,71 +1,91 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, View, Button,TouchableHighlight,ScrollView,ActivityIndicator, Dimensions } from 'react-native'
-import { TextInput } from 'react-native-gesture-handler'
+import { Text, StyleSheet, View, Button,TouchableHighlight,ScrollView,ActivityIndicator, Dimensions, Modal } from 'react-native'
+import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import auth from '@react-native-firebase/auth'
 import database from '@react-native-firebase/database';
 import Icon from 'react-native-vector-icons/FontAwesome'
 import {
     GoogleSignin,
-    GoogleSigninButton,
     statusCodes,
-} from '@react-native-community/google-signin'
-
-GoogleSignin.configure({
-    webClientId: '1095803181729-plorjsc7202l5koepequdtv0apag1snb.apps.googleusercontent.com',
-});
-
-
-const width = Dimensions.get("window").width - 100
-const height = Dimensions.get("window").height * 0.07
-
+  } from '@react-native-community/google-signin';
+  import AsyncStorage from '@react-native-community/async-storage';
 
 export default class RegisterTS extends Component {
     state = { 
         email: '', 
-        password: '', 
-        employeeId: '',
         name: '',
+        employeeId: '',
         errorMessage: null,
         loading:false ,
         isSigninInProgress: false,
-        wantTouseEmail: false,
+        editable: true
     }
 
-    onGoogleButtonPress = async () => {
-      if(this.state.employeeId !== '') {
-          this.setState({ loading: true, isSigninInProgress: true })
-          const { idToken, user } = await GoogleSignin.signIn();
-          this.setState({ email: user.email, name: user.name })
-          const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-          return auth().signInWithCredential(googleCredential);
-      } else {
-          Alert.alert("Fill Every thing")
-          return 1
-      }
-  }
+    componentDidMount() {
+      GoogleSignin.configure({
+          webClientId: "1095803181729-plorjsc7202l5koepequdtv0apag1snb.apps.googleusercontent.com", // client ID of type WEB for your server(needed to verify user ID and offline access)
+          offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
+          forceCodeForRefreshToken: true, // [Android] related to `serverAuthCode`, read the docs link below *.
+      });
 
-    handleSignUp = () => {
-        this.setState({loading:true})
-        console.log('handleSignUp')
-        auth()
-        .createUserWithEmailAndPassword(this.state.email, this.state.password)
-        .then(() => {
-            console.log('hogaya')
-            database()
-            .ref('Users/Teachers/'+auth().currentUser.uid)
-            .set({
-                employeeId: this.state.employeeId,
-                email: this.state.email,
-                user: 'Teacher',
-                name: this.state.name
+      console.log('data stored')
+      this.getData()
+    }
+
+    storeData = async ( value ) => {
+      try {
+          console.log('Store data')
+          const jsonValue = JSON.stringify(value)
+          await AsyncStorage.setItem('User_Cred', jsonValue)
+        } catch (e) {
+          console.log('error: ', e)
+        }
+    }
+
+  getData = async () => {
+      try {
+        const jsonValue = await AsyncStorage.getItem('User_Cred')
+        jsonValue != null ? JSON.parse(jsonValue) : null;
+        console.log(jsonValue)
+        if(jsonValue != null) {
+            var employeeId = JSON.parse(jsonValue).employeeId
+            var email = JSON.parse(jsonValue).email
+            var user = JSON.parse(jsonValue).user
+            var name = JSON.parse(jsonValue).name        
+
+            this.setState({
+                employeeId: employeeId,
+                editable: false
             })
-            this.setState({loading:false})
-        })
-        .catch(error => this.setState({ errorMessage: error.message, loading:false }))
+
+            console.log(employeeId)
+        }
+      } catch(e) {
+          console.log('error: ', e)
+      }
     }
 
     render() {
-        if(!this.state.loading){
+
+      if(this.state.loading) {
+        return(
+            <Modal
+            animationType="slide"
+            transparent={false}
+            visible={true}
+            onRequestClose={() => {
+                //   Alert.alert("Modal has been closed.");
+                }}
+            >
+                <View style={styles.containerR}>
+                <Text style={{fontFamily:'Nunito-Regular',fontSize:15}}>Registering</Text>
+                <Text style={{fontFamily:'Nunito-Regular',fontSize:15}}>Please Wait</Text>
+                <ActivityIndicator size='large' />
+                </View>
+                </Modal>
+        )
+    }
+    
         return (
             <ScrollView>
             <View style={styles.container}>
@@ -74,99 +94,78 @@ export default class RegisterTS extends Component {
                     {this.state.errorMessage}
                 </Text>}
                 <View style={styles.inputContainer}>
-            <Icon name={'id-card'} size={25} color="#808080" style={styles.inputIcon}/>
-                <TextInput
-                    placeholder="Employee Id"
-                    autoCapitalize="none"
-                    style={styles.textInput}
-                    onChangeText={employeeId => this.setState({ employeeId })}
-                    value={this.state.employeeId}
-                />
+                  <Icon name={'id-card'} size={25} color="#808080" style={styles.inputIcon}/>
+                    <TextInput
+                        placeholder="Employee Id"
+                        autoCapitalize="none"
+                        style={styles.textInput}
+                        onChangeText={employeeId => this.setState({ employeeId })}
+                        value={this.state.employeeId}
+                        editable = { this.state.editable }
+                    />
                 </View>
 
-          {!this.state.wantTouseEmail ? 
-              <TouchableHighlight style={styles.myBtn} onPress={() => { this.setState({ wantTouseEmail: true }) }}>
-                <Text style={styles.btnText}> Use Email </Text>
-              </TouchableHighlight> :
-            <View>
-                <View style={styles.inputContainer}>
-            <Icon name={'user'} size={25} color="#808080" style={styles.inputIcon}/>
-                <TextInput
-                    placeholder="name"
-                    autoCapitalize="none"
-                    style={styles.textInput}
-                    onChangeText={name => this.setState({ name })}
-                    value={this.state.name
-                    }
-                />
-                </View>
-                
-                <View style={styles.inputContainer}>
-            <Icon name={'envelope'} size={25} color="#808080" style={styles.inputIcon}/>
-                <TextInput
-                    placeholder="Email"
-                    autoCapitalize="none"
-                    style={styles.textInput}
-                    onChangeText={email => this.setState({ email })}
-                    value={this.state.email}
-                />
-                </View>
+          <TouchableOpacity 
+                style={ styles.googleBtn }
+                onPress={async () => {
+                    this.setState({ loading: true, isSigninInProgress: true })
+                    try {
+                    await GoogleSignin.hasPlayServices();
+                    const info = await GoogleSignin.signIn();
+                    const googleCredential = auth.GoogleAuthProvider.credential(info.idToken);
+                    await auth().signInWithCredential(googleCredential).then(() => {
+                        console.log('Sign in with google !')
+                        if( this.state.editable != false ) {
+                          console.log(auth().currentUser.uid)
+                          console.log(this.state.employeeId)
+                          console.log(info.user.email)
+                          console.log(info.user.name)
 
-                <View style={styles.inputContainer}>
-            <Icon name={'lock'} size={25} color="#808080" style={styles.inputIcon}/>
-                <TextInput
-                    secureTextEntry
-                    placeholder="Password"
-                    autoCapitalize="none"
-                    style={styles.textInput}
-                    onChangeText={password => this.setState({ password })}
-                    value={this.state.password}
-                />
-                </View>
-
-                <TouchableHighlight style={styles.myBtn} onPress={this.handleSignUp}>
-                  <Text style={styles.btnText}>Sign Up</Text>
-                </TouchableHighlight> 
-            </View>
-          }
-
-          <GoogleSigninButton
-                    style={{ width: width, height: height, marginTop: 20, }}
-                    size={GoogleSigninButton.Size.Wide}
-                    color={GoogleSigninButton.Color.Dark}
-                    onPress={() => {
-                      this.onGoogleButtonPress().then(() => {
-                        console.log('Signed in with Google!')
-                        database()
-                        .ref('Users/Teachers/'+ auth().currentUser.uid)
-                        .set({
+                          var myValue = {
                             employeeId: this.state.employeeId,
-                            email: this.state.email,
+                            email: info.user.email,
                             user: 'Teacher',
-                            name: this.state.name
-                        })
-                        this.setState({loading:false, isSigninInProgress: false})
-                    })}}
-                    disabled={this.state.isSigninInProgress} 
-            />
+                            name: info.user.name                     
+                          }
 
+                          database().ref('Users/Teachers/'+ auth().currentUser.uid).set({
+                              employeeId: this.state.employeeId,
+                              email: info.user.email,
+                              user: 'Teacher',
+                              name: info.user.name
+                          })
+
+                          this.storeData(myValue)
+                        }
+                    })
+                  } catch (error) {
+                    if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+                      console.log('Cancel: ' + error )
+                    } else if (error.code === statusCodes.IN_PROGRESS) {
+                      console.log('InProgress: ' + error)
+                    } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+                      console.log('Play Services:' + error )
+                    } else {
+                      console.log('Other:' + error)
+                    }
+                  }           
+                  this.setState({ loading: false, isSigninInProgress: false })
+                }}
+            >
+                <View style={ styles.googlePack }>
+                <Icon  name={'google'} size={30} color={'#fff'} style={ styles.googleIcon } />
+                <Text style={ styles.googleText } > Sign in with Google </Text>
+                </View>
+            </TouchableOpacity>
       </View>
       </ScrollView>
         )
-    }else{
-        return(
-          <View style={styles.loading}>
-            <Text> Loading Please Wait ... </Text>
-              <ActivityIndicator size = 'large'/>
-          </View>
-        )
-      }
     }
 }
 
 const styles = StyleSheet.create({
     container: {
-        // flex: 1,
+        flex: 1,
         justifyContent:'center',
           borderRadius: 6,
           elevation: 3,
@@ -182,6 +181,14 @@ const styles = StyleSheet.create({
           marginRight:30,
           marginTop:'20%',
           marginBottom:'30%'
+      },    
+      containerR: {
+        flex: 1,
+        backgroundColor: '#fff',
+        padding: 10,
+        justifyContent: 'center',
+        alignContent: 'center',
+        alignItems: 'center',
       },
       textInput: {
         justifyContent:'center',
@@ -243,6 +250,38 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
+      },
+
+      googleBtn: {
+        width: '100%',
+        margin: 25,
+        alignSelf: 'center',
+        textAlignVertical: 'center',
+        borderColor: '#4285F4',
+        borderWidth: 2,
+        borderRadius: 10,
+      },
+      googlePack: {
+          flexDirection: 'row',
+          justifyContent: 'flex-start',
+      },
+      googleIcon: {
+          padding: 10,
+          display: 'flex',
+          alignSelf: 'flex-start',
+          textAlignVertical: 'center',
+          backgroundColor: '#4285F4',
+          borderTopLeftRadius: 5,
+          borderBottomLeftRadius: 5,
+          borderWidth: 1,
+          borderColor: '#4285F4',
+      },
+      googleText:{
+          fontSize: 16,
+          color: '#111',
+          fontWeight: 'bold',
+          textAlignVertical: 'center',
+          marginLeft: 30,
       },
   })
 

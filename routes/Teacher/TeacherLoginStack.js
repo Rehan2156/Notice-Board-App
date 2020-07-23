@@ -1,19 +1,9 @@
 import React from 'react';
 import {createStackNavigator} from 'react-navigation-stack'
 import Header from '../../shared/header'
-import LoginTS from '../../screens/Teacher/LoginTS';
 import RegisterTS from '../../screens/Teacher/RegisterTS';
 
 const screens = {
-    Login:{
-        screen: LoginTS,
-        navigationOptions:({navigation})=>{
-            // title:'MESCOE Notice Board',
-            return{
-            headerTitle:()=> <Header title='Teacher Login'/>
-            }
-        }
-    },
     Register:{
         screen: RegisterTS,
         navigationOptions:({navigation})=>{

@@ -13,49 +13,49 @@ const { width: WIDTH } = Dimensions.get('window')
 export default class AddNotice extends Component {
 
     state = {
-        head: "",
-        notice: "",
-        all:   true,
-        comp:  true,
-        mech:  true,
-        entc:  true,
-        fe:    true,
-        fec1:  true,
-        fec2:  true,
-        fecss: true,
-        fem1:  true,
-        fem2:  true,
-        fee1:  true,
-        fee2:  true,
-        se:    true,
-        sec1:  true,
-        sec2:  true,
-        secss: true,
-        sem1:  true,
-        sem2:  true,
-        see1:  true,
-        see2:  true,
-        te:    true,
-        tec1:  true,
-        tec2:  true,
-        tecss: true,
-        tem1:  true,
-        tem2:  true,
-        tee1:  true,
-        tee2:  true,
-        be:    true,
-        bec1:  true,
-        bec2:  true,
-        becss: true,
-        bem1:  true,
-        bem2:  true,
-        bee1:  true,
-        bee2:  true,
-        files: null,
-        downloadLink: '',
-        progress:'0',
-        uplaoding: false,
-        segment: [],
+        head:           "",
+        notice:         "",
+        files:          null,
+        downloadLink:   '',
+        uplaoding:      false,
+        sendList:       null,
+        segment:        [],
+        all:            true,
+        comp:           true,
+        mech:           true,
+        entc:           true,
+        fe:             true,
+        fec1:           true,
+        fec2:           true,
+        fecss:          true,
+        fem1:           true,
+        fem2:           true,
+        fee1:           true,
+        fee2:           true,
+        se:             true,
+        sec1:           true,
+        sec2:           true,
+        secss:          true,
+        sem1:           true,
+        sem2:           true,
+        see1:           true,
+        see2:           true,
+        te:             true,
+        tec1:           true,
+        tec2:           true,
+        tecss:          true,
+        tem1:           true,
+        tem2:           true,
+        tee1:           true,
+        tee2:           true,
+        be:             true,
+        bec1:           true,
+        bec2:           true,
+        becss:          true,
+        bem1:           true,
+        bem2:           true,
+        bee1:           true,
+        bee2:           true,
     }
 
     findDate = () => {
@@ -101,7 +101,7 @@ export default class AddNotice extends Component {
               headings: {en: "MESCOE Notice board"},
             })
           };
-          fetch(endpoint, params).then(res => console.log("After :", res));
+          fetch(endpoint, params).then(res => console.log("Thanks"));
     }
 
     uploadImage = async () => {
@@ -151,12 +151,16 @@ export default class AddNotice extends Component {
             )
         }
         else{
+            this.setState({
+                uplaoding: true,
+            })
             this.uploadTheDetails() 
         }
     }
 
     uploadTheDetails = async () => {
         console.log('hello')
+        console.log('sendlist: ', this.state.sendList)
         // if (this.state.head !== "" && this.state.notice !== "") {
             database()
                 .ref('/notice/' + Date.now())
@@ -166,51 +170,20 @@ export default class AddNotice extends Component {
                     downloadURL: this.state.downloadLink==""?"":this.state.downloadLink,
                     date: this.findDate(),
                     time: this.findTime(),
-                    all: this.state.all,
-                    fec1: this.state.fec1,
-                    fec2: this.state.fec2,
-                    fecss: this.state.fecss,
-                    fem1: this.state.fem1,
-                    fem2: this.state.fem2,
-                    fee1: this.state.fee1,
-                    fee2: this.state.fee2,
-                    sec1: this.state.sec1,
-                    sec2: this.state.sec2,
-                    secss: this.state.secss,
-                    sem1: this.state.sem1,
-                    sem2: this.state.sem2,
-                    see1: this.state.see1,
-                    see2: this.state.see2,
-                    tec1: this.state.tec1,
-                    tec2: this.state.tec2,
-                    tecss: this.state.tecss,
-                    tem1: this.state.tem1,
-                    tem2: this.state.tem2,
-                    tee1: this.state.tee1,
-                    tee2: this.state.tee2,
-                    bec1: this.state.bec1,
-                    bec2: this.state.bec2,
-                    becss: this.state.becss,
-                    bem1: this.state.bem1,
-                    bem2: this.state.bem2,
-                    bee1: this.state.bee1,
-                    bee2: this.state.bee2,
+                    toSegments: this.createSendList(),
                     uploaderID:auth().currentUser.uid
-
                 })
                 .then(() => {
                     this.createSegment()
-                    this.pushNotification()
+                    // this.pushNotification()
                     this.setState({ 
                         uplaoding: false
                     })
                     Alert.alert('Success', 'Notice is sent sucessfully')
                     this.props.navigation.navigate('Home')
                 });
-        // } else {
-        //     Alert.alert("Fill Every Info please")
-        // }
     }
+
     selectOneFile = async () => {
         try {
             const res = await DocumentPicker.pick({
@@ -239,6 +212,129 @@ export default class AddNotice extends Component {
         }
     }
 
+    createSendList = () => {
+        console.log('Send list')
+        var sendList = "Teacher"
+
+        if(this.state.all === true) {
+            sendList += ";Student"
+        }
+
+        if(this.state.comp === true && this.state.all != true) {
+            sendList += ";C"
+        }
+        if(this.state.entc === true && this.state.all != true) {
+            sendList += ";E"
+        }
+        if(this.state.mech === true && this.state.all != true) {
+            sendList += ";M"
+        }
+
+        if(this.state.fe === true && this.state.all != true) {
+            sendList += ";FE"
+        }
+        if(this.state.se === true && this.state.all != true) {
+            sendList += ";SE"
+        }
+        if(this.state.te === true && this.state.all != true) {
+            sendList += ";TE"
+        }
+        if(this.state.be === true && this.state.all != true) {
+            sendList += ";BE"
+        }
+
+        if(this.state.fec1 === true && this.state.all != true && this.state.comp != true && this.state.fe != true) {
+            sendList += ";FEC1"
+        }
+        if(this.state.fec2 === true && this.state.all != true && this.state.comp != true && this.state.fe != true) {
+            sendList += ";FEC2"
+        }
+        if(this.state.fecss === true && this.state.all != true && this.state.comp != true && this.state.fe != true) {
+            sendList += ";FECSS"
+        }
+        if(this.state.fee1 === true && this.state.all != true && this.state.entc != true && this.state.fe != true) {
+            sendList += ";FEE1"
+        }
+        if(this.state.fee2 === true && this.state.all != true && this.state.entc != true && this.state.fe != true) {
+            sendList += ";FEE2"
+        }
+        if(this.state.fem1 === true && this.state.all != true && this.state.mech != true && this.state.fe != true) {
+            sendList += ";FEM1"
+        }
+        if(this.state.fem2 === true && this.state.all != true && this.state.mech != true && this.state.fe != true) {
+            sendList += ";FEM2"
+        }
+
+        if(this.state.sec1 === true && this.state.all != true && this.state.comp != true && this.state.se != true) {
+            sendList += ";SEC1"
+        }
+        if(this.state.sec2 === true && this.state.all != true && this.state.comp != true && this.state.se != true) {
+            sendList += ";SEC2"
+        }
+        if(this.state.secss === true && this.state.all != true && this.state.comp != true && this.state.se != true) {
+            sendList += ";SECSS"
+        }
+        if(this.state.see1 === true && this.state.all != true && this.state.entc != true && this.state.se != true) {
+            sendList += ";SEE1"
+        }
+        if(this.state.see2 === true && this.state.all != true && this.state.entc != true && this.state.se != true) {
+            sendList += ";SEE2"
+        }
+        if(this.state.sem1 === true && this.state.all != true && this.state.mech != true && this.state.se != true) {
+            sendList += ";SEM1"
+        }
+        if(this.state.sem2 === true && this.state.all != true && this.state.mech != true && this.state.se != true) {
+            sendList += ";SEM2"
+        }
+
+        if(this.state.tec1 === true && this.state.all != true && this.state.comp != true && this.state.te != true) {
+            sendList += ";TEC1"
+        }
+        if(this.state.tec2 === true && this.state.all != true && this.state.comp != true && this.state.te != true) {
+            sendList += ";TEC2"
+        }
+        if(this.state.tecss === true && this.state.all != true && this.state.comp != true && this.state.te != true) {
+            sendList += ";TECSS"
+        }
+        if(this.state.tee1 === true && this.state.all != true && this.state.entc != true && this.state.te != true) {
+            sendList += ";TEE1"
+        }
+        if(this.state.tee2 === true && this.state.all != true && this.state.entc != true && this.state.te != true) {
+            sendList += ";TEE2"
+        }
+        if(this.state.tem1 === true && this.state.all != true && this.state.mech != true && this.state.te != true) {
+            sendList += ";TEM1"
+        }
+        if(this.state.tem2 === true && this.state.all != true && this.state.mech != true && this.state.te != true) {
+            sendList += ";TEM2"
+        }
+
+        if(this.state.bec1 === true && this.state.all != true && this.state.comp != true && this.state.be != true) {
+            sendList += ";BEC1"
+        }
+        if(this.state.bec2 === true && this.state.all != true && this.state.comp != true && this.state.be != true) {
+            sendList += ";BEC2"
+        }
+        if(this.state.becss === true && this.state.all != true && this.state.comp != true && this.state.be != true) {
+            sendList += ";BECSS"
+        }
+        if(this.state.bee1 === true && this.state.all != true && this.state.entc != true && this.state.be != true) {
+            sendList += ";BEE1"
+        }
+        if(this.state.bee2 === true && this.state.all != true && this.state.entc != true && this.state.be != true) {
+            sendList += ";BEE2"
+        }
+        if(this.state.bem1 === true && this.state.all != true && this.state.mech != true && this.state.be != true) {
+            sendList += ";BEM1"
+        }
+        if(this.state.bem2 === true && this.state.all != true && this.state.mech != true && this.state.be != true) {
+            sendList += ";BEM2"
+        }
+
+        console.log('Var: ', sendList)
+        return sendList
+    }
+
     createSegment = () => {
         console.log('segment')
         var segment = ["Teacher"]
@@ -248,13 +344,13 @@ export default class AddNotice extends Component {
         }
 
         if(this.state.comp === true) {
-            segment = [...segment, "C"]
+            segment = [...segment, "Co"]
         }
         if(this.state.entc === true) {
-            segment = [...segment, "E"]
+            segment = [...segment, "En"]
         }
         if(this.state.mech === true) {
-            segment = [...segment, "M"]
+            segment = [...segment, "Me"]
         }
 
         if(this.state.fe === true) {
@@ -365,7 +461,6 @@ export default class AddNotice extends Component {
         this.setState({
             segment: segment
         })
-
     }
 
     changeInDpartment = (boolVar , whichDep) => {
@@ -513,15 +608,14 @@ export default class AddNotice extends Component {
                 transparent={false}
                 visible={true}
                 onRequestClose={() => {
-        //   Alert.alert("Modal has been closed.");
-        }}
+                    //   Alert.alert("Modal has been closed.");
+                    }}
                 >
                     <View style={styles.container}>
                     <Text style={{fontFamily:'Nunito-Regular',fontSize:15}}>Uploading</Text>
                     <Text style={{fontFamily:'Nunito-Regular',fontSize:15}}>Please Wait</Text>
                     <ActivityIndicator size='large' />
                     </View>
-
                     </Modal>
             )
         }
