@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, View,ScrollView,ActivityIndicator, Dimensions, Alert } from 'react-native'
+import { Text, StyleSheet, View,ScrollView,ActivityIndicator, Dimensions, Alert, Modal } from 'react-native'
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import auth from '@react-native-firebase/auth'
 import database from '@react-native-firebase/database';
@@ -78,7 +78,26 @@ export default class RegisterScreen extends Component {
       }
 
     render() {
-        if(!this.state.loading){
+
+      if(this.state.loading) {
+        return(
+            <Modal
+            animationType="slide"
+            transparent={false}
+            visible={true}
+            onRequestClose={() => {
+                //   Alert.alert("Modal has been closed.");
+                }}
+            >
+                <View style={styles.containerR}>
+                <Text style={{fontFamily:'Nunito-Regular',fontSize:15}}>Registering</Text>
+                <Text style={{fontFamily:'Nunito-Regular',fontSize:15}}>Please Wait</Text>
+                <ActivityIndicator size='large' />
+                </View>
+                </Modal>
+        )
+    }
+
         return (
             <ScrollView>
             <View style={styles.container}>
@@ -156,32 +175,30 @@ export default class RegisterScreen extends Component {
                         const googleCredential = auth.GoogleAuthProvider.credential(info.idToken);
                         await auth().signInWithCredential(googleCredential).then(() => {
                             console.log('Sign in with google !')
-                            console.log(auth().currentUser.uid)
-                            console.log(this.state.prn)
-                            console.log(this.state.year)
-                            console.log(this.state.div)
-                            console.log(this.state.class)
-                            console.log(info.user.email)
-                            console.log(info.user.name)
-
-                            var myValue = {
-                                prn: this.state.prn,
-                                year: this.state.year, 
-                                class: this.state.class,
-                                div: this.state.div,
-                                email: info.user.email,
-                                user: 'Student'                            
+                            if(this.state.editable != false) {
+                              console.log(auth().currentUser.uid)
+                              console.log(this.state.prn)
+                              console.log(this.state.year)
+                              console.log(this.state.div)
+                              console.log(this.state.class)
+                              console.log(info.user.email)
+                              console.log(info.user.name)
+                              var myValue = {
+                                  prn: this.state.prn,
+                                  year: this.state.year, 
+                                  class: this.state.class,
+                                  div: this.state.div,
+                                  email: info.user.email,
+                                  user: 'Student'                            
+                              }
+                              database().ref('Users/Student/' + auth().currentUser.uid).set({
+                                  prn: this.state.prn,
+                                  year_div: this.state.year + '' + this.state.class + '' + this.state.div,
+                                  email: info.user.email,
+                                  user: 'Student'
+                              })
+                              this.storeData(myValue)
                             }
-
-                            database().ref('Users/Student/' + auth().currentUser.uid).set({
-                                prn: this.state.prn,
-                                year_div: this.state.year + '' + this.state.class + '' + this.state.div,
-                                email: info.user.email,
-                                user: 'Student'
-                            })
-
-                            this.storeData(myValue)
-
                     })
                   } catch (error) {
                     if (error.code === statusCodes.SIGN_IN_CANCELLED) {
@@ -205,14 +222,6 @@ export default class RegisterScreen extends Component {
             </View>
             </ScrollView>
         )
-    }else{
-        return(
-            <View style={styles.loading}>
-            <Text> Loading Please Wait ... </Text>
-                <ActivityIndicator size = 'large'/>
-            </View>
-        )
-        }
     }
 }
 
@@ -234,6 +243,14 @@ const styles = StyleSheet.create({
         marginRight:30,
         marginTop:'20%',
         marginBottom:'20%',
+    },    
+    containerR: {
+      flex: 1,
+      backgroundColor: '#fff',
+      padding: 10,
+      justifyContent: 'center',
+      alignContent: 'center',
+      alignItems: 'center',
     },
     textInput: {
       justifyContent:'center',

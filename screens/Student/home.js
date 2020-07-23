@@ -9,99 +9,112 @@ import {
   } from 'react-native/Libraries/NewAppScreen';
   import database from '@react-native-firebase/database';
   import OneSignal from 'react-native-onesignal';
+  import AsyncStorage from '@react-native-community/async-storage';
   
 const StudentHome = ({navigation,theme}) => {
   
-  useState(() => {
-   /* It is used to add this user to perticular group */
-    var myTag
-    
-    database().ref('Users/Student/'+auth().currentUser.uid)
-    .once('value' , data => {
-      myTag = data.toJSON().year_div
-    }).then(() => {
-      console.log('myTag:', myTag)
-  
-      var cls = myTag.toString().substr(0,2)
-      var dep = myTag.toString().substr(2,1)
-      const tags = {
-        user: 'Student',
-        department: dep,
-        class: cls,
-        tag: myTag,
+  const getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('User_Cred')
+      jsonValue != null ? JSON.parse(jsonValue) : null;
+      console.log(jsonValue)
+      if(jsonValue != null) {
+          var prn = JSON.parse(jsonValue).prn
+          var Class = JSON.parse(jsonValue).class 
+          var year = JSON.parse(jsonValue).year
+          var div = JSON.parse(jsonValue).div
+          var user = JSON.parse(jsonValue).user
+
+            this.setState({
+                prn: prn,
+                class: Class ? Class : '',
+                year: year ? year : '',
+                div: div ? div : '',
+                user: user,
+                editable: false,
+            })
       }
+    } catch(e) {
+        console.log('error: ', e)
+    }
+  }
 
-      console.log('tags:', tags)
-      OneSignal.sendTags(tags)
-  })})
 
-    const [list,setList] = useState([
-        // {head:"Defaulter list",text:"All defaulter students are supposed to report in room no 403nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn nnnnnnnnnnnnnnnnnnnnnnnnnnn yyyyyyyyyyyyyyyyyyyyyyyyyyyyyy yyyyyyyyyyyyyyyyyyyyyyyyyyyy",key:'1'},
-        // {head:"Result announced",text:"SE results announced. Topper is Laukik Chavan. Everyone is requested to bring photocopy of results. jjjj jj j j j jjjjsgdhbsjbhgsbjbvjbvjvdjvndjnvjdnvjdnvjdvndjv",key:'2'},
-        // {head:'Holiday tomorrow1',text:'yeyy',key:'3'},
-        
-    ])
-    const [load,setLoad]=useState(0)
-    const [classroom,setClassroom]=useState('')
-    const [user,setUser]=useState('')
-    const [timehaspassed,setTimehaspassed]=useState(false)
+const [list,setList] = useState([])
+const [classroom,setClassroom]=useState('')
+const [user,setUser]=useState('')
+const [timehaspassed,setTimehaspassed]=useState(false)
+const [dep,setDep] = useState()
+const [ye, setYe] = useState()
 
-    useEffect(() => {
-        var myArray = []
-      database().ref("/Users/Student/"+auth().currentUser.uid)
-      .once("value",(snapshot)=>{
-        var myJSON = snapshot.toJSON()
-        setUser(myJSON.user)
-        setClassroom(myJSON.year_div)
-      })
+  useState(async () => {
+    try {
+      await database().setPersistenceCacheSizeBytes(2000000);
+      const jsonValue = await AsyncStorage.getItem('User_Cred')
+      jsonValue != null ? JSON.parse(jsonValue) : null;
+      console.log(jsonValue)
+      if(jsonValue != null) {
+          var prn = JSON.parse(jsonValue).prn
+          var Class = JSON.parse(jsonValue).class 
+          var year = JSON.parse(jsonValue).year
+          var div = JSON.parse(jsonValue).div
+          var user = JSON.parse(jsonValue).user
+          const tags = {
+            user: user,
+            department: Class,
+            class: year,
+            tag: year + '' + Class + '' + div,
+          }
+          console.log('tags:', tags)
+          var classroom = year + '' + Class + '' + div
+          setUser(user)
+          setClassroom(classroom)
+          
+          if(Class == "C") {
+            Class += "o"
+          } else if(Class == "E") {
+            Class += "n"
+          } else if(Class == "M") {
+            Class += "e"
+          } else {
+            console.log('Someting is worng')
+          }
 
-    // try {
-      var ref = database().ref("/notice");
-      // setLoad(1)
+          setDep(Class)
+          setYe(year)
+          OneSignal.sendTags(tags)
+      }
+    } catch(e) {
+        console.log('error: ', e)
+    }
+  })
+
+  useEffect(() => {
+    setTimeout(() => {
+      var myArray = []
+      var ref = database().ref("notice/");
       ref.once("value", (snapshot) => {
+        console.log('hello')
         snapshot.forEach( (childSnapshot) => {
-            var myJSON=childSnapshot.toJSON()
-            var div = myJSON[classroom.toLowerCase()]
-           if(div==true){
-          var key = myJSON.key
-          var head = myJSON.head
-          var notice = myJSON.text
-          var downURL = myJSON.downloadURL
-          var date = myJSON.date
-          var time = myJSON.time
-          myArray = [...myArray, {head: head, text:notice, downloadURL:downURL,date:date,time:time,key: key }]
-           }
-        
+          var myJSON=childSnapshot.toJSON()
+          if(myJSON.toSegments != null || myJSON.toSegments != undefined) {
+            var seg = (myJSON.toSegments)
+            if(seg.includes(user) || seg.includes(dep) || seg.includes(ye) || seg.includes(classroom) ){
+              var key = myJSON.key
+              var head = myJSON.head
+              var notice = myJSON.text
+              var downURL = myJSON.downloadURL
+              var date = myJSON.date
+              var time = myJSON.time
+              myArray = [...myArray, {head: head, text:notice, downloadURL:downURL,date:date,time:time,key: key }]}
+          }
         })
-    
-        //   this.setState({
-        //     shops: [...this.state.shops, ...myArray],
-        //   })
-
-        //   this.setState({
-        //     tempArray: this.state.shops,
-        //     lisIsready: true,
-        //   })
         setList(myArray.reverse());
-      }).then(()=>{
-        // setLoad(0)
-      }
-    );
-    // } catch(e) {
-    //   console.log('Error: aya bro :', e)
-    // }
+        }).then( async () => {
+          await database().goOffline()
+        }) 
+    }, 100000);
     })
-    
-  //   if(load==1) {
-  //     return(
-  //         <View style={styles.container}>
-  //             <Text> Loading </Text>
-  //             <Text> Please Wait</Text>
-  //             <ActivityIndicator size='large' />
-  //         </View>
-  //     )
-  // }
-  // else{
     
     if(list.length==0){
       setTimeout(() => {setTimehaspassed(true)}, 10000)
@@ -117,6 +130,7 @@ const StudentHome = ({navigation,theme}) => {
       </View>
       )
     }
+
     return ( 
     <View>
         {/* <ScrollView
@@ -132,7 +146,6 @@ const StudentHome = ({navigation,theme}) => {
      </View> 
     
     );
-        // }
 }
 
 const styles = StyleSheet.create({

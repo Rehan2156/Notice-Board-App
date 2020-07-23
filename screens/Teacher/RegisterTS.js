@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, View, Button,TouchableHighlight,ScrollView,ActivityIndicator, Dimensions } from 'react-native'
+import { Text, StyleSheet, View, Button,TouchableHighlight,ScrollView,ActivityIndicator, Dimensions, Modal } from 'react-native'
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import auth from '@react-native-firebase/auth'
 import database from '@react-native-firebase/database';
@@ -66,7 +66,26 @@ export default class RegisterTS extends Component {
     }
 
     render() {
-        if(!this.state.loading){
+
+      if(this.state.loading) {
+        return(
+            <Modal
+            animationType="slide"
+            transparent={false}
+            visible={true}
+            onRequestClose={() => {
+                //   Alert.alert("Modal has been closed.");
+                }}
+            >
+                <View style={styles.containerR}>
+                <Text style={{fontFamily:'Nunito-Regular',fontSize:15}}>Registering</Text>
+                <Text style={{fontFamily:'Nunito-Regular',fontSize:15}}>Please Wait</Text>
+                <ActivityIndicator size='large' />
+                </View>
+                </Modal>
+        )
+    }
+    
         return (
             <ScrollView>
             <View style={styles.container}>
@@ -96,26 +115,28 @@ export default class RegisterTS extends Component {
                     const googleCredential = auth.GoogleAuthProvider.credential(info.idToken);
                     await auth().signInWithCredential(googleCredential).then(() => {
                         console.log('Sign in with google !')
-                        console.log(auth().currentUser.uid)
-                        console.log(this.state.employeeId)
-                        console.log(info.user.email)
-                        console.log(info.user.name)
+                        if( this.state.editable != false ) {
+                          console.log(auth().currentUser.uid)
+                          console.log(this.state.employeeId)
+                          console.log(info.user.email)
+                          console.log(info.user.name)
 
-                        var myValue = {
-                          employeeId: this.state.employeeId,
-                          email: info.user.email,
-                          user: 'Teacher',
-                          name: info.user.name                     
-                        }
-
-                        database().ref('Users/Teachers/'+ auth().currentUser.uid).set({
+                          var myValue = {
                             employeeId: this.state.employeeId,
                             email: info.user.email,
                             user: 'Teacher',
-                            name: info.user.name
-                        })
+                            name: info.user.name                     
+                          }
 
-                        this.storeData(myValue)
+                          database().ref('Users/Teachers/'+ auth().currentUser.uid).set({
+                              employeeId: this.state.employeeId,
+                              email: info.user.email,
+                              user: 'Teacher',
+                              name: info.user.name
+                          })
+
+                          this.storeData(myValue)
+                        }
                     })
                   } catch (error) {
                     if (error.code === statusCodes.SIGN_IN_CANCELLED) {
@@ -139,20 +160,12 @@ export default class RegisterTS extends Component {
       </View>
       </ScrollView>
         )
-    }else{
-        return(
-          <View style={styles.loading}>
-            <Text> Loading Please Wait ... </Text>
-              <ActivityIndicator size = 'large'/>
-          </View>
-        )
-      }
     }
 }
 
 const styles = StyleSheet.create({
     container: {
-        // flex: 1,
+        flex: 1,
         justifyContent:'center',
           borderRadius: 6,
           elevation: 3,
@@ -168,6 +181,14 @@ const styles = StyleSheet.create({
           marginRight:30,
           marginTop:'20%',
           marginBottom:'30%'
+      },    
+      containerR: {
+        flex: 1,
+        backgroundColor: '#fff',
+        padding: 10,
+        justifyContent: 'center',
+        alignContent: 'center',
+        alignItems: 'center',
       },
       textInput: {
         justifyContent:'center',
