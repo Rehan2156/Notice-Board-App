@@ -1,7 +1,6 @@
 import React,{useState,useEffect} from 'react';
-import { Text, StyleSheet,ActivityIndicator, View, Alert,FlatList,Button,TouchableOpacity,SafeAreaView,ScrollView  } from 'react-native'
+import { StyleSheet, View, FlatList, TouchableOpacity  } from 'react-native'
 import Tile from '../../components/tile';
-import { Colors, } from 'react-native/Libraries/NewAppScreen';
 import database from '@react-native-firebase/database';
 import OneSignal from 'react-native-onesignal';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -13,12 +12,12 @@ const [timehaspassed,setTimehaspassed]=useState(false)
 const [isDone, setIsDone] = useState(0)
 
   useEffect(() => {
-    if(isDone == 0) {
-      try {
-        AsyncStorage.getItem('User_Cred').then( jsonValue  => {
-          jsonValue != null ? JSON.parse(jsonValue) : null;
-          console.log(jsonValue)
-          if(jsonValue != null) {
+    try {
+      AsyncStorage.getItem('list_data').then( myList => {
+        if(myList == null) { 
+          AsyncStorage.getItem('User_Cred').then( jsonValue  => {
+            console.log(jsonValue)
+            if(jsonValue != null) {
               var Class = JSON.parse(jsonValue).class 
               var year = JSON.parse(jsonValue).year
               var div = JSON.parse(jsonValue).div
@@ -41,67 +40,50 @@ const [isDone, setIsDone] = useState(0)
               } else {
                 console.log('Someting is worng')
               }
-              setIsDone(1)
               OneSignal.sendTags(tags)
-            AsyncStorage.getItem('list_data').then( myList => {
-            if(myList == null) { 
               var myArray = []
-                var ref = database().ref("notice/")
-                ref.once("value", async (snapshot) => {
-                  snapshot.forEach( (childSnapshot) => {
-                    var myJSON=childSnapshot.toJSON()
-                    var seg = myJSON.toSegments
-                    if((myJSON.toSegments != null || myJSON.toSegments != undefined) && (seg.includes(user) || seg.includes(Class) || seg.includes(year) || seg.includes(classroom))) {
-                        
-                      console.log(myJSON.toSegments)
-
-                        var key = myJSON.key
-                        var head = myJSON.head
-                        var notice = myJSON.text
-                        var downURL = myJSON.downloadURL
-                        var date = myJSON.date
-                        var time = myJSON.time
-                        var toSegments = myJSON.toSegments
-                        var uploaderID = myJSON.uploaderID
-                        
-                        var item = {head: head, text:notice, downloadURL:downURL,date:date,time:time, key:key, toSegments: toSegments, uploaderID:uploaderID}
-                        var itemStr = JSON.stringify(item) + '<;>'
-    
-                        myArray = [...myArray, itemStr]
-                    }
-                  })
-                  await AsyncStorage.setItem('list_data', myArray.toString()).then(() => {
-                    setIsDone(1)
-                  })
+              var ref = database().ref("notice/")
+              ref.once("value", async (snapshot) => {
+                snapshot.forEach( (childSnapshot) => {
+                  var myJSON=childSnapshot.toJSON()
+                  var seg = myJSON.toSegments
+                  if((myJSON.toSegments != null || myJSON.toSegments != undefined) && (seg.includes(user) || seg.includes(Class) || seg.includes(year) || seg.includes(classroom))) {
+                    console.log(myJSON.toSegments)
+                      var key = myJSON.key
+                      var head = myJSON.head
+                      var notice = myJSON.text
+                      var downURL = myJSON.downloadURL
+                      var date = myJSON.date
+                      var time = myJSON.time
+                      var toSegments = myJSON.toSegments
+                      var uploaderID = myJSON.uploaderID  
+                      var item = {head: head, text:notice, downloadURL:downURL,date:date,time:time, key:key, toSegments: toSegments, uploaderID:uploaderID}
+                      var itemStr = JSON.stringify(item) + '<;>'
+                      myArray = [...myArray, itemStr]
+                  }
                 })
-              }
-            })
-          }
-        })
-        
-      } catch(e) {
-          console.log('error: ', e)
-      }
-    } 
-  })
-
-  useEffect(() => {
-      try {
-        AsyncStorage.getItem('list_data').then(jsonValue => {
-          if(jsonValue != null) {
-            var myArray = jsonValue.split("<;>,")
-            var myJSON = []
-            myArray.forEach(e => {
-                e = e.replace('<;>', '')
-                var r = JSON.parse(e)
-                myJSON = [...myJSON, r]
-            })
-            setList(myJSON.reverse());
-          }
-        })
-      } catch(e) {
-          console.log('error: ', e)
-      }
+                AsyncStorage.setItem('list_data', myArray.toString())
+              })
+            }
+          })
+        } else {
+          AsyncStorage.getItem('list_data').then(jsonValue => {
+            if(jsonValue != null) {
+              var myArray = jsonValue.split("<;>,")
+              var myJSON = []
+              myArray.forEach(e => {
+                  e = e.replace('<;>', '')
+                  var r = JSON.parse(e)
+                  myJSON = [...myJSON, r]
+              })
+              setList(myJSON.reverse());
+            }
+          })
+        }
+      })
+    } catch(e) {
+        console.log('error: ', e)
+    }
   })
       
   if(list.length==0) {

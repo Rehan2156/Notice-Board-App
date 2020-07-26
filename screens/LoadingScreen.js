@@ -10,5 +10,6 @@ export default function LoadingScreen({navigation}) {
             })
         },1000)
     })
+    
     return ( <SlpashScreen head="Loading" /> )
 }

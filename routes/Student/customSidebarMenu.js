@@ -19,7 +19,7 @@ export default function customSidebarMenu({ navigation }) {
     }
   ])
 
-  useEffect(() => {
+  useState(() => {
     try {
       AsyncStorage.getItem('User_Cred').then( jsonValue => {
         jsonValue != null ? JSON.parse(jsonValue) : null;
