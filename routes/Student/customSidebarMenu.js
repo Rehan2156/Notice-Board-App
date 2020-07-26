@@ -1,4 +1,4 @@
-import React,{useEffect, useState} from 'react';
+import React,{ useState, useEffect} from 'react';
 import { View, StyleSheet, Image, Text, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome'
 import auth from '@react-native-firebase/auth'
@@ -9,8 +9,6 @@ const {height:HEIGHT}=Dimensions.get('window')
 
 export default function customSidebarMenu({ navigation }) {
 
-  const [user, setUser] = useState('')
-  const [classroom, setClassroom] = useState('')
   const [items, setItems] = useState([
     {
       navOptionThumb: 'home',
@@ -18,22 +16,27 @@ export default function customSidebarMenu({ navigation }) {
       screenToNavigate: 'Home',
     }
   ])
+  const [user, setUser] = useState(null)
+  const [classroom, setClassroom] = useState(null)
 
-  useState(() => {
-    try {
-      AsyncStorage.getItem('User_Cred').then( jsonValue => {
-        jsonValue != null ? JSON.parse(jsonValue) : null;
-        if(jsonValue != null) {
-          var Class = JSON.parse(jsonValue).class 
-          var year = JSON.parse(jsonValue).year
-          var div = JSON.parse(jsonValue).div
-          var user = JSON.parse(jsonValue).user
-          setUser(user)
-          setClassroom(year + '' + Class + '' + div)
-        }
-      })
-    } catch(e) {
-        console.log('error: ', e)
+  useEffect(() => {
+    if(user == null && classroom == null) {
+      try {
+        AsyncStorage.getItem('User_Cred').then( jsonValue => {
+          jsonValue != null ? JSON.parse(jsonValue) : null;
+          console.log(jsonValue)
+          if(jsonValue != null) {
+            var Class = JSON.parse(jsonValue).class 
+            var year = JSON.parse(jsonValue).year
+            var div = JSON.parse(jsonValue).div
+            var user = JSON.parse(jsonValue).user
+            setUser(user)
+            setClassroom(year + '' + Class + '' + div)
+          }
+        })
+      } catch(e) {
+          console.log('error: ', e)
+      }
     }
   })
 
@@ -110,6 +113,7 @@ export default function customSidebarMenu({ navigation }) {
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
 sideMenuContainer: {
