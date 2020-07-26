@@ -34,23 +34,19 @@ const MyNotice = ({navigation}) => {
       }
     })
     
-    if(list.length==0)
-    {
-        return(
-            <View><Text style={styles.empty}>You have not sent any notices yet</Text></View>
-        )
-    }
-
-    else{
+  if(list.length==0){
+      return(
+        <View><Text style={styles.empty}>You have not sent any notices yet</Text></View>
+      )
+  } else {
     return ( 
-    <View>
-        <FlatList data={list} keyExtractor={(item, index) => index.toString()} renderItem={({ item }) => (
-        <TouchableOpacity onPress={()=>navigation.navigate('Notice',item)}>
-        <Tile title={item.head} date={item.date} time={item.time}/>
-        </TouchableOpacity>
-      )}/>
-     </View> 
-    
+      <View>
+          <FlatList data={list} keyExtractor={(item, index) => index.toString()} renderItem={({ item }) => (
+          <TouchableOpacity onPress={()=>navigation.navigate('Notice',item)}>
+          <Tile title={item.head} date={item.date} time={item.time}/>
+          </TouchableOpacity>
+        )}/>
+      </View> 
     );
   }
 }

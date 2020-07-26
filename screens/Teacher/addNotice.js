@@ -8,6 +8,7 @@ import storage from '@react-native-firebase/storage'
 import RNFS from 'react-native-fs'
 import auth from '@react-native-firebase/auth'
 import AsyncStorage from '@react-native-community/async-storage';
+import SlpashScreen from '../../components/SlpashScreen';
 
 const { width: WIDTH } = Dimensions.get('window')
 
@@ -629,22 +630,7 @@ export default class AddNotice extends Component {
 
     render() {
         if(this.state.uplaoding) {
-            return(
-                <Modal
-                animationType="slide"
-                transparent={false}
-                visible={true}
-                onRequestClose={() => {
-                    //   Alert.alert("Modal has been closed.");
-                    }}
-                >
-                    <View style={styles.container}>
-                    <Text style={{fontFamily:'Nunito-Regular',fontSize:15}}>Uploading</Text>
-                    <Text style={{fontFamily:'Nunito-Regular',fontSize:15}}>Please Wait</Text>
-                    <ActivityIndicator size='large' />
-                    </View>
-                    </Modal>
-            )
+            return (<SlpashScreen  head="Uploading Notice"/>)
         }
 
         return ( 

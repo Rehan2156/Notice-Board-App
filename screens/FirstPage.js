@@ -1,61 +1,76 @@
 import React, { Component } from 'react'
 import { Text, StyleSheet ,Image ,Dimensions ,TouchableOpacity ,ImageBackground } from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage';
+import SlpashScreen from '../components/SlpashScreen';
 
 const width = Dimensions.get('window').width
 const heigth = Dimensions.get('window').height
 
 export default class FirstPage extends Component {
   state = {
-    user: ''
+    user: '',
+    loading : true,
+    backgrounImage1: null,
+    backgrounImage2: null,
+    logo: null,
   }
 
   componentDidMount() {
-    console.log('is Logged in') 
-    this.checkingWhereToGo()
-  }
-
-  checkingWhereToGo = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem('User_Cred')
-      jsonValue != null ? JSON.parse(jsonValue) : null;
-      console.log('User_cred: ', jsonValue)
-      if(jsonValue != null) {
-          var user =  JSON.parse(jsonValue).user 
-          this.props.navigation.navigate(user)
+    this.setState({
+      backgrounImage1: require('../assets/img/bgImage1.png'),
+      backgrounImage2: require('../assets/img/bgImage2.png'),
+      logo: require('../assets/img/mes_logo1.png')
+    })
+    setTimeout(() => {
+      console.log('is Logged in') 
+      try {
+        AsyncStorage.getItem('User_Cred').then( jsonValue => {
+          jsonValue != null ? JSON.parse(jsonValue) : null;
+          console.log('User_cred: ', jsonValue)
+          if(jsonValue != null) {
+              var user =  JSON.parse(jsonValue).user 
+              this.props.navigation.navigate(user)
+          }
+        })
+      } catch(e) {
+          console.log('error: ', e)
       }
-    } catch(e) {
-        console.log('error: ', e)
-    }
+      this.setState({ loading: false })
+    }, 2500)
   }
 
-    render() {
-        return (
-            <ImageBackground style={styles.body} source={require('../assets/img/bgImage1.png')}>
-            <Image style ={styles.img} source={require('../assets/img/mes_logo1.png')} />
-            <Text style={styles.head}>Modern Education Society's College of Engineering</Text>
-            <Text style={styles.headApp}>NOTICE BOARD APP</Text>
-            <ImageBackground style={styles.container} imageStyle={{ borderTopRightRadius:50,borderTopLeftRadius:50,}} source={require('../assets/img/bgImage2.png')}>
-                <TouchableOpacity 
-                  style={styles.myBtn} 
-                  onPress = { () => {
-                    this.props.navigation.navigate('Student')
-                  }}
-                >
-                  <Text style={styles.btnText} > I am a Student </Text>
-                </TouchableOpacity>
-                <TouchableOpacity 
-                  style={styles.myBtn} 
-                  onPress = { () => {
-                    this.props.navigation.navigate('Teacher')
-                  }}
-                >
-                  <Text style={styles.btnText} > I am a Faculty Member </Text>
-                </TouchableOpacity>
-            </ImageBackground>
-            </ImageBackground>
-        )
+  render() {
+
+    if(this.state.loading) {
+      return <SlpashScreen head="Starting" />
     }
+
+      return (
+          <ImageBackground style={styles.body} source={this.state.backgrounImage1}>
+          <Image style ={styles.img} source={this.state.logo} />
+          <Text style={styles.head}>Modern Education Society's College of Engineering</Text>
+          <Text style={styles.headApp}>NOTICE BOARD APP</Text>
+          <ImageBackground style={styles.container} imageStyle={{ borderTopRightRadius:50,borderTopLeftRadius:50,}} source={this.state.backgrounImage2}>
+              <TouchableOpacity 
+                style={styles.myBtn} 
+                onPress = { () => {
+                  this.props.navigation.navigate('Student')
+                }}
+              >
+                <Text style={styles.btnText} > I am a Student </Text>
+              </TouchableOpacity>
+              <TouchableOpacity 
+                style={styles.myBtn} 
+                onPress = { () => {
+                  this.props.navigation.navigate('Teacher')
+                }}
+              >
+                <Text style={styles.btnText} > I am a Faculty Member </Text>
+              </TouchableOpacity>
+          </ImageBackground>
+          </ImageBackground>
+      )
+  }
 }
 
 const styles = StyleSheet.create({

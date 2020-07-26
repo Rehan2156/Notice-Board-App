@@ -19,7 +19,6 @@ const screens = {
         screen:Notice,
         navigationOptions:{
             title:'Notice',
-            // headerStyle:{backgroundColor:'#eee'}
         }
     }
 }
