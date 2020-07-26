@@ -1,12 +1,12 @@
 import React,{Component} from 'react';
 import { View, StyleSheet, Image, Text, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome'
-import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth'
 import {Button} from 'react-native-elements'
 import AsyncStorage from '@react-native-community/async-storage';
 
 const {height:HEIGHT}=Dimensions.get('window')
+
 export default class StudentCustomSidebarMenu extends Component {
 
   state={
@@ -15,22 +15,11 @@ export default class StudentCustomSidebarMenu extends Component {
   }
 
   componentDidMount(){
-    database().ref("/Users/Student/"+auth().currentUser.uid)
-      .once("value",(snapshot)=>{
-        var myJSON = snapshot.toJSON()
-        this.setState({
-          user:myJSON.user,
-          classroom:myJSON.year_div
-        })
-      })
-  }
-
-  getData = async () => {
     try {
-      const jsonValue = await AsyncStorage.getItem('User_Cred')
-      jsonValue != null ? JSON.parse(jsonValue) : null;
-      console.log(jsonValue)
-      if(jsonValue != null) {
+      AsyncStorage.getItem('User_Cred').then( jsonValue => {
+        jsonValue != null ? JSON.parse(jsonValue) : null;
+        console.log(jsonValue)
+        if(jsonValue != null) {
           var prn = JSON.parse(jsonValue).prn
           var Class = JSON.parse(jsonValue).class 
           var year = JSON.parse(jsonValue).year
@@ -40,7 +29,8 @@ export default class StudentCustomSidebarMenu extends Component {
             user: user,
             classroom: year + '' + Class + '' + div
           })
-      }
+        }
+      })
     } catch(e) {
         console.log('error: ', e)
     }

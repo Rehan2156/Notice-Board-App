@@ -14,25 +14,19 @@ export default class CustomSidebarMenu extends Component {
   }
 
   componentDidMount(){
-    this.getData()
-  }
-
-  getData = async () => {
     try {
-      const jsonValue = await AsyncStorage.getItem('User_Cred')
-      jsonValue != null ? JSON.parse(jsonValue) : null;
-      console.log(jsonValue)
-      if(jsonValue != null) {
-          var employeeId = JSON.parse(jsonValue).employeeId
-          var email = JSON.parse(jsonValue).email
-          var user = JSON.parse(jsonValue).user
-          var name = JSON.parse(jsonValue).name        
-
-          this.setState({
-            user: user,
-            name: name
-          })
-      }
+      AsyncStorage.getItem('User_Cred').then( jsonValue => {
+        jsonValue != null ? JSON.parse(jsonValue) : null;
+        console.log(jsonValue)
+        if(jsonValue != null) {
+            var user = JSON.parse(jsonValue).user
+            var name = JSON.parse(jsonValue).name        
+            this.setState({
+              user: user,
+              name: name
+            })
+        }
+      })
     } catch(e) {
         console.log('error: ', e)
     }
