@@ -3,6 +3,7 @@ import { Text, StyleSheet, View, FlatList, TouchableOpacity  } from 'react-nativ
 import Tile from '../../components/tile';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import AsyncStorage from '@react-native-community/async-storage'
+import SlpashScreen from '../../components/SlpashScreen';
 
 const MyNotice = ({navigation}) => {
 
@@ -35,9 +36,7 @@ const MyNotice = ({navigation}) => {
     })
     
   if(list.length==0){
-      return(
-        <View><Text style={styles.empty}>You have not sent any notices yet</Text></View>
-      )
+      return( <SlpashScreen head="Loading your Notices" /> )
   } else {
     return ( 
       <View>

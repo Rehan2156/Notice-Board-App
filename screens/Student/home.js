@@ -54,7 +54,7 @@ const [isDone, setIsDone] = useState(0)
                     if((myJSON.toSegments != null || myJSON.toSegments != undefined) && (seg.includes(user) || seg.includes(Class) || seg.includes(year) || seg.includes(classroom))) {
                         
                       console.log(myJSON.toSegments)
-    
+
                         var key = myJSON.key
                         var head = myJSON.head
                         var notice = myJSON.text
@@ -62,8 +62,9 @@ const [isDone, setIsDone] = useState(0)
                         var date = myJSON.date
                         var time = myJSON.time
                         var toSegments = myJSON.toSegments
+                        var uploaderID = myJSON.uploaderID
                         
-                        var item = {head: head, text:notice, downloadURL:downURL,date:date,time:time, key:key, toSegments: toSegments}
+                        var item = {head: head, text:notice, downloadURL:downURL,date:date,time:time, key:key, toSegments: toSegments, uploaderID:uploaderID}
                         var itemStr = JSON.stringify(item) + '<;>'
     
                         myArray = [...myArray, itemStr]
