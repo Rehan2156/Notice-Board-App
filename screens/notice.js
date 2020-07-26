@@ -1,8 +1,7 @@
-import React,{useCallback} from 'react';
-import {View, Text,StyleSheet,SafeAreaView,ScrollView,TouchableOpacity,Linking} from 'react-native'
+import React,{ useCallback } from 'react';
+import {View, Text, StyleSheet, ScrollView, Linking} from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import {Button} from 'react-native-elements'
-
 
 const Notice = ({navigation}) => {
 

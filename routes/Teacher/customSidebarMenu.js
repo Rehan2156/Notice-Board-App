@@ -1,7 +1,5 @@
-//This is an example code for Navigation Drawer with Custom Side bar//
 import React,{Component} from 'react';
 import { View, StyleSheet, Image, Text } from 'react-native';
-// import Icon from 'react-native-vector-icons';
 import Icon from 'react-native-vector-icons/FontAwesome'
 import auth from '@react-native-firebase/auth'
 import {Button} from 'react-native-elements'
@@ -43,8 +41,6 @@ export default class CustomSidebarMenu extends Component {
   constructor() {
     super();
     //Setting up the Main Top Large Image of the Custom Sidebar
-    this.proileImage =
-    'https://static.wixstatic.com/media/e32ac7_d39ea08678ab45749acecbd799fde031~mv2.png/v1/fit/w_1000,h_766,al_c,q_80/file.png';
     //Array of the sidebar navigation option with icon and screen to navigate
     //This screens can be any screen defined in Drawer Navigator in App.js
     //You can find the Icons from here https://material.io/tools/icons/
@@ -71,7 +67,7 @@ export default class CustomSidebarMenu extends Component {
         <View style={styles.sideMenuContainer}>
           {/*Top Large Image */}
           <Image
-            source={{ uri: this.proileImage }}
+            source={require('../../assets/img/mes_logo1.png')}
             style={styles.sideMenuProfileIcon}
           />
           <Text style={styles.head}>User : {this.state.user}</Text>
@@ -142,29 +138,6 @@ export default class CustomSidebarMenu extends Component {
   }
 }
 const styles = StyleSheet.create({
-//   sideMenuContainer: {
-//     width: '100%',
-//     height: '100%',
-//     backgroundColor: '#424242',
-//     alignItems: 'center',
-//     paddingTop: 20,
-//     fontFamily:'nunito-bold'
-//   },
-//   sideMenuProfileIcon: {
-//     resizeMode: 'center',
-//     width: 300,
-//     height: 150,
-//     marginTop: 20,
-//     borderRadius: 150 / 2,
-//     opacity:0.8
-//   },
-//   qtext:{
-//       position:"absolute",
-//       marginTop:100,
-//       fontFamily:'Acme',
-//       fontSize:45,
-//       color: '#C2F2B0',
-//   }
 sideMenuContainer: {
     width: '100%',
     height: '100%',

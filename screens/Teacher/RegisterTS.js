@@ -1,14 +1,11 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, View, Button,TouchableHighlight,ScrollView,ActivityIndicator, Dimensions, Modal } from 'react-native'
+import { Text, StyleSheet, View, ScrollView, ActivityIndicator, Modal } from 'react-native'
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import auth from '@react-native-firebase/auth'
 import database from '@react-native-firebase/database';
 import Icon from 'react-native-vector-icons/FontAwesome'
-import {
-    GoogleSignin,
-    statusCodes,
-  } from '@react-native-community/google-signin';
-  import AsyncStorage from '@react-native-community/async-storage';
+import { GoogleSignin, statusCodes, } from '@react-native-community/google-signin';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export default class RegisterTS extends Component {
     state = { 
@@ -125,7 +122,8 @@ export default class RegisterTS extends Component {
                             employeeId: this.state.employeeId,
                             email: info.user.email,
                             user: 'Teacher',
-                            name: info.user.name                     
+                            name: info.user.name,
+                            uid: auth().currentUser.uid,            
                           }
 
                           database().ref('Users/Teachers/'+ auth().currentUser.uid).set({

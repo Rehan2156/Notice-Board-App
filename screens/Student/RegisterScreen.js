@@ -189,13 +189,16 @@ export default class RegisterScreen extends Component {
                                   class: this.state.class,
                                   div: this.state.div,
                                   email: info.user.email,
-                                  user: 'Student'                            
+                                  user: 'Student',
+                                  uid: auth().currentUser.uid,                          
                               }
                               database().ref('Users/Student/' + auth().currentUser.uid).set({
                                   prn: this.state.prn,
                                   year_div: this.state.year + '' + this.state.class + '' + this.state.div,
                                   email: info.user.email,
                                   user: 'Student'
+                              }).then(() => {
+                                console.log('Data is Uploaded')
                               })
                               this.storeData(myValue)
                             }

@@ -49,8 +49,6 @@ export default class StudentCustomSidebarMenu extends Component {
   constructor() {
     super();
     //Setting up the Main Top Large Image of the Custom Sidebar
-    this.proileImage =
-    'https://static.wixstatic.com/media/e32ac7_d39ea08678ab45749acecbd799fde031~mv2.png/v1/fit/w_1000,h_766,al_c,q_80/file.png';
     //Array of the sidebar navigation option with icon and screen to navigate
     //This screens can be any screen defined in Drawer Navigator in App.js
     //You can find the Icons from here https://material.io/tools/icons/
@@ -67,7 +65,7 @@ export default class StudentCustomSidebarMenu extends Component {
         <View style={styles.sideMenuContainer}>
           {/*Top Large Image */}
           <Image
-            source={{ uri: this.proileImage }}
+            source={require('../../assets/img/mes_logo1.png')}
             style={styles.sideMenuProfileIcon}
           />
           <Text style={styles.head}>User : {this.state.user}</Text>

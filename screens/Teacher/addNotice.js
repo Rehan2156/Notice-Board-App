@@ -7,6 +7,7 @@ import DocumentPicker from 'react-native-document-picker';
 import storage from '@react-native-firebase/storage'
 import RNFS from 'react-native-fs'
 import auth from '@react-native-firebase/auth'
+import AsyncStorage from '@react-native-community/async-storage';
 
 const { width: WIDTH } = Dimensions.get('window')
 
@@ -175,13 +176,39 @@ export default class AddNotice extends Component {
                 })
                 .then(() => {
                     this.createSegment()
-                    // this.pushNotification()
+                    this.pushNotification()
+                    this.getNewData()
                     this.setState({ 
                         uplaoding: false
                     })
                     Alert.alert('Success', 'Notice is sent sucessfully')
                     this.props.navigation.navigate('Home')
                 });
+    }
+
+    getNewData = async () => {
+        console.log('Teacher')
+        var myArray = []
+          var ref = database().ref("notice/")
+          ref.once("value", async (snapshot) => {
+            snapshot.forEach( (childSnapshot) => {
+              var myJSON=childSnapshot.toJSON()
+              if(myJSON.toSegments != null || myJSON.toSegments != undefined) {
+                console.log(myJSON.toSegments)
+                  var key = myJSON.key
+                  var head = myJSON.head
+                  var notice = myJSON.text
+                  var downURL = myJSON.downloadURL
+                  var date = myJSON.date
+                  var time = myJSON.time
+                  var toSegments = myJSON.toSegments
+                  var item = {head: head, text:notice, downloadURL:downURL,date:date,time:time, key:key, toSegments: toSegments}
+                  var itemStr = JSON.stringify(item) + '<;>'
+                  myArray = [...myArray, itemStr]
+              }
+            })
+            await AsyncStorage.setItem('list_data', myArray.toString())
+          })
     }
 
     selectOneFile = async () => {
