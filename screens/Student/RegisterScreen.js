@@ -1,15 +1,13 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, View,ScrollView,ActivityIndicator, Dimensions, Alert, Modal } from 'react-native'
+import { Text, StyleSheet, View,ScrollView } from 'react-native'
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import auth from '@react-native-firebase/auth'
 import database from '@react-native-firebase/database';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Icon from 'react-native-vector-icons/FontAwesome'
-import {
-    GoogleSignin,
-    statusCodes,
-} from '@react-native-community/google-signin';
+import { GoogleSignin, statusCodes, } from '@react-native-community/google-signin';
 import AsyncStorage from '@react-native-community/async-storage';
+import SlpashScreen from '../../components/SlpashScreen';
 
 export default class RegisterScreen extends Component {
     state = { 
@@ -80,23 +78,8 @@ export default class RegisterScreen extends Component {
     render() {
 
       if(this.state.loading) {
-        return(
-            <Modal
-            animationType="slide"
-            transparent={false}
-            visible={true}
-            onRequestClose={() => {
-                //   Alert.alert("Modal has been closed.");
-                }}
-            >
-                <View style={styles.containerR}>
-                <Text style={{fontFamily:'Nunito-Regular',fontSize:15}}>Registering</Text>
-                <Text style={{fontFamily:'Nunito-Regular',fontSize:15}}>Please Wait</Text>
-                <ActivityIndicator size='large' />
-                </View>
-                </Modal>
-        )
-    }
+        return(<SlpashScreen head="Registering" /> )
+      }
 
         return (
             <ScrollView>
@@ -189,13 +172,16 @@ export default class RegisterScreen extends Component {
                                   class: this.state.class,
                                   div: this.state.div,
                                   email: info.user.email,
-                                  user: 'Student'                            
+                                  user: 'Student',
+                                  uid: auth().currentUser.uid,                          
                               }
                               database().ref('Users/Student/' + auth().currentUser.uid).set({
                                   prn: this.state.prn,
                                   year_div: this.state.year + '' + this.state.class + '' + this.state.div,
                                   email: info.user.email,
                                   user: 'Student'
+                              }).then(() => {
+                                console.log('Data is Uploaded')
                               })
                               this.storeData(myValue)
                             }
@@ -210,6 +196,7 @@ export default class RegisterScreen extends Component {
                     } else {
                       console.log('Other:' + error)
                     }
+                    this.setState({ loading: false, isSigninInProgress: false })    
                   }     
                   this.setState({ loading: true, isSigninInProgress: true })           
                 }}

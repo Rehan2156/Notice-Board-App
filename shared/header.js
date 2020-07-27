@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Acme-Regular',
     fontSize: 25,
     color: '#333',
-    // letterSpacing: 1,
+    letterSpacing: 0.2,
   },
   drawer: {
     position: 'absolute',
@@ -41,5 +41,4 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 16,
   }
-
 });

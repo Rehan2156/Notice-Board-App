@@ -1,31 +1,15 @@
-import React, { Component } from 'react'
-import { Text, StyleSheet, View, ActivityIndicator } from 'react-native'
+import React, { useState } from 'react'
 import auth from '@react-native-firebase/auth'
+import SlpashScreen from '../components/SlpashScreen'
 
-export default class LoadingScreen extends Component {
-
-    componentDidMount() {
-        auth().onAuthStateChanged(user => {
-            this.props.navigation.navigate(user ? 'Navigator' : 'LoginStack')
-        })
-    }
-
-    render() {
-        return (
-            <View style={styles.container}>
-                <Text> Loading.... </Text>
-                <Text> </Text>
-                <ActivityIndicator size='large' />
-            </View>
-        )
-    }
+export default function LoadingScreen({navigation}) {
+    useState(() => {
+        setTimeout(() => {
+            auth().onAuthStateChanged(user => {
+                navigation.navigate(user ? 'Navigator' : 'LoginStack')
+            })
+        },1000)
+    })
+    
+    return ( <SlpashScreen head="Loading" /> )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignContent: 'center',
-        alignItems: 'center'
-    }
-})

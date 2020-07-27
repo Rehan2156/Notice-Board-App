@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
         flex:1,
         flexDirection:'row',
         borderBottomColor:'#C1CAD7',
+        margin: 4,
     },
     date:{
         flex:1,

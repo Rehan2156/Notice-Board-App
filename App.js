@@ -1,7 +1,9 @@
 import 'react-native-gesture-handler';
 import MainRoute from './routes/MainRoute';
 import React, { Component } from 'react';
-import OneSignal from 'react-native-onesignal';
+import OneSignal from 'react-native-onesignal'
+import AsyncStorage from '@react-native-community/async-storage'
+import database from '@react-native-firebase/database'
 
 export default class App extends Component {
 
@@ -15,19 +17,100 @@ export default class App extends Component {
     OneSignal.addEventListener('received', this.onReceived);
     OneSignal.addEventListener('opened', this.onOpened);
     OneSignal.addEventListener('ids', this.onIds);
+
+  }
+  
+  async onReceived(notification) {
+    console.log("Notification received: ", notification);
+    console.log('In data Is Updating')
+    try {
+      var jsonValue = await AsyncStorage.getItem('User_Cred')
+      jsonValue != null ? JSON.parse(jsonValue) : null;
+      console.log(jsonValue)
+      if(jsonValue != null) {
+        var user = JSON.parse(jsonValue).user
+
+        if(user == 'Student') {
+            console.log('Student')
+            var Class = JSON.parse(jsonValue).class 
+            var year = JSON.parse(jsonValue).year
+            var div = JSON.parse(jsonValue).div
+            const tags = {
+              user: user,
+              department: Class,
+              class: year,
+              tag: year + '' + Class + '' + div,
+            }
+            console.log('tags:', tags)
+            var classroom = year + '' + Class + '' + div
+            if(Class == "C") {
+              Class += "o"
+            } else if(Class == "E") {
+              Class += "n"
+            } else if(Class == "M") {
+              Class += "e"
+            } else {
+              console.log('Someting is worng')
+            }
+          jsonValue = await AsyncStorage.getItem('list_data')
+          var myArray = []
+            var ref = database().ref("notice/")
+            ref.once("value", async (snapshot) => {
+              snapshot.forEach( (childSnapshot) => {
+                var myJSON=childSnapshot.toJSON()
+                var seg = myJSON.toSegments
+                if((myJSON.toSegments != null || myJSON.toSegments != undefined) && (seg.includes(user) || seg.includes(Class) || seg.includes(year) || seg.includes(classroom))) {
+                  console.log(myJSON.toSegments)
+                   
+                  var key = myJSON.key
+                  var head = myJSON.head
+                  var notice = myJSON.text
+                  var downURL = myJSON.downloadURL
+                  var date = myJSON.date
+                  var time = myJSON.time
+                  var toSegments = myJSON.toSegments
+                  var uploaderID = myJSON.uploaderID
+                  
+                  var item = {head: head, text:notice, downloadURL:downURL,date:date,time:time, key:key, toSegments: toSegments, uploaderID:uploaderID}
+             
+                    var itemStr = JSON.stringify(item) + '<;>'    
+                    myArray = [...myArray, itemStr]
+                }
+              })
+              console.log(myArray)
+              await AsyncStorage.setItem('list_data', myArray.toString())
+            })
+        } else {
+          console.log('Teacher')
+          var myArray = []
+            var ref = database().ref("notice/")
+            ref.once("value", async (snapshot) => {
+              snapshot.forEach( (childSnapshot) => {
+                var myJSON=childSnapshot.toJSON()
+                if(myJSON.toSegments != null || myJSON.toSegments != undefined) {
+                  console.log(myJSON.toSegments)
+                    var key = myJSON.key
+                    var head = myJSON.head
+                    var notice = myJSON.text
+                    var downURL = myJSON.downloadURL
+                    var date = myJSON.date
+                    var time = myJSON.time
+                    var toSegments = myJSON.toSegments
+                    var item = {head: head, text:notice, downloadURL:downURL,date:date,time:time, key:key, toSegments: toSegments}
+                    var itemStr = JSON.stringify(item) + '<;>'
+                    myArray = [...myArray, itemStr]
+                }
+              })
+              await AsyncStorage.setItem('list_data', myArray.toString())
+            })
+        }
+      }
+    } catch(e) {
+        console.log('error: ', e)
+    }
   }
 
-  componentWillUnmount() {
-    OneSignal.removeEventListener('received', this.onReceived);
-    OneSignal.removeEventListener('opened', this.onOpened);
-    OneSignal.removeEventListener('ids', this.onIds);
-  }
-  
-  onReceived(notification) {
-    console.log("Notification received: ", notification);
-  }
-  
-  onOpened(openResult) {
+  async onOpened(openResult) {
     console.log('Message: ', openResult.notification.payload.body);
     console.log('Data: ', openResult.notification.payload.additionalData);
     console.log('isActive: ', openResult.notification.isAppInFocus);
