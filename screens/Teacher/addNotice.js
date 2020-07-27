@@ -7,8 +7,9 @@ import DocumentPicker from 'react-native-document-picker';
 import storage from '@react-native-firebase/storage'
 import RNFS from 'react-native-fs'
 import auth from '@react-native-firebase/auth'
-import S3 from 'aws-sdk'
 import 'base64-arraybuffer'
+import AsyncStorage from '@react-native-community/async-storage';
+import SlpashScreen from '../../components/SlpashScreen';
 
 const { width: WIDTH } = Dimensions.get('window')
 var AWS = require('aws-sdk');
@@ -111,35 +112,35 @@ export default class AddNotice extends Component {
 
 
 
-     uploadImageOnS3 = async (file) => {
-        const s3bucket = new AWS.S3({
-          accessKeyId: 'AKIARO72JVXM4KLZD6W3',
-          secretAccessKey: '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',          
-          Bucket: 'noticesmescoe',
-          signatureVersion: 'v4',
-        });
-     let contentType = 'image/jpeg';
-        let contentDeposition = 'inline;filename="' + file.name + '"';
-        const base64 = await RNFS.readFile(file.uri, 'base64');
-        const arrayBuffer = dec.decode(base64);
-     s3bucket.createBucket(() => {
-           const params = {
-            Bucket: 'noticesmescoe/images',
-            Key: file.name,
-            Body: arrayBuffer,
-            ContentDisposition: contentDeposition,
-            ContentType: contentType,
-        };
-     s3bucket.upload(params, (err, data) => {
-          if (err) {
-            console.log('error in callback'+err);
-          }
-        console.log('success');
-        console.log("Response URL : "+ data.Location);
-        this.setState({downloadLink:data.Location})
-        });
-      });
-     };
+    //  uploadImageOnS3 = async (file) => {
+    //     const s3bucket = new AWS.S3({
+    //       accessKeyId: 'AKIARO72JVXM4KLZD6W3',
+    //       secretAccessKey: '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',          
+    //       Bucket: 'noticesmescoe',
+    //       signatureVersion: 'v4',
+    //     });
+    //  let contentType = 'image/jpeg';
+    //     let contentDeposition = 'inline;filename="' + file.name + '"';
+    //     const base64 = await RNFS.readFile(file.uri, 'base64');
+    //     const arrayBuffer = dec.decode(base64);
+    //  s3bucket.createBucket(() => {
+    //        const params = {
+    //         Bucket: 'noticesmescoe/images',
+    //         Key: file.name,
+    //         Body: arrayBuffer,
+    //         ContentDisposition: contentDeposition,
+    //         ContentType: contentType,
+    //     };
+    //  s3bucket.upload(params, (err, data) => {
+    //       if (err) {
+    //         console.log('error in callback'+err);
+    //       }
+    //     console.log('success');
+    //     console.log("Response URL : "+ data.Location);
+    //     this.setState({downloadLink:data.Location})
+    //     });
+    //   });
+    //  };
 
 
 
@@ -155,7 +156,7 @@ export default class AddNotice extends Component {
             Alert.alert("Warning","Heading is compulsory")
         }
         else if(this.state.files!=null){
-            this.setState({uplaoding: true,})
+            this.setState({uplaoding: true})
 
         const file = this.state.fileData
 
@@ -254,12 +255,38 @@ export default class AddNotice extends Component {
                 .then(() => {
                     this.createSegment()
                     this.pushNotification()
+                    this.getNewData()
                     this.setState({ 
                         uplaoding: false
                     })
                     Alert.alert('Success', 'Notice is sent sucessfully')
                     this.props.navigation.navigate('Home')
                 });
+    }
+
+    getNewData = async () => {
+        console.log('Teacher')
+        var myArray = []
+          var ref = database().ref("notice/")
+          ref.once("value", async (snapshot) => {
+            snapshot.forEach( (childSnapshot) => {
+              var myJSON=childSnapshot.toJSON()
+              if(myJSON.toSegments != null || myJSON.toSegments != undefined) {
+                console.log(myJSON.toSegments)
+                  var key = myJSON.key
+                  var head = myJSON.head
+                  var notice = myJSON.text
+                  var downURL = myJSON.downloadURL
+                  var date = myJSON.date
+                  var time = myJSON.time
+                  var toSegments = myJSON.toSegments
+                  var item = {head: head, text:notice, downloadURL:downURL,date:date,time:time, key:key, toSegments: toSegments}
+                  var itemStr = JSON.stringify(item) + '<;>'
+                  myArray = [...myArray, itemStr]
+              }
+            })
+            await AsyncStorage.setItem('list_data', myArray.toString())
+          })
     }
 
     selectOneFile = async () => {
@@ -688,22 +715,7 @@ export default class AddNotice extends Component {
 
     render() {
         if(this.state.uplaoding) {
-            return(
-                <Modal
-                animationType="slide"
-                transparent={false}
-                visible={true}
-                onRequestClose={() => {
-                    //   Alert.alert("Modal has been closed.");
-                    }}
-                >
-                    <View style={styles.container}>
-                    <Text style={{fontFamily:'Nunito-Regular',fontSize:15}}>Uploading</Text>
-                    <Text style={{fontFamily:'Nunito-Regular',fontSize:15}}>Please Wait</Text>
-                    <ActivityIndicator size='large' />
-                    </View>
-                    </Modal>
-            )
+            return (<SlpashScreen  head="Uploading Notice"/>)
         }
 
         return ( 

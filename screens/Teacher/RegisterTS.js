@@ -1,14 +1,12 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, View, Button,TouchableHighlight,ScrollView,ActivityIndicator, Dimensions, Modal } from 'react-native'
+import { Text, StyleSheet, View, ScrollView } from 'react-native'
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import auth from '@react-native-firebase/auth'
 import database from '@react-native-firebase/database';
 import Icon from 'react-native-vector-icons/FontAwesome'
-import {
-    GoogleSignin,
-    statusCodes,
-  } from '@react-native-community/google-signin';
-  import AsyncStorage from '@react-native-community/async-storage';
+import { GoogleSignin, statusCodes, } from '@react-native-community/google-signin';
+import AsyncStorage from '@react-native-community/async-storage';
+import SlpashScreen from '../../components/SlpashScreen';
 
 export default class RegisterTS extends Component {
     state = { 
@@ -42,49 +40,34 @@ export default class RegisterTS extends Component {
         }
     }
 
-  getData = async () => {
-      try {
-        const jsonValue = await AsyncStorage.getItem('User_Cred')
-        jsonValue != null ? JSON.parse(jsonValue) : null;
-        console.log(jsonValue)
-        if(jsonValue != null) {
-            var employeeId = JSON.parse(jsonValue).employeeId
-            var email = JSON.parse(jsonValue).email
-            var user = JSON.parse(jsonValue).user
-            var name = JSON.parse(jsonValue).name        
+    getData = async () => {
+        try {
+          const jsonValue = await AsyncStorage.getItem('User_Cred')
+          jsonValue != null ? JSON.parse(jsonValue) : null;
+          console.log(jsonValue)
+          if(jsonValue != null) {
+              var employeeId = JSON.parse(jsonValue).employeeId
+              var email = JSON.parse(jsonValue).email
+              var user = JSON.parse(jsonValue).user
+              var name = JSON.parse(jsonValue).name        
 
-            this.setState({
-                employeeId: employeeId,
-                editable: false
-            })
+              this.setState({
+                  employeeId: employeeId,
+                  editable: false
+              })
 
-            console.log(employeeId)
+              console.log(employeeId)
+          }
+        } catch(e) {
+            console.log('error: ', e)
         }
-      } catch(e) {
-          console.log('error: ', e)
       }
-    }
 
     render() {
-
+      
       if(this.state.loading) {
-        return(
-            <Modal
-            animationType="slide"
-            transparent={false}
-            visible={true}
-            onRequestClose={() => {
-                //   Alert.alert("Modal has been closed.");
-                }}
-            >
-                <View style={styles.containerR}>
-                <Text style={{fontFamily:'Nunito-Regular',fontSize:15}}>Registering</Text>
-                <Text style={{fontFamily:'Nunito-Regular',fontSize:15}}>Please Wait</Text>
-                <ActivityIndicator size='large' />
-                </View>
-                </Modal>
-        )
-    }
+        return(<SlpashScreen head="Registering" /> )
+      }
     
         return (
             <ScrollView>
@@ -125,7 +108,8 @@ export default class RegisterTS extends Component {
                             employeeId: this.state.employeeId,
                             email: info.user.email,
                             user: 'Teacher',
-                            name: info.user.name                     
+                            name: info.user.name,
+                            uid: auth().currentUser.uid,            
                           }
 
                           database().ref('Users/Teachers/'+ auth().currentUser.uid).set({
@@ -193,13 +177,8 @@ const styles = StyleSheet.create({
       textInput: {
         justifyContent:'center',
         width: '90%',
-      // height:55,
       borderRadius:5,
       fontSize:16,
-      // paddingLeft:45,
-      // backgroundColor:'rgba(0,0,0,0.35)',
-      // color:'rgba(255,255,255,0.7)',
-      // marginHorizontal:25,
       fontFamily:'Nunito-Bold',
       borderColor:'black',
       borderWidth:1,
@@ -209,7 +188,6 @@ const styles = StyleSheet.create({
       paddingRight:45
       },
       myBtn: {
-        // width:WIDTH - 55,
         height:45,
         borderRadius:25,
         backgroundColor:'#84D7F7',
@@ -221,7 +199,6 @@ const styles = StyleSheet.create({
         fontSize: 20,
         textAlign:'center',
         color: '#fff',
-        // fontWeight:'bold',
         fontFamily:'Nunito-Bold'
     
       }, 

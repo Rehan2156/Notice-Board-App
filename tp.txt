@@ -1,0 +1,11 @@
+Size of everything : 19.8 KB
+
+number of Students : 11
+after Delete size: 19.8 KB
+
+number of Teachers: 11 
+after Delete size : 19.8 KB
+
+After User delete Size : 19.8 KB
+
+
