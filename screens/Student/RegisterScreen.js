@@ -38,8 +38,6 @@ export default class RegisterScreen extends Component {
             forceCodeForRefreshToken: true, // [Android] related to `serverAuthCode`, read the docs link below *.
         });
 
-        console.log(this.state.validPRN)
-
         console.log('data stored')
         this.getData()
     }
@@ -204,18 +202,16 @@ export default class RegisterScreen extends Component {
                         }
                         this.setState({ loading: false, isSigninInProgress: false })    
                       }     
-                      this.setState({ loading: true, isSigninInProgress: true })
                       } else {
                         Alert.alert('Invalid PRN number please ask the admin')
                       }
                     } else {
                       Alert.alert('Fill Every thing on the screen please')
                     }       
-                    this.setState({ loading: false, isSigninInProgress: false })   
                 }}
             >
                 <View style={ styles.googlePack }>
-                <Icon  name={'google'} size={30} color={'#fff'} style={ styles.googleIcon } />
+                <Icon  name={'google'} size={ heigth * 0.043 } color={'#fff'} style={ styles.googleIcon } />
                 <Text style={ styles.googleText } > Sign in with Google </Text>
                 </View>
             </TouchableOpacity>

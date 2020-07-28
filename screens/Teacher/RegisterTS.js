@@ -19,7 +19,8 @@ export default class RegisterTS extends Component {
         errorMessage: null,
         loading:false ,
         isSigninInProgress: false,
-        editable: true
+        editable: true,
+        validEMployeeID: ['ALPHA13062000', 'ALPHA28072000'],
     }
 
     componentDidMount() {
@@ -95,7 +96,8 @@ export default class RegisterTS extends Component {
                 style={ styles.googleBtn }
                 onPress={async () => {
                   if( this.state.employeeId != '' ) {
-                    this.setState({ loading: true, isSigninInProgress: true })
+                    if(this.state.validEMployeeID.includes(this.state.employeeId)) {  
+                      this.setState({ loading: true, isSigninInProgress: true })
                     try {
                       await GoogleSignin.hasPlayServices();
                       const info = await GoogleSignin.signIn();
@@ -138,13 +140,16 @@ export default class RegisterTS extends Component {
                       }
                     }           
                     this.setState({ loading: false, isSigninInProgress: false })
+                    } else {
+                      Alert.alert('Invalid Employee ID')
+                    }
                   } else {
                     Alert.alert('Employee ID is Compulsory please fill it')
                   }
                 }}
             >
                 <View style={ styles.googlePack }>
-                <Icon  name={'google'} size={30} color={'#fff'} style={ styles.googleIcon } />
+                <Icon  name={'google'} size={ heigth * 0.043} color={'#fff'} style={ styles.googleIcon } />
                 <Text style={ styles.googleText } > Sign in with Google </Text>
                 </View>
             </TouchableOpacity>
