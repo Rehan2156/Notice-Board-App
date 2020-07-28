@@ -10,7 +10,8 @@ import auth from '@react-native-firebase/auth'
 import AsyncStorage from '@react-native-community/async-storage';
 import SlpashScreen from '../../components/SlpashScreen';
 
-const { width: WIDTH } = Dimensions.get('window')
+const width = Dimensions.get('screen').width
+const heigth = Dimensions.get('screen').height
 
 export default class AddNotice extends Component {
 
@@ -1176,119 +1177,51 @@ export default class AddNotice extends Component {
 }
 
 const styles = StyleSheet.create({
-    body: {
-        backgroundColor: '#fff',
-        padding: 30,
-        height: '100%',
-    },
-    container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      padding: 10,
-      justifyContent: 'center',
-      alignContent: 'center',
-      alignItems: 'center',
-    },
-    centeredView: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        marginTop: 22
-      },
-    checkbox: {
-        alignSelf: "center",
-    },
     checkboxContainer: {
         flexDirection: "row",
-        marginBottom: 20,
+        marginBottom: heigth * 0.02,
     },
     line: {
         borderBottomWidth: 2,
-        marginBottom: 15,
+        marginBottom: heigth * 0.02,
         borderBottomColor: '#C1CAD7',
     },
     label: {
-        fontSize: 15,
+        fontSize: heigth * 0.021,
         color: 'black',
-        margin: 5,
-        padding: 10,
+        margin: heigth * 0.004,
+        padding: heigth * 0.008,
         fontFamily: 'Nunito-Bold',
     },
     headInput: {
         alignSelf: 'center',
-        width: WIDTH - 90,
-        height: 55,
+        width: width * 0.8,
+        height: heigth * 0.07,
         borderRadius: 5,
-        fontSize: 16,
-        paddingLeft: 20,
-        marginHorizontal: 25,
+        fontSize: heigth * 0.02,
+        paddingLeft: heigth * 0.02,
         fontFamily: 'Nunito-Bold',
-        margin: 20,
+        margin: heigth * 0.02,
         borderRadius:5,
         borderColor:'black',
-          borderWidth:1,
+        borderWidth:1,
     },
     textInput: {
         alignSelf: 'center',
-        width: WIDTH - 90,
-        height: 100,
+        width: width * 0.8,
+        height: heigth * 0.16,
         borderRadius: 5,
-        fontSize: 16,
-        paddingLeft: 20,
-        paddingRight: 20,
-        marginHorizontal: 25,
+        fontSize: heigth * 0.02,
+        paddingLeft: heigth * 0.02,
+        paddingRight: heigth * 0.02,
         fontFamily: 'Nunito-Bold',
-        margin: 20,
-          borderRadius:5,
-          borderColor:'black',
-          borderWidth:1,
-    },
-
-    myBtnA: {
-        padding: 10,
-        margin: 7,
-        borderRadius: 17,
-        borderWidth: 2,
-        borderColor: '#aaa',
-        alignItems: 'center',
-    },
-
-    myBtnB: {
-        padding: 10,
-        margin: 7,
-        borderRadius: 17,
-        borderWidth: 2,
-        borderColor: '#aaa',
-        alignItems: 'center',
-        backgroundColor: '#fedbd0',
-        marginTop: 30,
-    },
-
-    Header: {
-        fontSize: 28,
-        alignSelf: 'center',
-        padding: 10,
-        paddingBottom: 20,
-        fontFamily: 'Nunito-Bold',
-        color: '#fff'
-    },
-    box: {
-        padding: 20,
-        margin: 5,
-        marginTop: 80,
-        backgroundColor: '#424242',
-        shadowOffset: { width: 5, height: 5 },
-        shadowColor: '#333',
-        shadowOpacity: 0.3,
-        shadowRadius: 2,
-        elevation: 15,
+        margin: heigth * 0.02,
+        borderRadius:5,
+        borderColor:'black',
+        borderWidth:1,
     },
     image: {
-        marginTop: 20,
-        minWidth: 200,
-        height: 200
-    },
-    progressBarContainer: {
-        marginTop: 20
+        marginTop: heigth * 0.045,
+        height: heigth * 0.3
     },
 })

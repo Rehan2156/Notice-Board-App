@@ -5,7 +5,8 @@ import auth from '@react-native-firebase/auth'
 import {Button} from 'react-native-elements'
 import AsyncStorage from '@react-native-community/async-storage';
 
-const {height:HEIGHT}=Dimensions.get('window')
+const width = Dimensions.get('screen').width
+const heigth = Dimensions.get('screen').height
 
 export default function customSidebarMenu({ navigation }) {
 
@@ -47,6 +48,14 @@ export default function customSidebarMenu({ navigation }) {
         source={require('../../assets/img/mes_logo1.png')}
         style={styles.sideMenuProfileIcon}
       />
+      <View
+        style={{
+          width: '100%',
+          height: 1,
+          backgroundColor: '#d2d2d2',
+          marginVertical: heigth * 0.02
+        }}
+      />
       <Text style={styles.head}>User : {user}</Text>
       <Text style={styles.head}>Class : {classroom}</Text>
       {/*Divider between Top Image and Sidebar Option*/}
@@ -54,8 +63,8 @@ export default function customSidebarMenu({ navigation }) {
         style={{
           width: '100%',
           height: 1,
-          backgroundColor: '#e2e2e2',
-          marginTop: 15,
+          backgroundColor: '#d2d2d2',
+          marginVertical: heigth * 0.02
         }}
       />
       {/*Setting up Navigation Options from option array using loop*/}
@@ -65,17 +74,17 @@ export default function customSidebarMenu({ navigation }) {
             style={{
               flexDirection: 'row',
               alignItems: 'center',
-              paddingTop: 10,
-              paddingBottom: 10,
+              paddingTop: heigth * 0.016,
+              paddingBottom: heigth * 0.016,
               backgroundColor: global.currentScreenIndex === key ? '#ffffff':'#e0dbdb',
             }}
             key={key}>
-            <View style={{ marginRight: 10, marginLeft: 20 }}>
-              <Icon name={item.navOptionThumb} size={25} color="#808080" />
+            <View style={{ marginHorizontal: width * 0.045}}>
+              <Icon name={item.navOptionThumb} size={ heigth * 0.033 } color="#808080" />
             </View>
             <Text
               style={{
-                fontSize: 15,
+                fontSize: heigth * 0.023,
                 color: global.currentScreenIndex === key ? 'black' : 'red',
                 fontFamily:'Nunito-Bold'
               }}
@@ -91,14 +100,23 @@ export default function customSidebarMenu({ navigation }) {
       <View>
       <Button
         title='Log Out'
-        titleStyle={{fontFamily:'Nunito-Bold'}}
-        buttonStyle={{marginTop:20,width:'100%'}}
+        titleStyle={{
+          fontFamily:'Nunito-Bold',
+          fontSize: heigth * 0.025
+        }}
+        buttonStyle={{
+          marginTop: heigth * 0.02,
+          width: width * 0.6,
+        }}
         icon={
           <Icon
             name="sign-out"
-            size={15}
+            size={ heigth * 0.03}
             color="white"
-            style={{paddingRight:8}}
+            style={{
+              position: 'absolute',
+              left: width * 0.02,
+            }}
           />
         }
         onPress={() => {
@@ -116,23 +134,22 @@ export default function customSidebarMenu({ navigation }) {
 
 
 const styles = StyleSheet.create({
-sideMenuContainer: {
+  sideMenuContainer: {
     width: '100%',
     height: '100%',
     backgroundColor: '#fff',
     alignItems: 'center',
-    paddingTop: 20,
+    paddingTop: heigth * 0.05,
   },
   sideMenuProfileIcon: {
     resizeMode: 'center',
-    width: 700,
-    height: 200,
-    marginTop: 10,
-    borderRadius: 150 / 2,
+    height: heigth * 0.25,
+    marginTop: heigth * 0.009,
     
   },
   head:{
     fontFamily:'Nunito-Bold',
-    fontSize:20
+    fontSize: heigth * 0.025,
+    marginVertical: heigth * 0.003
   }
 });

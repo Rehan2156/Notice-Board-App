@@ -36,7 +36,11 @@ const MyNotice = ({navigation}) => {
     })
     
   if(list.length==0){
-      return( <SlpashScreen head="Loading your Notices" /> )
+      return( 
+        <View>
+          <Text style={styles.empty}> Is empty </Text>
+        </View>
+      )
   } else {
     return ( 
       <View>

@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from 'react';
-import { StyleSheet, View, FlatList, TouchableOpacity  } from 'react-native'
+import { View, FlatList, TouchableOpacity } from 'react-native'
 import Tile from '../../components/tile';
 import database from '@react-native-firebase/database';
 import OneSignal from 'react-native-onesignal';
@@ -9,7 +9,6 @@ import SlpashScreen from '../../components/SlpashScreen';
 const StudentHome = ({navigation,theme}) => {
 const [list,setList] = useState([])
 const [timehaspassed,setTimehaspassed]=useState(false)
-const [isDone, setIsDone] = useState(0)
 
   useEffect(() => {
     try {
@@ -91,7 +90,7 @@ const [isDone, setIsDone] = useState(0)
     return ( <SlpashScreen  head="Loading Notices"/> )
   }
 
-  return ( 
+ return ( 
     <View>
         <FlatList data={list} keyExtractor={(item, index) => index.toString()} renderItem={({ item }) => (
         <TouchableOpacity onPress={()=>navigation.navigate('Notice',item)}>
@@ -101,16 +100,5 @@ const [isDone, setIsDone] = useState(0)
     </View> 
   );
 }
-
-const styles = StyleSheet.create({
-      container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        padding: 10,
-        justifyContent: 'center',
-        alignContent: 'center',
-        alignItems: 'center',
-      },  
-    })
 
 export default StudentHome;
