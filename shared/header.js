@@ -42,6 +42,6 @@ const styles = StyleSheet.create({
   },
   person:{
     position: 'absolute',
-    right: heigth * 0.002,
+    right: heigth * 0.02,
   }
 });

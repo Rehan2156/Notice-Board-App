@@ -90,7 +90,6 @@ const styles = StyleSheet.create({
     },
     noFile:{
       alignSelf:'flex-end',
-      
     }
 
 })
