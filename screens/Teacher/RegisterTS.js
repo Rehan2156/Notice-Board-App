@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, View, ScrollView } from 'react-native'
+import { Text, StyleSheet, View, ScrollView, Dimensions, Alert } from 'react-native'
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 import auth from '@react-native-firebase/auth'
 import database from '@react-native-firebase/database';
@@ -7,6 +7,9 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import { GoogleSignin, statusCodes, } from '@react-native-community/google-signin';
 import AsyncStorage from '@react-native-community/async-storage';
 import SlpashScreen from '../../components/SlpashScreen';
+
+const width = Dimensions.get('screen').width
+const heigth = Dimensions.get('screen').height
 
 export default class RegisterTS extends Component {
     state = { 
@@ -16,7 +19,8 @@ export default class RegisterTS extends Component {
         errorMessage: null,
         loading:false ,
         isSigninInProgress: false,
-        editable: true
+        editable: true,
+        validEMployeeID: ['ALPHA13062000', 'ALPHA28072000'],
     }
 
     componentDidMount() {
@@ -61,7 +65,7 @@ export default class RegisterTS extends Component {
         } catch(e) {
             console.log('error: ', e)
         }
-      }
+    }
 
     render() {
       
@@ -91,53 +95,61 @@ export default class RegisterTS extends Component {
           <TouchableOpacity 
                 style={ styles.googleBtn }
                 onPress={async () => {
-                    this.setState({ loading: true, isSigninInProgress: true })
+                  if( this.state.employeeId != '' ) {
+                    if(this.state.validEMployeeID.includes(this.state.employeeId)) {  
+                      this.setState({ loading: true, isSigninInProgress: true })
                     try {
-                    await GoogleSignin.hasPlayServices();
-                    const info = await GoogleSignin.signIn();
-                    const googleCredential = auth.GoogleAuthProvider.credential(info.idToken);
-                    await auth().signInWithCredential(googleCredential).then(() => {
-                        console.log('Sign in with google !')
-                        if( this.state.editable != false ) {
-                          console.log(auth().currentUser.uid)
-                          console.log(this.state.employeeId)
-                          console.log(info.user.email)
-                          console.log(info.user.name)
+                      await GoogleSignin.hasPlayServices();
+                      const info = await GoogleSignin.signIn();
+                      const googleCredential = auth.GoogleAuthProvider.credential(info.idToken);
+                      await auth().signInWithCredential(googleCredential).then(() => {
+                          console.log('Sign in with google !')
+                          if( this.state.editable != false ) {
+                            console.log(auth().currentUser.uid)
+                            console.log(this.state.employeeId)
+                            console.log(info.user.email)
+                            console.log(info.user.name)
 
-                          var myValue = {
-                            employeeId: this.state.employeeId,
-                            email: info.user.email,
-                            user: 'Teacher',
-                            name: info.user.name,
-                            uid: auth().currentUser.uid,            
-                          }
-
-                          database().ref('Users/Teachers/'+ auth().currentUser.uid).set({
+                            var myValue = {
                               employeeId: this.state.employeeId,
                               email: info.user.email,
                               user: 'Teacher',
-                              name: info.user.name
-                          })
+                              name: info.user.name,
+                              uid: auth().currentUser.uid,            
+                            }
 
-                          this.storeData(myValue)
-                        }
-                    })
-                  } catch (error) {
-                    if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-                      console.log('Cancel: ' + error )
-                    } else if (error.code === statusCodes.IN_PROGRESS) {
-                      console.log('InProgress: ' + error)
-                    } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-                      console.log('Play Services:' + error )
+                            database().ref('Users/Teachers/'+ auth().currentUser.uid).set({
+                                employeeId: this.state.employeeId,
+                                email: info.user.email,
+                                user: 'Teacher',
+                                name: info.user.name
+                            })
+
+                            this.storeData(myValue)
+                          }
+                      })
+                    } catch (error) {
+                      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+                        console.log('Cancel: ' + error )
+                      } else if (error.code === statusCodes.IN_PROGRESS) {
+                        console.log('InProgress: ' + error)
+                      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+                        console.log('Play Services:' + error )
+                      } else {
+                        console.log('Other:' + error)
+                      }
+                    }           
+                    this.setState({ loading: false, isSigninInProgress: false })
                     } else {
-                      console.log('Other:' + error)
+                      Alert.alert('Invalid Employee ID')
                     }
-                  }           
-                  this.setState({ loading: false, isSigninInProgress: false })
+                  } else {
+                    Alert.alert('Employee ID is Compulsory please fill it')
+                  }
                 }}
             >
                 <View style={ styles.googlePack }>
-                <Icon  name={'google'} size={30} color={'#fff'} style={ styles.googleIcon } />
+                <Icon  name={'google'} size={ heigth * 0.043} color={'#fff'} style={ styles.googleIcon } />
                 <Text style={ styles.googleText } > Sign in with Google </Text>
                 </View>
             </TouchableOpacity>
@@ -149,116 +161,71 @@ export default class RegisterTS extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        justifyContent:'center',
-          borderRadius: 6,
-          elevation: 3,
-          backgroundColor: '#fff',
-          shadowOffset: { width: 1, height: 1 },
-          shadowColor: '#333',
-          shadowOpacity: 0.3,
-          shadowRadius: 2,
-          marginHorizontal: 4,
-          marginVertical: 6,
-          padding:15,
-          marginLeft:30,
-          marginRight:30,
-          marginTop:'20%',
-          marginBottom:'30%'
-      },    
-      containerR: {
-        flex: 1,
-        backgroundColor: '#fff',
-        padding: 10,
-        justifyContent: 'center',
-        alignContent: 'center',
-        alignItems: 'center',
-      },
-      textInput: {
-        justifyContent:'center',
-        width: '90%',
-      borderRadius:5,
-      fontSize:16,
-      fontFamily:'Nunito-Bold',
-      borderColor:'black',
-      borderWidth:1,
-      padding:10,
-      margin:20,
-      paddingLeft:45,
-      paddingRight:45
-      },
-      myBtn: {
-        height:45,
-        borderRadius:25,
-        backgroundColor:'#84D7F7',
-        justifyContent:'center',
-        marginTop:20,
-        marginHorizontal:25,
-      },
-      btnText: {
-        fontSize: 20,
-        textAlign:'center',
-        color: '#fff',
-        fontFamily:'Nunito-Bold'
-    
-      }, 
-      navBtn: {
-        padding: 14,
-        alignItems: 'center',
-        marginTop: 20,
-      },
-      navText: {
-        fontSize: 18,
-        fontFamily:'Nunito-Bold',
-        color: '#84D7F9',
-      },
-      inputIcon:{
-        position:'absolute',
-        top:30,
-        left:28
-      },
-      eyeIcon:{
-        position:'absolute',
-        top:30,
-        left:250
-      },
-      loading: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-      },
-
-      googleBtn: {
-        width: '100%',
-        margin: 25,
-        alignSelf: 'center',
+      flex: 1,
+      justifyContent:'center',
+      borderRadius: 10,
+      elevation: 3,
+      backgroundColor: '#fff',
+      shadowOffset: { width: 1, height: 1 },
+      shadowColor: '#333',
+      shadowOpacity: 0.3,
+      shadowRadius: 2,
+      marginHorizontal: width * 0.05,
+      marginVertical: heigth * 0.15,
+      padding: heigth * 0.013,
+    },    
+    inputContainer: {
+      justifyContent: 'center',
+      position: 'relative',
+      borderColor: 'black',
+      borderWidth: 1.2,
+      marginVertical: heigth * 0.04,
+      borderRadius: 5,
+    },
+    textInput: {
+      width: '90%',
+      height: heigth * 0.065,
+      fontSize: heigth * 0.025,
+      fontFamily: 'Nunito-Bold',
+      padding: heigth * 0.01,
+      paddingLeft: heigth * 0.07,
+      paddingRight: heigth * 0.02,
+      textAlignVertical: 'center'
+    },
+    inputIcon:{
+      position: 'absolute',
+      paddingLeft: heigth * 0.009,
+    },
+    googleBtn: {
+      width: '100%',
+      marginVertical: heigth * 0.04,
+      alignSelf: 'center',
+      textAlignVertical: 'center',
+      borderColor: '#4285F4',
+      borderWidth: 2,
+      borderRadius: 10,
+    },
+    googlePack: {
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+    },
+    googleIcon: {
+        padding: heigth * 0.013,
+        display: 'flex',
+        alignSelf: 'flex-start',
         textAlignVertical: 'center',
+        backgroundColor: '#4285F4',
+        borderTopLeftRadius: 5,
+        borderBottomLeftRadius: 5,
+        borderWidth: 1,
         borderColor: '#4285F4',
-        borderWidth: 2,
-        borderRadius: 10,
-      },
-      googlePack: {
-          flexDirection: 'row',
-          justifyContent: 'flex-start',
-      },
-      googleIcon: {
-          padding: 10,
-          display: 'flex',
-          alignSelf: 'flex-start',
-          textAlignVertical: 'center',
-          backgroundColor: '#4285F4',
-          borderTopLeftRadius: 5,
-          borderBottomLeftRadius: 5,
-          borderWidth: 1,
-          borderColor: '#4285F4',
-      },
-      googleText:{
-          fontSize: 16,
-          color: '#111',
-          fontWeight: 'bold',
-          textAlignVertical: 'center',
-          marginLeft: 30,
-      },
+    },
+    googleText:{
+        fontSize: heigth * 0.023,
+        color: '#111',
+        fontWeight: 'bold',
+        textAlignVertical: 'center',
+        marginLeft: heigth * 0.03,
+    },
   })
 

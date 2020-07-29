@@ -1,6 +1,9 @@
 import React from 'react';
-import { StyleSheet, Text, View} from 'react-native';
+import { StyleSheet, Text, View, Dimensions} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+
+const width = Dimensions.get('window').width
+const heigth = Dimensions.get('window').height
 
 export default function Header({navigation,title }) {
 
@@ -29,7 +32,7 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontFamily: 'Acme-Regular',
-    fontSize: 25,
+    fontSize: heigth * 0.034,
     color: '#333',
     letterSpacing: 0.2,
   },
@@ -39,6 +42,6 @@ const styles = StyleSheet.create({
   },
   person:{
     position: 'absolute',
-    right: 16,
+    right: heigth * 0.02,
   }
 });

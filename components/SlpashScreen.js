@@ -28,8 +28,8 @@ export default function SlpashScreen({ head = "Starting" }) {
             >
                     <View style={styles.containerR}>
                         <Image style ={styles.img} source={require('../assets/img/mes_logo1.png')} />
-                        <Text style={{fontFamily:'Nunito-Regular',fontSize:20}}>{ head }</Text>
-                        <Text style={{fontFamily:'Nunito-Regular',fontSize:20}}>Please Wait{ dots } </Text>
+                        <Text style={{fontFamily:'Nunito-Regular',fontSize: heigth * 0.03}}>{ head }</Text>
+                        <Text style={{fontFamily:'Nunito-Regular',fontSize: heigth * 0.03}}>Please Wait{ dots } </Text>
                     </View>
                 </Modal>
     )
@@ -38,14 +38,14 @@ export default function SlpashScreen({ head = "Starting" }) {
 const styles = StyleSheet.create({
     containerR: {
         flex: 1,
-        padding: 10,
+        padding: heigth * 0.05,
         justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: 60,
+        marginBottom: heigth * 0.007,
       },
       img:{
         width: width * 0.43,
         height: heigth * 0.33,
-        margin: 20,
+        margin: heigth * 0.05,
       },
 })

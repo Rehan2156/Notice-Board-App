@@ -3,8 +3,8 @@ import { Text, StyleSheet ,Image ,Dimensions ,TouchableOpacity ,ImageBackground 
 import AsyncStorage from '@react-native-community/async-storage';
 import SlpashScreen from '../components/SlpashScreen';
 
-const width = Dimensions.get('window').width
-const heigth = Dimensions.get('window').height
+const width = Dimensions.get('screen').width
+const heigth = Dimensions.get('screen').height
 
 export default class FirstPage extends Component {
   state = {
@@ -79,27 +79,28 @@ const styles = StyleSheet.create({
     },
     head:{
         textAlign:'center',
-        fontSize:25,
+        fontSize: heigth * 0.026,
         fontFamily:'Lato-Bold',
-        paddingBottom:40,
+        paddingBottom: heigth * 0.002,
+        paddingTop: heigth * 0.015,
         color:'#1C2837'
     },
     headApp:{
         textAlign:'center',
-        fontSize:35,
+        fontSize: heigth * 0.035,
         fontFamily:'Amiri-Bold',
-        paddingBottom:30,
         color:'#465362',
-        paddingLeft:10,
-        paddingRight:10
+        paddingBottom: heigth * 0.013,
+        paddingLeft: width * 0.08,
+        paddingRight: width * 0.08
     },
     container: {
       flex: 1,
       justifyContent:'center',
-      paddingBottom:50,
+      paddingBottom: heigth * 0.08,
       backgroundColor:"#b1a296",
-      borderTopRightRadius:50,
-      borderTopLeftRadius:50,
+      borderTopRightRadius: 50,
+      borderTopLeftRadius: 50,
       shadowOffset: { width: 1, height: 1 },
       shadowColor: '#333',
       shadowOpacity: 0.3,
@@ -107,22 +108,22 @@ const styles = StyleSheet.create({
       elevation:12
     },
     img:{
+      marginTop: heigth * 0.007,
       width: width * 0.4,
       height: heigth * 0.28,
       alignSelf:'center',
     },
     myBtn: {
-      width:width - 55,
-      height:50,
+      width: width * 0.92,
+      height: heigth * 0.065,
       borderRadius:25,
       backgroundColor:'#06BEE1',
       justifyContent:'center',
-      marginTop:20,
-      marginHorizontal:25,
-      marginTop: 35,
+      marginHorizontal: width * 0.05,
+      marginTop: heigth * 0.04,
     },
     btnText: {
-      fontSize: 23,
+      fontSize: heigth * 0.028,
       textAlign:'center',
       color: '#fff',
       fontFamily:'Nunito-Bold'

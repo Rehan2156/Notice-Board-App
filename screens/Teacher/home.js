@@ -87,18 +87,4 @@ const TeacherHome = ({navigation}) => {
   );
 }
 
-const styles = StyleSheet.create({
-    scrollView: {
-        backgroundColor: Colors.lighter,
-      },
-      container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        padding: 10,
-        justifyContent: 'center',
-        alignContent: 'center',
-        alignItems: 'center',
-      },  
-    })
-
 export default TeacherHome;
