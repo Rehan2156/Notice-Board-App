@@ -28,7 +28,7 @@ export default function customSidebarMenu({ navigation }) {
       screenToNavigate: 'MyNotice',
     },
     {
-      navOptionThumb: 'user',
+      navOptionThumb: 'info',
       navOptionName: 'About',
       screenToNavigate: 'About',
     }       

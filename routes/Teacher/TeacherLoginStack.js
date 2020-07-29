@@ -9,7 +9,7 @@ const screens = {
         navigationOptions:({navigation})=>{
             // title:'MESCOE Notice Board',
             return{
-            headerTitle:()=> <Header title='Teacher Register'/>
+            headerTitle:()=> <Header title='Faculty Login'/>
             }
         }
     }

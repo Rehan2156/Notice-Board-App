@@ -4,6 +4,7 @@ import {createAppContainer} from 'react-navigation'
 import Notice from '../../screens/notice'
 import Header from '../../shared/header'
 import StudentHome from '../../screens/Student/home';
+import About from '../../screens/about';
 
 const screens = {
     Home:{
@@ -13,6 +14,13 @@ const screens = {
             return{
             headerTitle:()=> <Header navigation={navigation} title='MESCOE Notice Board' theme={theme}/>
             }
+        }
+    },
+    About:{
+        screen:About,
+        navigationOptions:{
+            title:'About the app',
+            // headerStyle:{backgroundColor:'#eee'}
         }
     },
     Notice:{

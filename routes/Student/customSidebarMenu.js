@@ -15,6 +15,11 @@ export default function customSidebarMenu({ navigation }) {
       navOptionThumb: 'home',
       navOptionName: 'Home',
       screenToNavigate: 'Home',
+    },
+    {
+      navOptionThumb: 'info',
+      navOptionName: 'About',
+      screenToNavigate: 'About',
     }
   ])
   const [user, setUser] = useState(null)
@@ -76,7 +81,7 @@ export default function customSidebarMenu({ navigation }) {
               alignItems: 'center',
               paddingTop: heigth * 0.016,
               paddingBottom: heigth * 0.016,
-              backgroundColor: global.currentScreenIndex === key ? '#ffffff':'#e0dbdb',
+              // backgroundColor: global.currentScreenIndex === key ? '#ffffff':'#e0dbdb',
             }}
             key={key}>
             <View style={{ marginHorizontal: width * 0.045}}>
@@ -85,7 +90,7 @@ export default function customSidebarMenu({ navigation }) {
             <Text
               style={{
                 fontSize: heigth * 0.023,
-                color: global.currentScreenIndex === key ? 'black' : 'red',
+                // color: global.currentScreenIndex === key ? 'black' : 'red',
                 fontFamily:'Nunito-Bold'
               }}
               onPress={() => {
