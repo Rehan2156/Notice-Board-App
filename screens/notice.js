@@ -1,9 +1,10 @@
-import React,{ useCallback } from 'react';
+import React,{ useCallback,useEffect } from 'react';
 import {View, Text, StyleSheet, ScrollView, Linking} from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import {Button} from 'react-native-elements'
 
 const Notice = ({navigation}) => {
+
 
     const OpenURLButton = ({ url, children }) => {
         const handlePress = useCallback(async () => {
@@ -30,6 +31,9 @@ const Notice = ({navigation}) => {
         <ScrollView
           contentInsetAdjustmentBehavior="automatic"
           style={styles.scrollView}>
+          {navigation.getParam('uploaderName')!=null?
+          <View style={{alignSelf:'flex-end',padding:10,}}><Text style={{fontFamily:'Nunito-Regular',color:'#4D4B4B',fontSize:16}}>~ {navigation.getParam('uploaderName')}</Text></View>
+          :<View></View>}
           <View style={{flex:1,flexDirection:'row',alignSelf:'center',paddingBottom:20}}>
           <Icon name={'calendar'} size={15} color="#808080" style={{paddingRight:2,paddingTop:3}}/>
           <Text style={{paddingRight:30,fontFamily:'Nunito-Regular',color:'#899CA4'}}>{navigation.getParam('date')}</Text>

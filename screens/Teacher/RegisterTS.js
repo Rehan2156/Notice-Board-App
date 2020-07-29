@@ -20,7 +20,7 @@ export default class RegisterTS extends Component {
         loading:false ,
         isSigninInProgress: false,
         editable: true,
-        validEMployeeID: ['ALPHA13062000', 'ALPHA28072000'],
+        validEMployeeID: ['ALPHA13062000', 'ALPHA28072000','ALPHA900','ALPHA901','ALPHA902','ALPHA903','ALPHA904','ALPHA905','ALPHA906','ALPHA907'],
     }
 
     componentDidMount() {

@@ -64,6 +64,27 @@ export default class AddNotice extends Component {
         bem2:           true,
         bee1:           true,
         bee2:           true,
+        name:           null
+    }
+
+
+
+  
+    componentDidMount() {
+      if(this.state.name == null) {
+        try {
+          AsyncStorage.getItem('User_Cred').then( jsonValue => {
+            jsonValue != null ? JSON.parse(jsonValue) : null;
+            console.log(jsonValue)
+            if(jsonValue != null) {
+                var name = JSON.parse(jsonValue).name        
+                this.setState({name:name})
+            }
+          })
+        } catch(e) {
+            console.log('error: ', e)
+        } 
+      }   
     }
 
     findDate = () => {
@@ -252,7 +273,8 @@ export default class AddNotice extends Component {
                     date: this.findDate(),
                     time: this.findTime(),
                     toSegments: this.createSendList(),
-                    uploaderID:auth().currentUser.uid
+                    uploaderID:auth().currentUser.uid,
+                    uploaderName:this.state.name
                 })
                 .then(() => {
                     this.createSegment()
