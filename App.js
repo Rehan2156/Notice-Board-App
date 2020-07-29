@@ -107,6 +107,7 @@ export default class App extends Component {
                     var time = myJSON.time
                     var toSegments = myJSON.toSegments
                     var uploaderName = myJSON.uploaderName
+                    var uploaderID = myJSON.uploaderID
                     var item = {head: head, text:notice, downloadURL:downURL,date:date,time:time, key:key, toSegments: toSegments, uploaderID:uploaderID,uploaderName:uploaderName}
                     var itemStr = JSON.stringify(item) + '<;>'
                     myArray = [...myArray, itemStr]
@@ -238,6 +239,7 @@ export default class App extends Component {
                       var time = myJSON.time
                       var toSegments = myJSON.toSegments
                       var uploaderName = myJSON.uploaderName
+                      var uploaderID = myJSON.uploaderID
                       var item = {head: head, text:notice, downloadURL:downURL,date:date,time:time, key:key, toSegments: toSegments, uploaderID:uploaderID,uploaderName:uploaderName}
                       var itemStr = JSON.stringify(item) + '<;>'
                       myArray = [...myArray, itemStr]
