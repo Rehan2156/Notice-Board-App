@@ -236,7 +236,7 @@ export default class AddNotice extends Component {
                     this.createSegment()
                     this.pushNotification()
                     this.updateAllBit()
-                   // this.getNewData()
+                    this.getNewData()
                     this.setState({ 
                         uplaoding: false
                     })
@@ -269,7 +269,7 @@ export default class AddNotice extends Component {
             })
     }
 
-  /*  getNewData = async () => {
+    getNewData = async () => {
         console.log('Teacher')
         var myArray = []
           var ref = database().ref("notice/")
