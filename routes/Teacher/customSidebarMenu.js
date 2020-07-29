@@ -26,7 +26,12 @@ export default function customSidebarMenu({ navigation }) {
       navOptionThumb: 'user',
       navOptionName: 'My Notices',
       screenToNavigate: 'MyNotice',
-    }    
+    },
+    {
+      navOptionThumb: 'user',
+      navOptionName: 'About',
+      screenToNavigate: 'About',
+    }       
   ])
   const [user, setUser] = useState(null)
   const [name, setName] = useState(null)
