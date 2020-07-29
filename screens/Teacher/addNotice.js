@@ -4,7 +4,6 @@ import { CheckBox,Button } from 'react-native-elements'
 import {globalStyles} from '../../styles/global'
 import database from '@react-native-firebase/database';
 import DocumentPicker from 'react-native-document-picker';
-import storage from '@react-native-firebase/storage'
 import RNFS from 'react-native-fs'
 import auth from '@react-native-firebase/auth'
 import 'base64-arraybuffer'
@@ -13,7 +12,7 @@ import SlpashScreen from '../../components/SlpashScreen';
 
 const width = Dimensions.get('screen').width
 const heigth = Dimensions.get('screen').height
-const { width: WIDTH } = Dimensions.get('window')
+
 var AWS = require('aws-sdk');
 var dec = require('base64-arraybuffer')
 
@@ -67,9 +66,6 @@ export default class AddNotice extends Component {
         name:           null
     }
 
-
-
-  
     componentDidMount() {
       if(this.state.name == null) {
         try {
@@ -132,46 +128,6 @@ export default class AddNotice extends Component {
           };
           fetch(endpoint, params).then(res => console.log("Thanks"));
     }
-
-
-
-    //  uploadImageOnS3 = async (file) => {
-    //     const s3bucket = new AWS.S3({
-    //       accessKeyId: 'AKIARO72JVXM4KLZD6W3',
-    //       secretAccessKey: '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',          
-    //       Bucket: 'noticesmescoe',
-    //       signatureVersion: 'v4',
-    //     });
-    //  let contentType = 'image/jpeg';
-    //     let contentDeposition = 'inline;filename="' + file.name + '"';
-    //     const base64 = await RNFS.readFile(file.uri, 'base64');
-    //     const arrayBuffer = dec.decode(base64);
-    //  s3bucket.createBucket(() => {
-    //        const params = {
-    //         Bucket: 'noticesmescoe/images',
-    //         Key: file.name,
-    //         Body: arrayBuffer,
-    //         ContentDisposition: contentDeposition,
-    //         ContentType: contentType,
-    //     };
-    //  s3bucket.upload(params, (err, data) => {
-    //       if (err) {
-    //         console.log('error in callback'+err);
-    //       }
-    //     console.log('success');
-    //     console.log("Response URL : "+ data.Location);
-    //     this.setState({downloadLink:data.Location})
-    //     });
-    //   });
-    //  };
-
-
-
-
-
-
-
-
 
     uploadImage = async () => {
         if(this.state.head=="")
@@ -279,7 +235,8 @@ export default class AddNotice extends Component {
                 .then(() => {
                     this.createSegment()
                     this.pushNotification()
-                    this.getNewData()
+                    this.updateAllBit()
+                   // this.getNewData()
                     this.setState({ 
                         uplaoding: false
                     })
@@ -288,7 +245,31 @@ export default class AddNotice extends Component {
                 });
     }
 
-    getNewData = async () => {
+    updateAllBit = async () => {
+        database()
+            .ref('Users/Student').once('value', snap => {
+                snap.forEach(e => {
+                    database()
+                        .ref('Users/Student/' + e.key).update({
+                            newNotice: 1,
+                        })
+                })
+            }).then(async () => {
+                database()
+                .ref('Users/Teachers').once('value', snap => {
+                    snap.forEach(e => {
+                        database()
+                            .ref('Users/Teachers/' + e.key).update({
+                                newNotice: 1,
+                            })
+                    })
+                }).then(() => {
+                    console.log('Done')
+                })
+            })
+    }
+
+  /*  getNewData = async () => {
         console.log('Teacher')
         var myArray = []
           var ref = database().ref("notice/")
@@ -311,7 +292,7 @@ export default class AddNotice extends Component {
             })
             await AsyncStorage.setItem('list_data', myArray.toString())
           })
-    }
+    }*/
 
     selectOneFile = async () => {
         try {
@@ -768,13 +749,14 @@ export default class AddNotice extends Component {
                         // underlineColorAndroid='transparent'
                         multiline={true}
                     />
-
-                    <Button
-                        title="Select file (Optional)"
-                        type="solid"
-                        raised
-                        onPress={() => this.selectOneFile()}
-                    />
+                    <View style={styles.btnWidth1}>
+                        <Button
+                            title="Select file (Optional)"
+                            type="solid"
+                            raised
+                            onPress={() => this.selectOneFile()}
+                        />
+                    </View>
                     { this.state.files && <View>
                             <Image
                                 source={this.state.files}
@@ -1269,15 +1251,18 @@ export default class AddNotice extends Component {
                     {/* ----------------------------------------- */}
                     <View style={styles.line}></View>
                     {/* ----------------------------------------- */}
-                    <Button
-                        title="Send Notice"
-                        type="solid"
-                        raised
-                        onPress={() => {
-                            console.log('pressed')
-                            this.uploadImage()
-                        }}
-                    />
+
+                    <View style={styles.btnWidth}>
+                        <Button
+                            title="Send Notice"
+                            type="solid"
+                            raised
+                            onPress={() => {
+                                console.log('pressed')
+                                this.uploadImage()
+                            }}
+                        />
+                    </View>
                 </ScrollView>
             </View>
         );
@@ -1331,5 +1316,14 @@ const styles = StyleSheet.create({
     image: {
         marginTop: heigth * 0.045,
         height: heigth * 0.3
+    },
+    btnWidth: {
+        paddingHorizontal: heigth * 0.02,
+        marginTop: heigth * 0.04,
+        marginBottom: heigth * 0.06
+    },
+    btnWidth1: {
+        paddingHorizontal: heigth * 0.02,
+        marginVertical: heigth * 0.03
     },
 })
