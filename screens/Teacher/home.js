@@ -21,6 +21,7 @@ const TeacherHome = ({navigation}) => {
             console.log(jsonValue)
             if(jsonValue != null) {
               var user = JSON.parse(jsonValue).user
+              var uid = JSON.parse(jsonValue).uid
               const tags = {
                 user: user,
               }
@@ -49,6 +50,13 @@ const TeacherHome = ({navigation}) => {
                 }
               })
               AsyncStorage.setItem('list_data', myArray.toString())
+            }).then(() => {
+              database()
+                  .ref('Users/Teachers/' + uid).update({
+                    newNotice: 0,
+                  }).then(() => {
+                    console.log('done')
+                  })
             })
             }
           })

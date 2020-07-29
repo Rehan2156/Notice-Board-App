@@ -21,12 +21,15 @@ const [timehaspassed,setTimehaspassed]=useState(false)
               var year = JSON.parse(jsonValue).year
               var div = JSON.parse(jsonValue).div
               var user = JSON.parse(jsonValue).user
+              var uid = JSON.parse(jsonValue).uid
+
               const tags = {
                 user: user,
                 department: Class,
                 class: year,
                 tag: year + '' + Class + '' + div,
               }
+              
               console.log('tags:', tags)
               var classroom = year + '' + Class + '' + div
               
@@ -62,6 +65,13 @@ const [timehaspassed,setTimehaspassed]=useState(false)
                   }
                 })
                 AsyncStorage.setItem('list_data', myArray.toString())
+              }).then(() => {
+                  database()
+                  .ref('Users/Student/' + uid).update({
+                    newNotice: 0,
+                  }).then(() => {
+                    console.log('done')
+                  })
               })
             }
           })
