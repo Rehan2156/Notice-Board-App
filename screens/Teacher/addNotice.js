@@ -339,13 +339,13 @@ export default class AddNotice extends Component {
         }
 
         if(this.state.comp === true && this.state.all != true) {
-            sendList += ";C"
+            sendList += ";Co"
         }
         if(this.state.entc === true && this.state.all != true) {
-            sendList += ";E"
+            sendList += ";En"
         }
         if(this.state.mech === true && this.state.all != true) {
-            sendList += ";M"
+            sendList += ";Me"
         }
 
         if(this.state.fe === true && this.state.all != true) {
