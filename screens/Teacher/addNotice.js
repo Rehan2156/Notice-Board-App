@@ -749,13 +749,14 @@ export default class AddNotice extends Component {
                         // underlineColorAndroid='transparent'
                         multiline={true}
                     />
-
-                    <Button
-                        title="Select file (Optional)"
-                        type="solid"
-                        raised
-                        onPress={() => this.selectOneFile()}
-                    />
+                    <View style={styles.btnWidth1}>
+                        <Button
+                            title="Select file (Optional)"
+                            type="solid"
+                            raised
+                            onPress={() => this.selectOneFile()}
+                        />
+                    </View>
                     { this.state.files && <View>
                             <Image
                                 source={this.state.files}
@@ -1250,15 +1251,18 @@ export default class AddNotice extends Component {
                     {/* ----------------------------------------- */}
                     <View style={styles.line}></View>
                     {/* ----------------------------------------- */}
-                    <Button
-                        title="Send Notice"
-                        type="solid"
-                        raised
-                        onPress={() => {
-                            console.log('pressed')
-                            this.uploadImage()
-                        }}
-                    />
+
+                    <View style={styles.btnWidth}>
+                        <Button
+                            title="Send Notice"
+                            type="solid"
+                            raised
+                            onPress={() => {
+                                console.log('pressed')
+                                this.uploadImage()
+                            }}
+                        />
+                    </View>
                 </ScrollView>
             </View>
         );
@@ -1312,5 +1316,14 @@ const styles = StyleSheet.create({
     image: {
         marginTop: heigth * 0.045,
         height: heigth * 0.3
+    },
+    btnWidth: {
+        paddingHorizontal: heigth * 0.02,
+        marginTop: heigth * 0.04,
+        marginBottom: heigth * 0.06
+    },
+    btnWidth1: {
+        paddingHorizontal: heigth * 0.02,
+        marginVertical: heigth * 0.03
     },
 })
