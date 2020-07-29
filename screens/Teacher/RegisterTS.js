@@ -20,7 +20,7 @@ export default class RegisterTS extends Component {
         loading:false ,
         isSigninInProgress: false,
         editable: true,
-        validEMployeeID: ['ALPHA13062000', 'ALPHA28072000','ALPHA900','ALPHA901','ALPHA902','ALPHA903','ALPHA904','ALPHA905','ALPHA906','ALPHA907'],
+        validEMployeeID: ['ALPHA13062000', 'ALPHA28072000','ALPHA900','ALPHA901','ALPHA902','ALPHA903','ALPHA904','ALPHA905','ALPHA906','ALPHA907','ALPHA908','ALPHA909','ALPHA910','ALPHA911','ALPHA912','ALPHA913','ALPHA914','ALPHA915','ALPHA916','ALPHA917',],
     }
 
     componentDidMount() {
@@ -201,13 +201,16 @@ const styles = StyleSheet.create({
       marginVertical: heigth * 0.04,
       alignSelf: 'center',
       textAlignVertical: 'center',
-      borderColor: '#4285F4',
-      borderWidth: 2,
-      borderRadius: 10,
+      // borderColor: '#4285F4',
+      // borderWidth: 2,
+      // borderRadius: 10,
     },
     googlePack: {
         flexDirection: 'row',
         justifyContent: 'flex-start',
+        backgroundColor: '#4285F4',
+        borderRadius:30,
+
     },
     googleIcon: {
         padding: heigth * 0.013,
@@ -215,14 +218,14 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-start',
         textAlignVertical: 'center',
         backgroundColor: '#4285F4',
-        borderTopLeftRadius: 5,
-        borderBottomLeftRadius: 5,
+        borderTopLeftRadius: 30,
+        borderBottomLeftRadius: 30,
         borderWidth: 1,
         borderColor: '#4285F4',
     },
     googleText:{
         fontSize: heigth * 0.023,
-        color: '#111',
+        color: '#fff',
         fontWeight: 'bold',
         textAlignVertical: 'center',
         marginLeft: heigth * 0.03,
