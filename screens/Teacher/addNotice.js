@@ -7,11 +7,15 @@ import DocumentPicker from 'react-native-document-picker';
 import storage from '@react-native-firebase/storage'
 import RNFS from 'react-native-fs'
 import auth from '@react-native-firebase/auth'
+import 'base64-arraybuffer'
 import AsyncStorage from '@react-native-community/async-storage';
 import SlpashScreen from '../../components/SlpashScreen';
 
 const width = Dimensions.get('screen').width
 const heigth = Dimensions.get('screen').height
+const { width: WIDTH } = Dimensions.get('window')
+var AWS = require('aws-sdk');
+var dec = require('base64-arraybuffer')
 
 export default class AddNotice extends Component {
 
@@ -19,6 +23,7 @@ export default class AddNotice extends Component {
         head:           "",
         notice:         "",
         files:          null,
+        fileData:       null,
         downloadLink:   '',
         uplaoding:      false,
         sendList:       null,
@@ -107,51 +112,124 @@ export default class AddNotice extends Component {
           fetch(endpoint, params).then(res => console.log("Thanks"));
     }
 
+
+
+    //  uploadImageOnS3 = async (file) => {
+    //     const s3bucket = new AWS.S3({
+    //       accessKeyId: 'AKIARO72JVXM4KLZD6W3',
+    //       secretAccessKey: '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',          
+    //       Bucket: 'noticesmescoe',
+    //       signatureVersion: 'v4',
+    //     });
+    //  let contentType = 'image/jpeg';
+    //     let contentDeposition = 'inline;filename="' + file.name + '"';
+    //     const base64 = await RNFS.readFile(file.uri, 'base64');
+    //     const arrayBuffer = dec.decode(base64);
+    //  s3bucket.createBucket(() => {
+    //        const params = {
+    //         Bucket: 'noticesmescoe/images',
+    //         Key: file.name,
+    //         Body: arrayBuffer,
+    //         ContentDisposition: contentDeposition,
+    //         ContentType: contentType,
+    //     };
+    //  s3bucket.upload(params, (err, data) => {
+    //       if (err) {
+    //         console.log('error in callback'+err);
+    //       }
+    //     console.log('success');
+    //     console.log("Response URL : "+ data.Location);
+    //     this.setState({downloadLink:data.Location})
+    //     });
+    //   });
+    //  };
+
+
+
+
+
+
+
+
+
     uploadImage = async () => {
         if(this.state.head=="")
         {
             Alert.alert("Warning","Heading is compulsory")
         }
         else if(this.state.files!=null){
+            this.setState({uplaoding: true})
 
-        const files = this.state.files
-        const fileName = files.name
-        console.log(fileName)
+        const file = this.state.fileData
 
-        var storageRef = storage().ref(`images/${fileName}`);
-        console.log(files.uri)
+        const s3bucket = new AWS.S3({
+            accessKeyId: 'AKIARO72JVXM4KLZD6W3',
+            secretAccessKey: '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',          
+            Bucket: 'noticesmescoe',
+            signatureVersion: 'v4',
+          });
+    //    let contentType = 'image/jpeg';
+          let contentDeposition = 'inline;filename="' + file.name + '"';
+          const base64 = await RNFS.readFile(file.uri, 'base64');
+          const arrayBuffer = dec.decode(base64);
+       s3bucket.createBucket(() => {
+             const params = {
+              Bucket: 'noticesmescoe/images',
+              Key: file.name,
+              Body: arrayBuffer,
+              ContentDisposition: contentDeposition,
+            //   ContentType: contentType,
+          };
+         s3bucket.upload(params, (err, data) => {
+            if (err) {
+              console.log('error in callback'+err);
+            }
+            else{
+          console.log('success');
+          console.log("Response URL : "+ data.Location);
+          this.setState({downloadLink:data.Location})
+          this.uploadTheDetails() 
+            }
+          });
+        });    
 
-        const data = await RNFS.readFile(files.uri, 'base64')
+        // const fileName = files.name
+        // console.log(fileName)
 
-        this.setState({
-            uplaoding: true,
-        })
-        await storageRef.putString(data, 'base64')
-            .on('state_changed', snapshot => {
-                console.log('sanpshot: ' + snapshot.state)
-                var progress = (snapshot.bytesTransferred/snapshot.totalBytes) * 100
-                console.log('progress: ' + progress)
-                this.setState({
-                    progress: progress
-                })
+        // var storageRef = storage().ref(`images/${fileName}`);
+        // console.log(files.uri)
 
-                if (snapshot.state === storage.TaskState.SUCCESS) {
-                    console.log('Sucessful');
-                }
-            },
-                error => {
-                    unsubscribe();
-                    console.log('Image upload error: ' + error.toString())
-                },
-                () => {
-                    storageRef.getDownloadURL()
-                        .then(downloadURL => {
-                            console.log('file is here: ' + downloadURL);
-                            this.setState({ downloadLink: downloadURL })
-                            this.uploadTheDetails()
-                        })
-                }
-            )
+        // const data = await RNFS.readFile(files.uri, 'base64')
+
+        // this.setState({
+        //     uplaoding: true,
+        // })
+        // await storageRef.putString(data, 'base64')
+        //     .on('state_changed', snapshot => {
+        //         console.log('sanpshot: ' + snapshot.state)
+        //         var progress = (snapshot.bytesTransferred/snapshot.totalBytes) * 100
+        //         console.log('progress: ' + progress)
+        //         this.setState({
+        //             progress: progress
+        //         })
+
+        //         if (snapshot.state === storage.TaskState.SUCCESS) {
+        //             console.log('Sucessful');
+        //         }
+        //     },
+        //         error => {
+        //             unsubscribe();
+        //             console.log('Image upload error: ' + error.toString())
+        //         },
+        //         () => {
+        //             storageRef.getDownloadURL()
+        //                 .then(downloadURL => {
+        //                     console.log('file is here: ' + downloadURL);
+        //                     this.setState({ downloadLink: downloadURL })
+        //                     this.uploadTheDetails()
+        //                 })
+        //         }
+        //     )
         }
         else{
             this.setState({
@@ -223,6 +301,14 @@ export default class AddNotice extends Component {
             console.log('Type : ' + res.type);
             console.log('File Name : ' + res.name);
             console.log('File Size : ' + res.size);
+
+            const file = {
+                uri: res.uri,
+                name: res.name,
+                type: res.type,
+             };
+             this.setState({fileData:file})
+            //  this.uploadImageOnS3(file);
 
             if(((res.size / 1024) / 1024) >= 10) {
                 console.log('hello: ' + res.size)
