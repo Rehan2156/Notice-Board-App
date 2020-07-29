@@ -4,12 +4,16 @@ import { createAppContainer} from 'react-navigation'
 import {Dimensions, Button, View} from 'react-native'
 import HomeStack from './homeStack';
 import StudentCustomSidebarMenu from './customSidebarMenu';
+import About from '../../screens/about';
 
 
 // drawer navigation options
 const StudentRootDrawerNavigator = createDrawerNavigator({
   Home: {
     screen: HomeStack,
+  },
+  About:{
+    screen: About
   }
 },
 {

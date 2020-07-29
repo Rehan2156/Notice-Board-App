@@ -6,6 +6,7 @@ import Header from '../../shared/header'
 import TeacherHome from '../../screens/Teacher/home';
 import AddNotice from '../../screens/Teacher/addNotice';
 import MyNotice from '../../screens/Teacher/myNotice';
+import About from '../../screens/about'
 
 const screens = {
     Home:{
@@ -28,6 +29,13 @@ const screens = {
         screen:MyNotice,
         navigationOptions:{
             title:'My Notices',
+            // headerStyle:{backgroundColor:'#eee'}
+        }
+    },
+    About:{
+        screen:About,
+        navigationOptions:{
+            title:'About the app',
             // headerStyle:{backgroundColor:'#eee'}
         }
     },
