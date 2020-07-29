@@ -292,7 +292,7 @@ export default class AddNotice extends Component {
             })
             await AsyncStorage.setItem('list_data', myArray.toString())
           })
-    }*/
+    }
 
     selectOneFile = async () => {
         try {
