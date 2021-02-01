@@ -5,14 +5,16 @@ import {Button} from 'react-native-elements'
 
 const Notice = ({navigation}) => {
 
-
     const OpenURLButton = ({ url, children }) => {
+      console.log('entered openurlbutton')
         const handlePress = useCallback(async () => {
+          console.log('checking can open url')
           const supported = await Linking.canOpenURL(url);
           if (supported) {
             await Linking.openURL(url);
+            console.log('opening url')
           } else {
-            Alert.alert(`Don't know how to open this URL: ${url}`);
+            Alert.alert(`File not supported: ${url}`);
           }
         }, [url]);
       

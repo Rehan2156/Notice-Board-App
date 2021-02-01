@@ -79,6 +79,8 @@ target 'NotBoard' do
 
   pod 'react-native-netinfo', :path => '../node_modules/@react-native-community/netinfo'
 
+  pod 'RNFS', :path => '../node_modules/react-native-fs'
+
   target 'NotBoardTests' do
     inherit! :complete
     # Pods for testing
