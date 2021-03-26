@@ -2,6 +2,8 @@
 
 Faculty members can send notices to particular classes, department or everyone. Student will receive notifications on their smartphones. Students can view the notices and also download the attached file in the notice.
 
+Watch the working video of the app: https://drive.google.com/file/d/1RxcTzEVhNARWbt_WChlUu5eE14NE7CLg/view?usp=drivesdk
+
 Technology Stack
 * [React Native](https://reactnative.dev/)
 * [Firebase](https://firebase.google.com/)
